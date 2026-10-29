@@ -17,6 +17,7 @@ export const comparables = {
   ebay: (texto: string) => `https://www.ebay.es/sch/i.html?_nkw=${q(texto)}&LH_Sold=1&LH_Complete=1`,
   todocoleccion: (texto: string) => `https://www.todocoleccion.net/buscador?bu=${q(texto)}`,
   wallapop: (texto: string) => `https://es.wallapop.com/app/search?keywords=${q(texto)}`,
+  iberlibro: (texto: string) => `https://www.iberlibro.com/servlet/SearchResults?kn=${q(texto)}`,
 };
 
 /** Búsquedas en las apps de segunda mano, para guardarlas y recibir notificaciones. */
@@ -33,5 +34,12 @@ export const BUSQUEDAS_RECOMENDADAS: { categoria: string; terminos: string[] }[]
   { categoria: 'Cuberterías', terminos: ['cubertería plata', 'cubiertos plata', 'cubertería antigua', 'plata 916', 'christofle', 'wmf 90'] },
   { categoria: 'Vajillas', terminos: ['vajilla pickman', 'vajilla sargadelos', 'vajilla limoges', 'vajilla porcelana antigua'] },
   { categoria: 'Menaje', terminos: ['le creuset', 'staub', 'cocotte hierro', 'cazo cobre'] },
+  {
+    categoria: 'Libros a vigilar',
+    terminos: [
+      'cien años de soledad sudamericana', 'rayuela sudamericana', 'la sombra del viento planeta 2001',
+      'pascual duarte 1942', 'la colmena emece', 'cinco horas con mario 1966', 'harry potter bloomsbury', 'lote libros antiguos',
+    ],
+  },
   { categoria: 'Cristalería y jarrones', terminos: ['iittala', 'holmegaard', 'cristal murano firmado', 'west germany jarrón'] },
 ];

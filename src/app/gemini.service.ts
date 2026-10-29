@@ -23,7 +23,7 @@ sin texto antes ni después y sin bloques de código, con exactamente estas clav
 {
   "nota": "CHOLLO" | "BUENO" | "NEGOCIABLE" | "DESCARTADO",
   "motivo": "una frase con el porqué",
-  "categoria": "LEGO | Retro | Vajillas | Cuberterías | Menaje | Cristalería | Decoración y herrajes | Mixto | Otra",
+  "categoria": "LEGO | Retro | Libros | Vajillas | Cuberterías | Menaje | Cristalería | Decoración y herrajes | Mixto | Otra",
   "multiplo": número (ingreso neto / coste total, con un decimal),
   "coste_total_eur": número,
   "ingreso_neto_eur": número (conservador),

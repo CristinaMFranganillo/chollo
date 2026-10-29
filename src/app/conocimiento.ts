@@ -9,6 +9,7 @@ const PALABRAS: Record<string, RegExp> = {
   A: /plata|cubert|cubiert|cuchar|tenedor|punz|christofle|meneses|wmf|alpaca|platead|silver|ercuis|jensen|916|925/i,
   B: /vajilla|plato|loza|porcelana|sargadelos|pickman|cartuja|sopera|fuente|bidasoa|claudio|santa clara|taza|limoges|vista alegre/i,
   C: /lego|minifig|bricklink|ninjago|technic|duplo/i,
+  E: /libro|novela|primera edici|rayuela|cien a[ñn]os de soledad|sombra del viento|pascual duarte|colmena|cinco horas con mario|harry potter|sudamericana|biblioteca/i,
   D: /game ?boy|gba|nintendo|n64|snes|super nintendo|gamecube|game cube|consola|sega|playstation|ps1|ps2|cartucho|videojuego|pok[eé]mon/i,
 };
 

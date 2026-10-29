@@ -50,6 +50,9 @@ import { abrirEnlace, comparables } from './enlaces';
                     <ion-button size="small" fill="clear" (click)="abrir(enlaces.ebay(p.nombre))">eBay</ion-button>
                     <ion-button size="small" fill="clear" (click)="abrir(enlaces.todocoleccion(p.nombre))">todocoleccion</ion-button>
                     <ion-button size="small" fill="clear" (click)="abrir(enlaces.wallapop(p.nombre))">Wallapop</ion-button>
+                    @if (esLibro(r.categoria)) {
+                      <ion-button size="small" fill="clear" (click)="abrir(enlaces.iberlibro(p.nombre))">Iberlibro</ion-button>
+                    }
                   </div>
                 </ion-label>
               </ion-item>
@@ -98,4 +101,7 @@ export class ResultadoComponent {
   protected readonly color = colorNota;
   protected readonly enlaces = comparables;
   protected readonly abrir = abrirEnlace;
+  protected esLibro(categoria: string): boolean {
+    return /libro/i.test(categoria);
+  }
 }

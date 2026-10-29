@@ -28,6 +28,7 @@ final class FiltroGemini {
         + "o plateado de marca (Christofle, Ercuis, WMF 90/100), menaje premium (Le Creuset, Staub, cobre Mauviel, Pyrex vintage), "
         + "cristalería firmada (Iittala, Holmegaard, Orrefors, Murano firmado, Duralex vintage), jarrones de cerámica firmados "
         + "(West Germany, nórdicos, Manises, Sargadelos) y juegos completos de herrajes antiguos de latón o bronce.\n"
+        + "Libros a vigilar (avisa con nota alta si aparece alguno): Cien años de soledad de Sudamericana 1967, Rayuela de Sudamericana 1963, La sombra del viento de Planeta 2001 primera edición, La familia de Pascual Duarte de Aldecoa 1942, La colmena de Emecé 1951, Cinco horas con Mario de Destino 1966, Harry Potter en inglés de Bloomsbury 1997 o Scholastic 1998. El Harry Potter de Salamandra no vale.\n"
         + "Plata: 925, 916, 915, 800 o estrella de cinco puntas. NO es plata: EPNS, silver plated, plateado, Mtl, alpaca, números 90/100/84 (baño), Meneses sin ley.\n"
         + "Descarta: metal plateado o 'silver plated' sin marca, réplicas o 'estilo antiguo', moda rápida, y aldabas, pomos de porcelana, "
         + "ganchos de hierro fundido, percheros de diseño, porcelana china 'antigua' y cerámica italiana sin etiqueta.\n"

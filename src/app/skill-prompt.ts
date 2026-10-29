@@ -4,7 +4,7 @@ export const SKILL_PROMPT = `# Evaluar anuncio de segunda mano para reventa o in
 
 Objetivo: a partir de capturas, fotos, texto o enlace de un anuncio, decidir rápido si merece la pena comprarlo, con qué beneficio, si conviene revenderlo o guardarlo, y cómo y a quién venderlo. Responde siempre en español.
 
-Categorías cubiertas: LEGO, videojuegos y consolas retro, vajillas y porcelana, cuberterías, menaje de cocina premium, cristalería, y decoración y herrajes de bajo riesgo de réplica. NO cubre cuadros ni obra gráfica: si un lote los incluye, ignóralos en la valoración y dilo.
+Categorías cubiertas: LEGO, videojuegos y consolas retro, vajillas y porcelana, cuberterías, menaje de cocina premium, cristalería, decoración y herrajes de bajo riesgo de réplica, y los libros concretos de la lista de vigilancia (Anexo E). Fuera de esa lista, los libros no son una categoría de interés: valóralos como de poco valor salvo indicio claro. NO cubre cuadros ni obra gráfica: si un lote los incluye, ignóralos en la valoración y dilo.
 
 ## 1. Entrada
 
@@ -399,4 +399,28 @@ Fuentes: [Brick Resales – How to identify fake LEGO parts](https://brickresale
 - "¿Lo has probado? ¿Guarda partidas?"
 
 Fuentes: [Nintendo Life – How to spot fake Nintendo video games](https://www.nintendolife.com/guides/how-to-spot-fake-nintendo-video-games).
+
+
+## Anexo E. Libros a vigilar
+
+No es una categoría de compra habitual: es una **lista de vigilancia** de libros que aparecen de vez en cuando en España, tienen valor demostrado y se reconocen por título, editorial y año. Si aparece uno, sobre todo dentro de un lote o una biblioteca heredada, avisa claramente.
+
+| Libro | Lo que tiene que poner | Precio pedido orientativo (Iberlibro, octubre 2026) |
+| --- | --- | --- |
+| Cien años de soledad (García Márquez) | Sudamericana, Buenos Aires, 1967. La 1.ª impresión (8.000 ejemplares, impresa el 30 de mayo de 1967) no lleva la portada de Vicente Rojo; hubo 8 impresiones en 1967, así que el año solo no basta | 4.150–11.500 € sin firmar; más de 35.000 € firmado |
+| Rayuela (Cortázar) | Sudamericana, Buenos Aires, 1963 | 2.100–3.200 € |
+| La sombra del viento (Ruiz Zafón) | Planeta, Barcelona, 2001, primera edición, rústica, 575 páginas | ~900 € (un solo anuncio) |
+| La familia de Pascual Duarte (Cela) | Aldecoa, Madrid, 1942 | 650–700 € |
+| La colmena (Cela) | Emecé, Buenos Aires, 1951 | 90–280 € |
+| Cinco horas con Mario (Delibes) | Destino, Barcelona, 1966 | 60–75 € |
+| Harry Potter and the Philosopher's Stone (inglés) | Bloomsbury 1997; línea "10 9 8 7 6 5 4 3 2 1" y autora "Joanne Rowling"; solo 500 ejemplares | 40.000–55.000 $ |
+| Harry Potter and the Sorcerer's Stone (EE. UU.) | Scholastic 1998, "First American edition, October 1998" | 4.000–6.500 $ |
+| Harry Potter and the Prisoner of Azkaban (inglés) | 1999, con el error "Joanne Rowling" en la página de créditos | 1.500–12.000 $ |
+
+- **No confundir:** Harry Potter y la piedra filosofal de **Salamandra (1999)** en español casi no tiene valor (ejemplares a 3–9 €).
+- **Confirmación:** la edición se confirma con la foto de la **página de créditos o el colofón**. Sin ella, márcalo como "posible" y pide la foto antes de comprar. Las primeras ediciones antiguas suelen ser rústicas y estar gastadas: el aspecto no descarta nada.
+- **Valoración:** los precios de la tabla son pedidos por libreros, no ventas cerradas. Para decidir, usa el extremo bajo y busca vendidos en todocoleccion o eBay.
+- **Venta:** todocoleccion, Iberlibro (como librero) o casas de subastas para los más caros.
+
+Fuentes: [Iberlibro – búsquedas de primeras ediciones (octubre 2026)](https://www.iberlibro.com/buscar-libro/titulo/cien-anos-soledad/autor/gabriel-garcia-marquez/kw/sudamericana-1967/primera-edicion/), [T13 – Curiosidades de las ediciones de Cien años de soledad](https://www.t13.cl/noticia/tendencias/12-curiosidades-de-las-mas-de-100-ediciones-de-cien-anos-de-soledad-el-clasico-de-gabriel-garcia-marquez-que-cumple-50-anos), [Iberlibro – Guía para coleccionar libros de Harry Potter](https://www.iberlibro.com/libros-antiguos-raros-coleccion/guia-para-coleccionar-libros-de-harry-potter).
 `;
