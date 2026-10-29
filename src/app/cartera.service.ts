@@ -39,6 +39,35 @@ export class CarteraService {
     };
   });
 
+  /** Rendimiento por categoría: qué nicho deja más dinero y más rápido. Ordenado por beneficio. */
+  readonly porCategoria = computed(() => {
+    const grupos = new Map<string, ArticuloCartera[]>();
+    for (const a of this.articulos()) {
+      const clave = a.categoria.trim() || 'Sin categoría';
+      grupos.set(clave, [...(grupos.get(clave) ?? []), a]);
+    }
+    return [...grupos.entries()]
+      .map(([categoria, lista]) => {
+        const vendidos = lista.filter((a) => a.estado === 'vendido');
+        const beneficio = suma(vendidos.map((a) => (a.precioVenta ?? 0) - a.costeTotal));
+        const horas = suma(vendidos.map((a) => a.horas ?? 0));
+        const dias = vendidos
+          .filter((a) => a.fechaVenta)
+          .map((a) => (Date.parse(a.fechaVenta!) - Date.parse(a.fechaCompra)) / 864e5);
+        const coste = suma(vendidos.map((a) => a.costeTotal));
+        return {
+          categoria,
+          compras: lista.length,
+          vendidos: vendidos.length,
+          beneficio,
+          rentabilidad: coste > 0 ? beneficio / coste : null,
+          porHora: horas > 0 ? beneficio / horas : null,
+          diasMedios: dias.length ? suma(dias) / dias.length : null,
+        };
+      })
+      .sort((a, b) => b.beneficio - a.beneficio);
+  });
+
   /** Crea un artículo a partir de una evaluación ("Lo he comprado"). */
   desdeEvaluacion(e: Evaluacion, titulo: string, miniatura: string | null, precio: number | null): ArticuloCartera {
     return {

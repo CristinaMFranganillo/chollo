@@ -3,6 +3,9 @@ import { GeminiService } from './gemini.service';
 import { HistorialService } from './historial.service';
 import { ElementoCola, ORDEN_NOTA } from './models';
 import { miniatura } from './imagenes';
+import { guardar, leer } from './almacen';
+
+const CLAVE = 'chollos.cola';
 
 /**
  * Cola de anuncios: añades varios (cada uno con sus capturas) y los evalúa uno detrás de otro.
@@ -15,6 +18,14 @@ export class ColaService {
 
   readonly elementos = signal<ElementoCola[]>([]);
   readonly procesando = signal(false);
+
+  constructor() {
+    // Las fotos (File) se guardan tal cual en IndexedDB, así la cola sobrevive si Android cierra la app.
+    leer<ElementoCola[]>(CLAVE, []).then((guardados) => {
+      const recuperados = guardados.map((e) => (e.estado === 'evaluando' ? { ...e, estado: 'pendiente' as const } : e));
+      this.elementos.update((actuales) => [...recuperados, ...actuales]);
+    });
+  }
 
   readonly pendientes = computed(
     () => this.elementos().filter((e) => e.estado === 'pendiente' || e.estado === 'error').length,
@@ -40,15 +51,15 @@ export class ColaService {
       miniatura: fotos[0] ? await miniatura(fotos[0]) : null,
       estado: 'pendiente',
     };
-    this.elementos.update((lista) => [...lista, elemento]);
+    this.cambiar((lista) => [...lista, elemento]);
   }
 
   quitar(id: string): void {
-    this.elementos.update((lista) => lista.filter((e) => e.id !== id));
+    this.cambiar((lista) => lista.filter((e) => e.id !== id));
   }
 
   vaciarEvaluados(): void {
-    this.elementos.update((lista) => lista.filter((e) => e.estado !== 'hecho'));
+    this.cambiar((lista) => lista.filter((e) => e.estado !== 'hecho'));
   }
 
   /** Evalúa en serie (una llamada cada vez) para no saturar la cuota gratuita. */
@@ -83,6 +94,11 @@ export class ColaService {
   }
 
   private actualizar(id: string, cambios: Partial<ElementoCola>): void {
-    this.elementos.update((lista) => lista.map((e) => (e.id === id ? { ...e, ...cambios } : e)));
+    this.cambiar((lista) => lista.map((e) => (e.id === id ? { ...e, ...cambios } : e)));
+  }
+
+  private cambiar(fn: (lista: ElementoCola[]) => ElementoCola[]): void {
+    this.elementos.update(fn);
+    void guardar(CLAVE, this.elementos());
   }
 }

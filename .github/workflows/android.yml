@@ -34,6 +34,9 @@ jobs:
       - name: Instalar dependencias
         run: npm ci
 
+      - name: Pruebas automáticas
+        run: npm test
+
       - name: Compilar la web y copiarla al proyecto Android
         run: |
           npm run build

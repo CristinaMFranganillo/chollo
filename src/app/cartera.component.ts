@@ -1,5 +1,5 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { DecimalPipe, DatePipe } from '@angular/common';
+import { DecimalPipe, DatePipe, PercentPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
   IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonInput, IonItem,
@@ -17,7 +17,7 @@ type Filtro = 'stock' | 'guardar' | 'vendido' | 'todo';
 @Component({
   selector: 'app-cartera',
   imports: [
-    FormsModule, DecimalPipe, DatePipe,
+    FormsModule, DecimalPipe, DatePipe, PercentPipe,
     IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonInput, IonItem,
     IonLabel, IonList, IonModal, IonNote, IonSegment, IonSegmentButton, IonSelect, IonSelectOption,
     IonTextarea, IonThumbnail, IonTitle, IonToolbar, IonBadge, IonSpinner,
@@ -42,6 +42,30 @@ type Filtro = 'stock' | 'guardar' | 'vendido' | 'todo';
         <strong>{{ parados().length }} {{ parados().length === 1 ? 'artículo lleva' : 'artículos llevan' }} más de {{ diasParado }} días sin venderse.</strong>
         Plantéate bajar el precio, cambiar de canal o mejorar las fotos y el anuncio.
       </div>
+    }
+
+    @if (cartera.vendidos().length) {
+      <details class="categorias">
+        <summary>Rendimiento por categoría</summary>
+        <table>
+          <thead>
+            <tr><th>Categoría</th><th>Vendidos</th><th>Beneficio</th><th>Rentab.</th><th>€/h</th><th>Días</th></tr>
+          </thead>
+          <tbody>
+            @for (c of cartera.porCategoria(); track c.categoria) {
+              <tr>
+                <td>{{ c.categoria }}</td>
+                <td>{{ c.vendidos }}/{{ c.compras }}</td>
+                <td [class.negativo]="c.beneficio < 0">{{ c.beneficio | number: '1.0-0' }} €</td>
+                <td>{{ c.rentabilidad != null ? (c.rentabilidad | percent: '1.0-0') : '—' }}</td>
+                <td>{{ c.porHora != null ? (c.porHora | number: '1.0-0') : '—' }}</td>
+                <td>{{ c.diasMedios != null ? (c.diasMedios | number: '1.0-0') : '—' }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+        <p class="nota-tabla">Rentabilidad = beneficio / coste de lo vendido. Para comparar nichos, mira sobre todo los euros por hora.</p>
+      </details>
     }
 
     <div class="acciones">
@@ -174,6 +198,12 @@ type Filtro = 'stock' | 'guardar' | 'vendido' | 'todo';
     .resumen span { font-size: 0.8rem; color: var(--ion-color-medium); }
     .resumen strong { font-size: 1.1rem; }
     .negativo { color: var(--ion-color-danger); }
+    .categorias { max-width: 640px; margin: 0 auto 12px; padding: 8px 12px; border-radius: 10px; background: var(--ion-color-light); }
+    .categorias summary { font-weight: 600; cursor: pointer; padding: 4px 0; }
+    .categorias table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-top: 8px; }
+    .categorias th, .categorias td { text-align: right; padding: 4px 2px; border-bottom: 1px solid var(--ion-color-step-150, #ddd); }
+    .categorias th:first-child, .categorias td:first-child { text-align: left; }
+    .nota-tabla { font-size: 0.75rem; color: var(--ion-color-medium); margin: 6px 0 0; }
     .aviso-parado { max-width: 640px; margin: 0 auto 12px; padding: 10px 12px; border-radius: 10px;
       background: rgba(var(--ion-color-warning-rgb), 0.15); font-size: 0.9rem; }
     .texto-aviso { color: var(--ion-color-warning-shade) !important; }

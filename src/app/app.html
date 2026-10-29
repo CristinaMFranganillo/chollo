@@ -284,6 +284,31 @@
       }
     }
 
+    <!-- ================= BIENVENIDA ================= -->
+    <ion-modal [isOpen]="bienvenida()" [backdropDismiss]="false">
+      <ng-template>
+        <ion-content class="ion-padding">
+          @let paso = pasos[pasoBienvenida()];
+          <div class="bienvenida">
+            <div class="logo" aria-hidden="true">€</div>
+            <h2>{{ paso.titulo }}</h2>
+            <p>{{ paso.texto }}</p>
+            <div class="puntos" role="presentation">
+              @for (x of pasos; track $index) {
+                <span [class.activo]="$index === pasoBienvenida()"></span>
+              }
+            </div>
+            <ion-button expand="block" (click)="siguientePaso()">
+              {{ pasoBienvenida() < pasos.length - 1 ? 'Siguiente' : 'Empezar' }}
+            </ion-button>
+            @if (pasoBienvenida() < pasos.length - 1) {
+              <ion-button expand="block" fill="clear" color="medium" (click)="cerrarBienvenida()">Saltar</ion-button>
+            }
+          </div>
+        </ion-content>
+      </ng-template>
+    </ion-modal>
+
     <!-- ================= AJUSTES ================= -->
     <ion-modal [isOpen]="ajustesAbiertos()" (didDismiss)="ajustesAbiertos.set(false)">
       <ng-template>

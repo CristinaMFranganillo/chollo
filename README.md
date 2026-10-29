@@ -1,4 +1,4 @@
-# Chollos · versión 1.4
+# Chollos · versión 1.5
 
 App en Angular + Ionic + Capacitor que evalúa anuncios de segunda mano con la API de Gemini, usando los criterios de la skill *evaluar-anuncio-segunda-mano*.
 
@@ -7,9 +7,9 @@ App en Angular + Ionic + Capacitor que evalúa anuncios de segunda mano con la A
 | Pantalla | Para qué |
 | --- | --- |
 | **Evaluar** | Subes capturas y/o texto de un anuncio y te da nota de chollo, múltiplo, beneficio, piezas, riesgos y preguntas al vendedor |
-| **Cola** | Preparas varios anuncios con "A la cola" y los evalúa todos seguidos, ordenados de mejor a peor |
+| **Cola** | Preparas varios anuncios con "A la cola" y los evalúa todos seguidos, ordenados de mejor a peor. Se guarda en el móvil aunque se cierre la app |
 | **Avisos** (solo Android) | Lee las notificaciones de tus búsquedas guardadas de Vinted y Wallapop, las filtra con Gemini aunque la app esté cerrada y solo te avisa de lo que parece un chollo |
-| **Cartera** | Lo que has comprado: en stock, guardado como inversión y vendido, con invertido, ganancia latente, beneficio real, €/hora y días hasta vender. "Lo he comprado" en una evaluación lo añade aquí. Exporta a CSV. Avisa de lo que lleva más de 60 días sin venderse. En cada artículo, **Redactar anuncio de venta** prepara título, descripción, precio de salida y mínimo, canal, palabras clave y consejos de fotos, listos para copiar |
+| **Cartera** | Lo que has comprado: en stock, guardado como inversión y vendido, con invertido, ganancia latente, beneficio real, €/hora y días hasta vender. "Lo he comprado" en una evaluación lo añade aquí. Exporta a CSV. Avisa de lo que lleva más de 60 días sin venderse. **Rendimiento por categoría**: beneficio, rentabilidad, €/hora y días hasta vender de cada nicho. En cada artículo, **Redactar anuncio de venta** prepara título, descripción, precio de salida y mínimo, canal, palabras clave y consejos de fotos, listos para copiar |
 | **Historial** | Últimas 50 evaluaciones |
 
 En cada pieza valorada hay botones **Ver vendidos** (eBay, todocoleccion, Wallapop) para comprobar precios reales. En **Avisos** tienes **búsquedas recomendadas** por categoría que se abren en Vinted o Wallapop para guardarlas.
@@ -28,6 +28,10 @@ Cada vez que subes cambios a la rama `main`, GitHub Actions:
 Si una compilación falla, aparece una cruz roja en la pestaña **Actions**. Abre el paso que falla y copia el error.
 
 La firma de los APK de prueba (`android/app/chollos-debug.keystore`, contraseña `android`) está en el repositorio a propósito, para que todas las versiones se puedan instalar unas encima de otras. Sirve solo para uso personal, no para publicar en Google Play.
+
+## Pruebas automáticas
+
+`npm test` ejecuta las pruebas de los cálculos (cartera, categorías, CSV, enlaces, modo demo) en Chrome sin interfaz. GitHub las ejecuta antes de compilar el APK: si fallan, no se publica.
 
 ## Arrancar en el ordenador (versión web)
 

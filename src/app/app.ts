@@ -91,8 +91,69 @@ export class App implements OnInit {
       settingsOutline, imagesOutline, closeCircle, sparklesOutline, trashOutline, addCircleOutline,
       playOutline, notificationsOutline, alertCircleOutline, checkmarkCircleOutline,
     });
+    if (!this.bienvenidaVista()) {
+      this.bienvenida.set(true);
+    } else {
+      this.abrirAjustesSiFaltaClave();
+    }
+  }
+
+  // ---------- Bienvenida (primera vez) ----------
+
+  protected readonly bienvenida = signal(false);
+  protected readonly pasoBienvenida = signal(0);
+  protected readonly pasos = [
+    {
+      titulo: 'Encuentra chollos de segunda mano',
+      texto: 'Chollos evalúa anuncios de Vinted, Wallapop o todocoleccion con IA: te dice si es un chollo, cuánto podrías ganar, los riesgos y qué preguntar al vendedor.',
+    },
+    {
+      titulo: '1. Evalúa',
+      texto: 'Haz capturas del anuncio (fotos y descripción) y súbelas en Evaluar, o compártelas con Chollos desde la galería. Si tienes varios, mándalos a la Cola y evalúalos de una vez.',
+    },
+    {
+      titulo: '2. Recibe avisos',
+      texto: 'En Avisos tienes búsquedas recomendadas para guardar en Vinted y Wallapop. En Android, Chollos lee sus notificaciones y solo te avisa de lo que parece un buen negocio.',
+    },
+    {
+      titulo: '3. Compra, vende y mide',
+      texto: 'Pulsa "Lo he comprado" para llevarlo a la Cartera. Allí redactas el anuncio de venta y ves el beneficio real, los euros por hora y qué categoría te compensa más.',
+    },
+    {
+      titulo: 'Antes de empezar',
+      texto: 'Necesitas una clave gratuita de Gemini (aistudio.google.com/apikey, con tu cuenta personal de Google). Si aún no la tienes, activa el modo demostración en Ajustes para probarlo todo.',
+    },
+  ];
+
+  private bienvenidaVista(): boolean {
+    try {
+      return localStorage.getItem('chollos.bienvenida') === '1';
+    } catch {
+      return true;
+    }
+  }
+
+  protected siguientePaso(): void {
+    if (this.pasoBienvenida() < this.pasos.length - 1) {
+      this.pasoBienvenida.update((p) => p + 1);
+      return;
+    }
+    this.cerrarBienvenida();
+  }
+
+  protected cerrarBienvenida(): void {
+    try {
+      localStorage.setItem('chollos.bienvenida', '1');
+    } catch {
+      /* sin almacenamiento: se volverá a mostrar */
+    }
+    this.bienvenida.set(false);
+    this.abrirAjustesSiFaltaClave();
+  }
+
+  private abrirAjustesSiFaltaClave(): void {
     const a = this.ajustesSrv.ajustes();
-    if (!a.apiKey && !a.demo) this.ajustesAbiertos.set(true);
+    if (!a.apiKey && !a.demo) this.abrirAjustes();
   }
 
   async ngOnInit(): Promise<void> {

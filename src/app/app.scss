@@ -85,3 +85,52 @@ ion-list,
     text-transform: none;
   }
 }
+
+.bienvenida {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 90%;
+  max-width: 480px;
+  margin: 0 auto;
+  text-align: center;
+
+  .logo {
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 16px;
+    border-radius: 18px;
+    background: var(--ion-color-primary);
+    color: #fff;
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 72px;
+  }
+
+  h2 {
+    font-weight: 700;
+  }
+
+  p {
+    color: var(--ion-color-step-700, #555);
+    line-height: 1.5;
+  }
+
+  .puntos {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin: 16px 0 24px;
+
+    span {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--ion-color-step-300, #ccc);
+    }
+
+    .activo {
+      background: var(--ion-color-primary);
+    }
+  }
+}
