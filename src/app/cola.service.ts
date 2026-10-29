@@ -1,7 +1,7 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { GeminiService } from './gemini.service';
 import { HistorialService } from './historial.service';
-import { ElementoCola, ORDEN_NOTA } from './models';
+import { ElementoCola, ORDEN_NOTA, Plataforma } from './models';
 import { miniatura } from './imagenes';
 import { guardar, leer } from './almacen';
 
@@ -22,7 +22,13 @@ export class ColaService {
   constructor() {
     // Las fotos (File) se guardan tal cual en IndexedDB, así la cola sobrevive si Android cierra la app.
     leer<ElementoCola[]>(CLAVE, []).then((guardados) => {
-      const recuperados = guardados.map((e) => (e.estado === 'evaluando' ? { ...e, estado: 'pendiente' as const } : e));
+      const recuperados = guardados.map((e) => ({
+        ...e,
+        // Elementos guardados por versiones anteriores, sin plataforma.
+        plataforma: e.plataforma ?? 'vinted',
+        precioTotal: e.precioTotal ?? null,
+        estado: e.estado === 'evaluando' ? ('pendiente' as const) : e.estado,
+      }));
       this.elementos.update((actuales) => [...recuperados, ...actuales]);
     });
   }
@@ -42,11 +48,19 @@ export class ColaService {
     }),
   );
 
-  async anadir(texto: string, precio: number | null, fotos: File[]): Promise<void> {
+  async anadir(
+    texto: string,
+    precio: number | null,
+    fotos: File[],
+    plataforma: Plataforma = 'vinted',
+    precioTotal: number | null = null,
+  ): Promise<void> {
     const elemento: ElementoCola = {
       id: crypto.randomUUID(),
       texto,
       precio,
+      plataforma,
+      precioTotal,
       fotos,
       miniatura: fotos[0] ? await miniatura(fotos[0]) : null,
       estado: 'pendiente',
@@ -71,7 +85,9 @@ export class ColaService {
         if (elemento.estado !== 'pendiente' && elemento.estado !== 'error') continue;
         this.actualizar(elemento.id, { estado: 'evaluando', error: undefined });
         try {
-          const evaluacion = await this.gemini.evaluar(elemento.texto, elemento.precio, elemento.fotos);
+          const evaluacion = await this.gemini.evaluar(
+            elemento.texto, elemento.precio, elemento.fotos, elemento.plataforma, elemento.precioTotal,
+          );
           this.actualizar(elemento.id, { estado: 'hecho', evaluacion });
           this.historial.anadir({
             id: elemento.id,

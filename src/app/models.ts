@@ -81,11 +81,24 @@ export interface AnuncioVenta {
   consejos_fotos: string[];
 }
 
+/** Dónde y cómo se compra: cambia las comisiones y el envío que se suman al coste. */
+export type Plataforma = 'vinted' | 'wallapop_envio' | 'wallapop_mano' | 'otra';
+
+export const NOMBRE_PLATAFORMA: Record<Plataforma, string> = {
+  vinted: 'Vinted',
+  wallapop_envio: 'Wallapop con envío',
+  wallapop_mano: 'Wallapop en mano',
+  otra: 'Otra plataforma',
+};
+
 /** Un anuncio en la cola de evaluación. */
 export interface ElementoCola {
   id: string;
   texto: string;
   precio: number | null;
+  plataforma: Plataforma;
+  /** Precio total que muestra la app al pagar (con envío y comisiones), si se conoce. */
+  precioTotal: number | null;
   fotos: File[];
   miniatura: string | null;
   estado: 'pendiente' | 'evaluando' | 'hecho' | 'error';

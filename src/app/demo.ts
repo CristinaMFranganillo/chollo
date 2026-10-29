@@ -39,13 +39,13 @@ export async function evaluacionDemo(texto: string, precio: number | null, fotos
       preguntas_vendedor: ['¿Puedes enviar una foto de cerca de los punzones?', '¿Cuánto pesa sin los cuchillos?'],
     };
   }
-  if (/lego|playmobil|exin|scalextric|nancy|madelman/.test(t)) {
+  if (/lego|minifig/.test(t)) {
     const ingreso = Math.round(p * 2.3);
     return {
-      nota: 'BUENO', motivo: 'DEMO · Lote con piezas de colección identificables', categoria: /lego/.test(t) ? 'LEGO' : 'Juguetes españoles',
+      nota: 'BUENO', motivo: 'DEMO · Lote con piezas de colección identificables', categoria: 'LEGO',
       ...base(ingreso), oferta_maxima_eur: null,
       piezas: [{ nombre: 'Set descatalogado', confianza: 'posible', precio_min_eur: Math.round(ingreso * 0.8), precio_max_eur: Math.round(ingreso * 1.2), fuente: 'Ejemplo de demostración' }],
-      revender_o_guardar: 'Revender.', como_venderlo: 'BrickLink o todocoleccion, por sets completos.',
+      revender_o_guardar: 'Revender.', como_venderlo: 'BrickLink o Wallapop, por sets completos.',
       riesgos: ['Puede estar incompleto'], preguntas_vendedor: ['¿Están todas las piezas e instrucciones?'],
     };
   }

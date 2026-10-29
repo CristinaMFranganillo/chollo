@@ -47,6 +47,21 @@
                   <ion-input label="Precio (€)" labelPlacement="stacked" type="text" inputmode="decimal"
                     placeholder="Opcional si sale en la captura" [(ngModel)]="precio"></ion-input>
                 </ion-item>
+                <ion-item>
+                  <ion-select label="Dónde lo compras" labelPlacement="stacked" interface="popover"
+                    [value]="plataforma" (ionChange)="cambiarPlataforma($event.detail.value)">
+                    <ion-select-option value="vinted">Vinted</ion-select-option>
+                    <ion-select-option value="wallapop_envio">Wallapop con envío</ion-select-option>
+                    <ion-select-option value="wallapop_mano">Wallapop en mano</ion-select-option>
+                    <ion-select-option value="otra">Otra plataforma</ion-select-option>
+                  </ion-select>
+                </ion-item>
+                @if (plataforma !== 'wallapop_mano') {
+                  <ion-item>
+                    <ion-input label="Total al pagar (€), si lo sabes" labelPlacement="stacked" type="text" inputmode="decimal"
+                      placeholder="Con envío y comisiones" [(ngModel)]="precioTotal"></ion-input>
+                  </ion-item>
+                }
               </ion-list>
 
               <div class="fotos">
@@ -132,7 +147,7 @@
                   <h3>{{ e.texto.split('\n')[0] || 'Anuncio sin texto' }}</h3>
                   <p>
                     @if (e.precio != null) { {{ e.precio }} € · }
-                    {{ e.fotos.length }} capturas
+                    {{ nombrePlataforma[e.plataforma] }} · {{ e.fotos.length }} capturas
                     @if (e.evaluacion) { · {{ e.evaluacion.beneficio_neto_eur | number: '1.0-0' }} € netos }
                     @if (e.estado === 'error') { · <span class="texto-error">{{ e.error }}</span> }
                   </p>

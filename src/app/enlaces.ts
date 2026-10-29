@@ -27,10 +27,9 @@ export const buscarEn = {
 
 /** Búsquedas recomendadas por categoría: genéricas, donde aparecen los chollos. */
 export const BUSQUEDAS_RECOMENDADAS: { categoria: string; terminos: string[] }[] = [
-  { categoria: 'Genéricas', terminos: ['vaciado trastero', 'lote juguetes antiguos', 'herencia', 'cosas de mi infancia'] },
+  { categoria: 'Genéricas', terminos: ['vaciado trastero', 'vaciado piso', 'herencia', 'mudanza urge'] },
   { categoria: 'LEGO', terminos: ['lego al peso', 'caja lego variado', 'lego star wars completo', 'muñecos lego'] },
   { categoria: 'Retro', terminos: ['lote juegos game boy', 'consola antigua con juegos', 'game cube', 'nintendo 64 juegos'] },
-  { categoria: 'Juguetes españoles', terminos: ['playmobil antiguo', 'famobil', 'exin castillos', 'scalextric exin', 'nancy famosa', 'madelman'] },
   { categoria: 'Cuberterías', terminos: ['cubertería plata', 'cubiertos plata', 'cubertería antigua', 'plata 916', 'christofle', 'wmf 90'] },
   { categoria: 'Vajillas', terminos: ['vajilla pickman', 'vajilla sargadelos', 'vajilla limoges', 'vajilla porcelana antigua'] },
   { categoria: 'Menaje', terminos: ['le creuset', 'staub', 'cocotte hierro', 'cazo cobre'] },

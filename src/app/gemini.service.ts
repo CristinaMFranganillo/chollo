@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { AjustesService } from './ajustes.service';
 import { AprendizajesService } from './aprendizajes.service';
-import { AnuncioVenta, ArticuloCartera, Evaluacion } from './models';
+import { AnuncioVenta, ArticuloCartera, Evaluacion, NOMBRE_PLATAFORMA, Plataforma } from './models';
 import { instruccionesPara } from './conocimiento';
 import { imagenABase64 } from './imagenes';
 import { anuncioDemo, evaluacionDemo } from './demo';
@@ -23,7 +23,7 @@ sin texto antes ni después y sin bloques de código, con exactamente estas clav
 {
   "nota": "CHOLLO" | "BUENO" | "NEGOCIABLE" | "DESCARTADO",
   "motivo": "una frase con el porqué",
-  "categoria": "LEGO | Retro | Juguetes españoles | Vajillas | Cuberterías | Menaje | Cristalería | Decoración y herrajes | Mixto | Otra",
+  "categoria": "LEGO | Retro | Vajillas | Cuberterías | Menaje | Cristalería | Decoración y herrajes | Mixto | Otra",
   "multiplo": número (ingreso neto / coste total, con un decimal),
   "coste_total_eur": número,
   "ingreso_neto_eur": número (conservador),
@@ -44,7 +44,13 @@ export class GeminiService {
   private readonly ajustes = inject(AjustesService);
   private readonly aprendizajes = inject(AprendizajesService);
 
-  async evaluar(texto: string, precio: number | null, fotos: File[]): Promise<Evaluacion> {
+  async evaluar(
+    texto: string,
+    precio: number | null,
+    fotos: File[],
+    plataforma: Plataforma = 'vinted',
+    precioTotal: number | null = null,
+  ): Promise<Evaluacion> {
     const { apiKey, modelo, buscarPrecios, demo } = this.ajustes.ajustes();
     if (demo) {
       return evaluacionDemo(texto, precio, fotos.length);
@@ -60,6 +66,10 @@ export class GeminiService {
     const mensaje = [
       'Evalúa este anuncio.',
       precio != null ? `Precio pedido: ${precio} €.` : 'Precio: no indicado (búscalo en las capturas).',
+      `Plataforma y entrega: ${NOMBRE_PLATAFORMA[plataforma]}.`,
+      precioTotal != null
+        ? `Precio total al pagar (con envío y comisiones), según la app: ${precioTotal} €. Úsalo como coste total.`
+        : 'Precio total al pagar: no indicado; calcúlalo según la plataforma.',
       texto ? `Texto del anuncio:\n${texto}` : 'Sin texto: usa las capturas.',
       `Fotos adjuntas: ${imagenes.length}.`,
       `Fecha de hoy: ${new Date().toISOString().slice(0, 10)}.`,

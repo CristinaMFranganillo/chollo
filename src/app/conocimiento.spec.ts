@@ -24,4 +24,10 @@ describe('Conocimiento por categoría', () => {
     expect(instruccionesPara('')).toContain('## Anexo D.');
     expect(instruccionesPara('cosas de casa variadas')).not.toContain('Se han omitido');
   });
+
+  it('incluye los costes de Wallapop y ya no trata juguetes', () => {
+    expect(NUCLEO).toContain('Wallapop en mano');
+    expect(NUCLEO).toContain('cuándo conviene la compra en mano');
+    expect(NUCLEO.toLowerCase()).not.toContain('juguete');
+  });
 });

@@ -23,7 +23,6 @@ final class FiltroGemini {
         "Eres un filtro rápido para alguien que compra artículos de segunda mano en Vinted o Wallapop para revenderlos. "
         + "Solo ves el texto de una notificación (título, a veces precio y poco más), sin fotos.\n"
         + "Categorías que le interesan: LEGO (sets descatalogados, minifiguras, lotes), videojuegos y consolas retro (PAL, completos en caja), "
-        + "juguetes españoles antiguos (Playmobil o Famobil antiguos, Exin Castillos, Scalextric Exin, Nancy y Famosa, Madelman, Geyperman), "
         + "vajillas de marca (Sargadelos, Pickman, Vista Alegre, Limoges, Rosenthal, Royal Copenhagen, Herend, Arabia, Iittala, Rörstrand), "
         + "cuberterías de plata de ley (916, 925; marcas como Georg Jensen, Puiforcat, Tiffany, Robbe & Berking, Espuñes, Pedro Durán) "
         + "o plateado de marca (Christofle, Ercuis, WMF 90/100), menaje premium (Le Creuset, Staub, cobre Mauviel, Pyrex vintage), "

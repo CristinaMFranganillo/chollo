@@ -6,7 +6,7 @@ import {
   IonApp, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonButton, IonIcon,
   IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonItem, IonInput,
   IonTextarea, IonList, IonLabel, IonBadge, IonSpinner, IonModal, IonToggle, IonSegment,
-  IonSegmentButton, IonNote, IonThumbnail, IonListHeader, AlertController,
+  IonSegmentButton, IonNote, IonThumbnail, IonListHeader, AlertController, IonSelect, IonSelectOption,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
@@ -17,7 +17,7 @@ import { GeminiService } from './gemini.service';
 import { AjustesService } from './ajustes.service';
 import { HistorialService } from './historial.service';
 import { ColaService } from './cola.service';
-import { Ajustes, Aviso, Evaluacion, RegistroEvaluacion } from './models';
+import { Ajustes, Aviso, Evaluacion, NOMBRE_PLATAFORMA, Plataforma, RegistroEvaluacion } from './models';
 import { miniatura } from './imagenes';
 import { colorNota } from './colores';
 import { ResultadoComponent } from './resultado.component';
@@ -38,7 +38,7 @@ type Vista = 'evaluar' | 'cola' | 'avisos' | 'cartera' | 'historial';
     IonApp, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonButton, IonIcon,
     IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonItem, IonInput,
     IonTextarea, IonList, IonLabel, IonBadge, IonSpinner, IonModal, IonToggle, IonSegment,
-    IonSegmentButton, IonNote, IonThumbnail, IonListHeader,
+    IonSegmentButton, IonNote, IonThumbnail, IonListHeader, IonSelect, IonSelectOption,
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss',
@@ -59,6 +59,10 @@ export class App implements OnInit {
   // Formulario del anuncio actual
   protected texto = '';
   protected precio: number | string | null = null;
+  /** Plataforma y forma de entrega: cambian comisiones y envío. Se recuerda la última usada. */
+  protected plataforma: Plataforma = leerPlataforma();
+  protected precioTotal: number | string | null = null;
+  protected readonly nombrePlataforma = NOMBRE_PLATAFORMA;
   protected readonly fotos = signal<{ archivo: File; url: string }[]>([]);
   protected readonly cargando = signal(false);
   protected readonly error = signal<string | null>(null);
@@ -164,6 +168,8 @@ export class App implements OnInit {
     await escucharCompartir((c) =>
       this.zone.run(() => {
         if (c.texto) this.texto = this.texto ? `${this.texto}\n${c.texto}` : c.texto;
+        if (/wallapop/i.test(c.texto)) this.plataforma = 'wallapop_envio';
+        else if (/vinted/i.test(c.texto)) this.plataforma = 'vinted';
         this.anadirArchivos(c.fotos);
         this.resultado.set(null);
         this.vista.set('evaluar');
@@ -215,6 +221,21 @@ export class App implements OnInit {
   }
 
   /** ion-input puede devolver el número como texto: lo normalizamos. */
+  private totalNumero(): number | null {
+    if (this.precioTotal === null || String(this.precioTotal).trim() === '') return null;
+    const n = Number(String(this.precioTotal).replace(',', '.'));
+    return Number.isFinite(n) ? n : null;
+  }
+
+  protected cambiarPlataforma(p: Plataforma): void {
+    this.plataforma = p;
+    try {
+      localStorage.setItem('chollos.plataforma', p);
+    } catch {
+      /* sin almacenamiento */
+    }
+  }
+
   private precioNumero(): number | null {
     if (this.precio === null || String(this.precio).trim() === '') return null;
     const n = Number(String(this.precio).replace(',', '.'));
@@ -229,7 +250,7 @@ export class App implements OnInit {
     try {
       const archivos = this.fotos().map((f) => f.archivo);
       const precio = this.precioNumero();
-      const evaluacion = await this.gemini.evaluar(this.texto.trim(), precio, archivos);
+      const evaluacion = await this.gemini.evaluar(this.texto.trim(), precio, archivos, this.plataforma, this.totalNumero());
       const titulo = this.texto.trim().split('\n')[0].slice(0, 60) || evaluacion.categoria;
       const mini = archivos[0] ? await miniatura(archivos[0]) : null;
       this.resultado.set(evaluacion);
@@ -250,7 +271,9 @@ export class App implements OnInit {
   }
 
   protected async anadirACola(): Promise<void> {
-    await this.cola.anadir(this.texto.trim(), this.precioNumero(), this.fotos().map((f) => f.archivo));
+    await this.cola.anadir(
+      this.texto.trim(), this.precioNumero(), this.fotos().map((f) => f.archivo), this.plataforma, this.totalNumero(),
+    );
     this.limpiarFormulario();
     this.aviso.set(`Añadido a la cola (${this.cola.pendientes()} pendientes). Puedes preparar el siguiente.`);
   }
@@ -267,6 +290,7 @@ export class App implements OnInit {
     this.fotos.set([]);
     this.texto = '';
     this.precio = null;
+    this.precioTotal = null;
   }
 
   // ---------- Cola ----------
@@ -320,6 +344,8 @@ export class App implements OnInit {
   protected evaluarAviso(a: Aviso): void {
     this.nuevo();
     this.texto = [a.titulo, a.texto].filter(Boolean).join('\n');
+    if (a.app === 'Wallapop') this.plataforma = 'wallapop_envio';
+    else if (a.app === 'Vinted') this.plataforma = 'vinted';
     this.vista.set('evaluar');
     this.aviso.set('Abre el anuncio en Vinted, haz capturas y compártelas con Chollos para evaluarlo a fondo.');
   }
@@ -445,5 +471,14 @@ export class App implements OnInit {
     this.ajustesSrv.guardar({ ...this.borrador, apiKey: this.borrador.apiKey.trim() });
     this.ajustesAbiertos.set(false);
     await this.sincronizarVigilante();
+  }
+}
+
+function leerPlataforma(): Plataforma {
+  try {
+    const p = localStorage.getItem('chollos.plataforma') as Plataforma | null;
+    return p && p in NOMBRE_PLATAFORMA ? p : 'vinted';
+  } catch {
+    return 'vinted';
   }
 }

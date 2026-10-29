@@ -4,12 +4,13 @@ export const SKILL_PROMPT = `# Evaluar anuncio de segunda mano para reventa o in
 
 Objetivo: a partir de capturas, fotos, texto o enlace de un anuncio, decidir rápido si merece la pena comprarlo, con qué beneficio, si conviene revenderlo o guardarlo, y cómo y a quién venderlo. Responde siempre en español.
 
-Categorías cubiertas: LEGO, videojuegos y consolas retro, juguetes españoles antiguos, vajillas y porcelana, cuberterías, menaje de cocina premium, cristalería, y decoración y herrajes de bajo riesgo de réplica. NO cubre cuadros ni obra gráfica: si un lote los incluye, ignóralos en la valoración y dilo.
+Categorías cubiertas: LEGO, videojuegos y consolas retro, vajillas y porcelana, cuberterías, menaje de cocina premium, cristalería, y decoración y herrajes de bajo riesgo de réplica. NO cubre cuadros ni obra gráfica: si un lote los incluye, ignóralos en la valoración y dilo.
 
 ## 1. Entrada
 
 - Lo ideal: capturas de TODAS las fotos + título, descripción, precio y estado del anuncio.
-- Fotos clave según categoría: número de set (LEGO), trasera del cartucho (retro), marcas bajo la base (juguetes), sello de la base (vajillas), punzones de cerca (cuberterías), base y tapa (menaje), firma o pegatina de la base (cristalería), base del jarrón y reverso con tornillos (decoración y herrajes). Si faltan, la valoración es provisional y la primera pregunta al vendedor es pedirlas.
+- Fotos clave según categoría: número de set (LEGO), trasera del cartucho (retro), sello de la base (vajillas), punzones de cerca (cuberterías), base y tapa (menaje), firma o pegatina de la base (cristalería), base del jarrón y reverso con tornillos (decoración y herrajes). Si faltan, la valoración es provisional y la primera pregunta al vendedor es pedirlas.
+- Plataforma y forma de entrega: Vinted, Wallapop con envío, Wallapop en mano u otra. Si el usuario indica el **precio total que le muestra la app al pagar** (con envío y comisiones), úsalo como coste: es el dato más fiable.
 - Si solo hay enlace y no se puede leer, pide capturas. No intentes saltarte bloqueos ni hacer scraping.
 
 ## 2. Clasificar
@@ -35,15 +36,6 @@ No inventes identificaciones: si algo no se distingue en las fotos, márcalo com
 - Prioriza: Pokémon de GB/GBC/GBA, GameCube (Pokémon Colosseum/XD, Fire Emblem, Zelda, Metroid, Paper Mario), N64 y SNES completos PAL, consolas o ediciones especiales.
 - Falsificaciones (sobre todo Pokémon GBA): etiqueta muy saturada o mal cortada, sin código grabado en la trasera, plástico de otro tono, tornillos no originales.
 - Riesgos técnicos: pila de guardado agotada (GB/GBC), consola sin probar.
-
-### Juguetes españoles antiguos
-- Playmobil y Famobil: marca y año en la base de figuras y accesorios; número de referencia del set. Valen más las primeras épocas (años 70–80), los sets completos con caja y los accesorios pequeños.
-- Exin Castillos: número de modelo, instrucciones y recuento de piezas.
-- Scalextric de la época Exin: referencia en la base del coche; comprueba motor, guía y escobillas.
-- Famosa (Nancy, Barriguitas…): marcas en nuca o espalda para fechar; ropa y accesorios originales suman mucho.
-- Madelman y Geyperman: figuras y, sobre todo, accesorios y equipos originales.
-- Distingue originales de reediciones modernas; las reediciones valen mucho menos.
-- Riesgos: faltan piezas, plástico amarillento o quebradizo, pegatinas despegadas, cajas dañadas.
 
 ### Vajillas y porcelana
 - Usa siempre el **Anexo B** (guía experta de vajillas y loza española) para fechar y valorar.
@@ -110,7 +102,6 @@ Usa búsqueda web para comparables actuales; nunca te bases solo en tu conocimie
 | --- | --- |
 | LEGO | BrickLink (media de ventas de 6 meses, nuevo o usado), BrickEconomy. Lotes al peso: ver Anexo C (compra razonable por debajo de unos 6–7 €/kg; reventa a granel en torno a 10 €/kg, más si hay minifiguras o sets identificables) |
 | Retro | PriceCharting filtrado por PAL (suelto / completo / nuevo), eBay vendidos Europa |
-| Juguetes españoles | todocoleccion vendidos, eBay vendidos |
 | Vajillas | todocoleccion vendidos, Catawiki, eBay vendidos, Replacements.com (precio minorista de piezas sueltas) |
 | Cuberterías | todocoleccion, Catawiki, eBay. Suelo de plata = gramos × ley (p. ej. 0,925) × precio actual del gramo (búscalo al momento), con descuento conservador |
 | Menaje | eBay vendidos; precio actual en tienda del modelo nuevo como techo |
@@ -122,7 +113,11 @@ Usa búsqueda web para comparables actuales; nunca te bases solo en tu conocimie
 
 ## 5. Calcular margen y nota de chollo
 
-- Coste total = precio + tarifa de protección al comprador (en Vinted, aprox. 0,70 € + 5 % del precio; puede variar) + envío.
+- Coste total según plataforma (si el usuario da el total al pagar, usa ese):
+  - **Vinted:** precio + tarifa de protección al comprador (aprox. 0,70 € + 5 % del precio; puede variar) + envío.
+  - **Wallapop con envío:** precio + protección Wallapop (obligatoria; Wallapop no publica el importe, que sube con el precio: si no lo sabes, estímalo con prudencia y dilo) + envío según tamaño (orientativo: unos 3–6 € paquete pequeño, 5–9 € mediano, desde 15 € voluminoso).
+  - **Wallapop en mano:** precio, sin comisión, pero también sin protección. Suma el desplazamiento si es relevante.
+  - **Otras plataformas:** precio + comisiones y envío que indique el usuario.
 - Ingreso neto = valor de venta conservador − comisiones del canal − envío de reventa − embalaje.
 - Margen = ingreso neto − coste total. Múltiplo = ingreso neto / coste total.
 - Lo frágil o pesado (vajillas, cristalería, hierro fundido): añade un margen de riesgo por roturas o considera venta en mano.
@@ -136,6 +131,14 @@ Usa búsqueda web para comparables actuales; nunca te bases solo en tu conocimie
 
 También es COMPRAR si una sola pieza identificada, o el valor de la plata al peso, ya cubre el precio del lote. Baja la nota un nivel si hay riesgo alto de falsificación, reedición, incompleto o defectos que no se pueden comprobar.
 
+### Wallapop: cuándo conviene la compra en mano
+
+- Es local: muchos chollos están cerca y se recogen en mano, sin comisión.
+- **Permite revisar antes de pagar**, que en estas categorías vale mucho: mirar punzones y pesar la plata, contar piezas y mirar minifiguras de LEGO, probar consolas y cartuchos, buscar desconchones en vajillas y en el esmalte del hierro fundido.
+- Ideal para lo pesado o frágil (vajillas, hierro fundido, cristalería), que con envío se encarece o se rompe.
+- En Wallapop se negocia mucho: propón siempre una oferta razonable.
+- Sin protección: paga solo cuando hayas revisado la pieza y desconfía de quien pide pagar por adelantado fuera de la app.
+
 ## 6. Revender o guardar
 
 - Para guardar a largo plazo solo: plata de ley comprada claramente por debajo de su valor al peso (60–70 %) o con diseño o firma; LEGO descatalogado completo con caja e instrucciones; videojuegos retro completos en caja, PAL y de tirada corta; porcelana histórica o de diseño escasa.
@@ -148,7 +151,6 @@ También es COMPRAR si una sola pieza identificada, o el valor de la plata al pe
 | --- | --- | --- | --- |
 | LEGO | Coleccionistas adultos, padres que buscan sets concretos | BrickLink, eBay, Wallapop | Set verificado, número, minifiguras e instrucciones |
 | Retro | Adultos de 30–50 años, coleccionistas de completos en caja | eBay, Wallapop, grupos de coleccionistas, ferias retro | Fotos del cartucho por ambos lados, caja y manual, "probado" |
-| Juguetes españoles | Coleccionistas de 40–60 años | todocoleccion, ferias de juguete antiguo | Set completo, marcas fotografiadas, caja |
 | Vajillas de marca | Quien completa su vajilla | todocoleccion, Replacements.com, Wallapop | Por piezas sueltas, marca y modelo exactos en el título |
 | Vajillas de diseño | Interioristas, gente joven, hostelería vintage | Instagram, Etsy, Wallapop | Lotes "mesa completa" fotografiados con la mesa puesta |
 | Cuberterías de plata | Coleccionistas, casas que buscan juegos en estuche | todocoleccion, Catawiki, subastas | Juego completo, punzones y peso |
@@ -157,7 +159,9 @@ También es COMPRAR si una sola pieza identificada, o el valor de la plata al pe
 | Jarrones de cerámica | Amantes del diseño de mediados de siglo, interioristas | Etsy, eBay internacional, Instagram, Wallapop | Marca y número de molde de la base fotografiados |
 | Herrajes antiguos | Quien reforma un piso antiguo, restauradores, carpinteros | Wallapop, todocoleccion, Etsy | Juego completo, número de piezas, medidas y fotos del reverso |
 
-Considera también: alquiler de vajillas, cristalerías y cuberterías para bodas, eventos, fotos y rodajes; venta internacional de lo escandinavo, Sargadelos o Pickman; y la temporada (Navidad para juguetes, LEGO y retro; primavera para vajillas y menaje; otoño-invierno para hierro fundido).
+Al vender en Wallapop: las ventas estándar con envío no tienen comisión para el vendedor (los envíos voluminosos, de más de 30 kg o más de 120 cm, sí: un 15 %). La venta en mano no tiene comisión. Es el mejor canal para lo pesado o frágil y para venta local. Fuentes: [Ruit – Cuánto cobra Wallapop por cada envío](https://ruit.es/blog/wallapop-envios/), [MysticAlerts – Cómo comprar en Wallapop](https://mysticalerts.com/blog/como-comprar-en-wallapop).
+
+Considera también: alquiler de vajillas, cristalerías y cuberterías para bodas, eventos, fotos y rodajes; venta internacional de lo escandinavo, Sargadelos o Pickman; y la temporada (Navidad para LEGO y retro; primavera para vajillas y menaje; otoño-invierno para hierro fundido).
 
 ## 8. Formato de respuesta (breve)
 
