@@ -8,3 +8,384 @@
 @import '@ionic/angular/css/display.css';
 /* Modo oscuro según el sistema */
 @import '@ionic/angular/css/palettes/dark.system.css';
+
+/* =====================================================================
+   Sistema visual de Chollos
+   Línea fina + cristal: azul petróleo, coral para lo excepcional,
+   tipografía Plus Jakarta Sans (incluida en la app, funciona sin conexión).
+   ===================================================================== */
+@import '@fontsource-variable/plus-jakarta-sans/index.css';
+
+:root {
+  --ion-font-family: 'Plus Jakarta Sans Variable', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  /* Marca */
+  --marca-petroleo: #0e5a6e;
+  --marca-petroleo-suave: #e2eff1;
+  --marca-coral: #ff7a6b;
+  --marca-coral-suave: #ffe7e3;
+  --tinta: #10262e;
+  --tinta-suave: #4f6670;
+
+  /* Superficies */
+  --fondo-app:
+    radial-gradient(60% 40% at 100% 0%, rgba(255, 122, 107, 0.16) 0%, transparent 70%),
+    radial-gradient(70% 45% at 0% 30%, rgba(14, 90, 110, 0.14) 0%, transparent 70%),
+    linear-gradient(180deg, #f4f8f9 0%, #f7f3f1 100%);
+  --cristal: rgba(255, 255, 255, 0.72);
+  --cristal-fuerte: rgba(255, 255, 255, 0.86);
+  --cristal-borde: rgba(255, 255, 255, 0.9);
+  --sombra: 0 1px 2px rgba(16, 38, 46, 0.04), 0 10px 30px rgba(16, 38, 46, 0.08);
+  --campo: rgba(16, 38, 46, 0.045);
+  --radio: 20px;
+  --radio-sm: 14px;
+
+  /* Ilustraciones */
+  --ilu-trazo: #0e5a6e;
+  --ilu-acento: #f0604f;
+  --ilu-fondo: rgba(14, 90, 110, 0.09);
+  --ilu-papel: #ffffff;
+
+  --ion-background-color: #f4f8f9;
+  --ion-background-color-rgb: 244, 248, 249;
+  --ion-text-color: var(--tinta);
+  --ion-text-color-rgb: 16, 38, 46;
+
+  --ion-color-primary: #0e5a6e;
+  --ion-color-primary-rgb: 14, 90, 110;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #0c4f61;
+  --ion-color-primary-tint: #266b7d;
+
+  --ion-color-secondary: #c43d33;
+  --ion-color-secondary-rgb: 196, 61, 51;
+  --ion-color-secondary-contrast: #ffffff;
+  --ion-color-secondary-contrast-rgb: 255, 255, 255;
+  --ion-color-secondary-shade: #ac362d;
+  --ion-color-secondary-tint: #ca5047;
+
+  --ion-color-success: #11785a;
+  --ion-color-success-rgb: 17, 120, 90;
+  --ion-color-success-contrast: #ffffff;
+  --ion-color-success-contrast-rgb: 255, 255, 255;
+  --ion-color-success-shade: #0f6a4f;
+  --ion-color-success-tint: #29866b;
+
+  --ion-color-warning: #a35c00;
+  --ion-color-warning-rgb: 163, 92, 0;
+  --ion-color-warning-contrast: #ffffff;
+  --ion-color-warning-contrast-rgb: 255, 255, 255;
+  --ion-color-warning-shade: #8f5100;
+  --ion-color-warning-tint: #ac6c1a;
+
+  --ion-color-danger: #b42318;
+  --ion-color-danger-rgb: 180, 35, 24;
+  --ion-color-danger-contrast: #ffffff;
+  --ion-color-danger-contrast-rgb: 255, 255, 255;
+  --ion-color-danger-shade: #9e1f15;
+  --ion-color-danger-tint: #bc392f;
+
+  --ion-color-medium: #5d727b;
+  --ion-color-medium-rgb: 93, 114, 123;
+  --ion-color-medium-contrast: #ffffff;
+  --ion-color-medium-contrast-rgb: 255, 255, 255;
+  --ion-color-medium-shade: #52646c;
+  --ion-color-medium-tint: #6d8088;
+
+  --ion-color-light: #eef3f4;
+  --ion-color-light-rgb: 238, 243, 244;
+  --ion-color-light-contrast: #10262e;
+  --ion-color-light-contrast-rgb: 16, 38, 46;
+  --ion-color-light-shade: #d1d6d7;
+  --ion-color-light-tint: #f0f4f5;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --marca-petroleo: #5cc2d6;
+    --marca-petroleo-suave: rgba(92, 194, 214, 0.14);
+    --marca-coral: #ff8a7a;
+    --marca-coral-suave: rgba(255, 138, 122, 0.16);
+    --tinta: #e6f0f2;
+    --tinta-suave: #a7bac0;
+
+    --fondo-app:
+      radial-gradient(60% 40% at 100% 0%, rgba(255, 122, 107, 0.14) 0%, transparent 70%),
+      radial-gradient(70% 45% at 0% 30%, rgba(92, 194, 214, 0.12) 0%, transparent 70%),
+      linear-gradient(180deg, #0a171c 0%, #0f1a1f 100%);
+    --cristal: rgba(28, 46, 54, 0.62);
+    --cristal-fuerte: rgba(20, 36, 43, 0.86);
+    --cristal-borde: rgba(255, 255, 255, 0.08);
+    --sombra: 0 10px 30px rgba(0, 0, 0, 0.35);
+    --campo: rgba(255, 255, 255, 0.06);
+
+    --ilu-trazo: #7fd3e3;
+    --ilu-acento: #ff8a7a;
+    --ilu-fondo: rgba(92, 194, 214, 0.1);
+    --ilu-papel: #16272e;
+
+    --ion-background-color: #0b181d;
+    --ion-background-color-rgb: 11, 24, 29;
+    --ion-text-color: var(--tinta);
+    --ion-text-color-rgb: 230, 240, 242;
+    --ion-item-background: transparent;
+    --ion-card-background: var(--cristal);
+
+    --ion-color-primary: #5cc2d6;
+    --ion-color-primary-rgb: 92, 194, 214;
+    --ion-color-primary-contrast: #062a33;
+    --ion-color-primary-contrast-rgb: 6, 42, 51;
+    --ion-color-primary-shade: #51abbc;
+    --ion-color-primary-tint: #6cc8da;
+
+    --ion-color-secondary: #ff8a7a;
+    --ion-color-secondary-rgb: 255, 138, 122;
+    --ion-color-secondary-contrast: #2a0a06;
+    --ion-color-secondary-contrast-rgb: 42, 10, 6;
+    --ion-color-secondary-shade: #e0796b;
+    --ion-color-secondary-tint: #ff9687;
+
+    --ion-color-success: #4fd1a5;
+    --ion-color-success-rgb: 79, 209, 165;
+    --ion-color-success-contrast: #032619;
+    --ion-color-success-contrast-rgb: 3, 38, 25;
+    --ion-color-success-shade: #46b891;
+    --ion-color-success-tint: #61d6ae;
+
+    --ion-color-warning: #f5b84f;
+    --ion-color-warning-rgb: 245, 184, 79;
+    --ion-color-warning-contrast: #2b1900;
+    --ion-color-warning-contrast-rgb: 43, 25, 0;
+    --ion-color-warning-shade: #d8a246;
+    --ion-color-warning-tint: #f6bf61;
+
+    --ion-color-danger: #ff8a80;
+    --ion-color-danger-rgb: 255, 138, 128;
+    --ion-color-danger-contrast: #2b0603;
+    --ion-color-danger-contrast-rgb: 43, 6, 3;
+    --ion-color-danger-shade: #e07971;
+    --ion-color-danger-tint: #ff968d;
+
+    --ion-color-medium: #93a6ad;
+    --ion-color-medium-rgb: 147, 166, 173;
+    --ion-color-medium-contrast: #0b181d;
+    --ion-color-medium-contrast-rgb: 11, 24, 29;
+    --ion-color-medium-shade: #819298;
+    --ion-color-medium-tint: #9eafb5;
+
+    --ion-color-light: #1a2b31;
+    --ion-color-light-rgb: 26, 43, 49;
+    --ion-color-light-contrast: #e6f0f2;
+    --ion-color-light-contrast-rgb: 230, 240, 242;
+    --ion-color-light-shade: #17262b;
+    --ion-color-light-tint: #314046;
+  }
+}
+
+/* ---------- Base ---------- */
+body {
+  font-feature-settings: 'tnum' 1, 'cv11' 1;
+  -webkit-font-smoothing: antialiased;
+}
+
+ion-content {
+  --background: var(--fondo-app);
+}
+
+h1, h2, h3, h4 {
+  letter-spacing: -0.01em;
+}
+
+/* ---------- Tarjetas de cristal ---------- */
+ion-card {
+  --background: var(--cristal);
+  --color: var(--tinta);
+  margin: 0 auto 16px;
+  border: 1px solid var(--cristal-borde);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+  backdrop-filter: blur(18px) saturate(150%);
+}
+
+ion-card-title {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--tinta);
+}
+
+ion-card-subtitle {
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--tinta-suave);
+}
+
+ion-list,
+ion-list-header {
+  --background: transparent;
+  background: transparent !important;
+}
+
+ion-item {
+  --background: transparent;
+  --border-color: rgba(var(--ion-text-color-rgb), 0.08);
+}
+
+ion-list-header {
+  font-weight: 800;
+  font-size: 1.05rem;
+}
+
+/* ---------- Botones ---------- */
+ion-button {
+  --border-radius: var(--radio-sm);
+  --box-shadow: none;
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 700;
+  min-height: 46px;
+}
+
+ion-button[size='small'] {
+  min-height: 32px;
+  --border-radius: 10px;
+}
+
+ion-button[fill='outline'] {
+  --border-width: 0;
+  --background: var(--marca-petroleo-suave);
+  --background-hover: var(--marca-petroleo-suave);
+  --color: var(--ion-color-primary);
+}
+
+ion-button[fill='outline'][color='medium'] {
+  --background: var(--campo);
+  --color: var(--tinta-suave);
+}
+
+ion-button:not([fill]):not([color]),
+ion-button[fill='solid']:not([color]) {
+  --box-shadow: 0 6px 16px rgba(var(--ion-color-primary-rgb), 0.28);
+}
+
+/* ---------- Campos de formulario ---------- */
+.formulario ion-item {
+  --background: var(--campo);
+  --border-width: 0;
+  --inner-border-width: 0;
+  --padding-start: 14px;
+  --inner-padding-end: 14px;
+  border-radius: var(--radio-sm);
+  margin-bottom: 10px;
+}
+
+ion-input,
+ion-textarea,
+ion-select {
+  --placeholder-color: var(--tinta-suave);
+  --placeholder-opacity: 0.8;
+}
+
+ion-input .label-text,
+ion-textarea .label-text,
+ion-select .label-text {
+  font-weight: 600;
+}
+
+/* ---------- Etiquetas de nota ---------- */
+ion-badge {
+  --padding-start: 10px;
+  --padding-end: 10px;
+  --padding-top: 5px;
+  --padding-bottom: 5px;
+  border-radius: 999px;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+}
+
+ion-note {
+  color: var(--tinta-suave);
+}
+
+ion-toggle {
+  --track-background-checked: var(--ion-color-primary);
+}
+
+ion-thumbnail {
+  --border-radius: 12px;
+}
+
+/* Modales con el mismo fondo */
+ion-modal {
+  --border-radius: 24px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Color "guardar" (inversión a largo plazo): dorado */
+:root {
+  --ion-color-tertiary: #7a5a00;
+  --ion-color-tertiary-rgb: 122, 90, 0;
+  --ion-color-tertiary-contrast: #ffffff;
+  --ion-color-tertiary-contrast-rgb: 255, 255, 255;
+  --ion-color-tertiary-shade: #6b4f00;
+  --ion-color-tertiary-tint: #876b1a;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ion-color-tertiary: #e8c565;
+    --ion-color-tertiary-rgb: 232, 197, 101;
+    --ion-color-tertiary-contrast: #241a00;
+    --ion-color-tertiary-contrast-rgb: 36, 26, 0;
+    --ion-color-tertiary-shade: #ccad59;
+    --ion-color-tertiary-tint: #eacb74;
+  }
+}
+
+/* Segmentos (filtros) como píldoras */
+ion-segment {
+  --background: var(--campo);
+  border-radius: var(--radio-sm);
+  padding: 3px;
+}
+
+ion-segment-button {
+  --color: var(--tinta-suave);
+  --color-checked: var(--ion-color-primary);
+  --indicator-color: transparent;
+  --background-checked: var(--cristal-fuerte);
+  --border-radius: 11px;
+  min-height: 38px;
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 700;
+}
+
+ion-segment-button.segment-button-checked {
+  box-shadow: 0 1px 4px rgba(16, 38, 46, 0.12);
+  border-radius: 11px;
+}
+
+/* Listas dentro del contenido como tarjetas de cristal */
+ion-content > ion-list,
+app-cartera > ion-list {
+  border-radius: var(--radio);
+  border: 1px solid var(--cristal-borde);
+  background: var(--cristal) !important;
+  box-shadow: var(--sombra);
+  padding: 4px 0;
+  overflow: hidden;
+}
+
+ion-item h3 {
+  font-weight: 700;
+}

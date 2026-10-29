@@ -10,6 +10,7 @@ import { CarteraService } from './cartera.service';
 import { AnuncioVenta, ArticuloCartera } from './models';
 import { exportarTexto } from './exportar';
 import { GeminiService } from './gemini.service';
+import { IlustracionComponent } from './ilustracion.component';
 
 type Filtro = 'stock' | 'guardar' | 'vendido' | 'todo';
 
@@ -17,23 +18,34 @@ type Filtro = 'stock' | 'guardar' | 'vendido' | 'todo';
 @Component({
   selector: 'app-cartera',
   imports: [
-    FormsModule, DecimalPipe, DatePipe, PercentPipe,
+    FormsModule, DecimalPipe, DatePipe, PercentPipe, IlustracionComponent,
     IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonInput, IonItem,
     IonLabel, IonList, IonModal, IonNote, IonSegment, IonSegmentButton, IonSelect, IonSelectOption,
     IonTextarea, IonThumbnail, IonTitle, IonToolbar, IonBadge, IonSpinner,
   ],
   template: `
     @let r = cartera.resumen();
+    @if (!cartera.articulos().length) {
+      <div class="vacio">
+        <app-ilustracion nombre="cartera" />
+        <h2>Tu cartera está vacía</h2>
+        <p>Cuando compres algo, pulsa «Lo he comprado» en su evaluación o añádelo a mano. Aquí verás lo invertido, lo que vale y lo que has ganado de verdad.</p>
+        <ion-button (click)="abrir(cartera.nuevo())">
+          <ion-icon aria-hidden="true" slot="start" name="add-circle-outline"></ion-icon> Añadir compra
+        </ion-button>
+      </div>
+    } @else {
+    <div class="destacado">
+      <span>Beneficio real</span>
+      <strong [class.negativo]="r.beneficio < 0">{{ r.beneficio >= 0 ? '+' : '' }}{{ r.beneficio | number: '1.0-0' }} €</strong>
+      <small>{{ r.piezasVendidas }} {{ r.piezasVendidas === 1 ? 'venta' : 'ventas' }} · {{ r.porHora != null ? (r.porHora | number: '1.0-1') + ' €/h' : 'sin horas anotadas' }}</small>
+    </div>
     <div class="resumen">
       <div><span>En stock</span><strong>{{ r.piezasStock }} {{ r.piezasStock === 1 ? 'pieza' : 'piezas' }}</strong></div>
       <div><span>Invertido</span><strong>{{ r.invertido | number: '1.0-0' }} €</strong></div>
       <div><span>Valor estimado</span><strong>{{ r.valorStock | number: '1.0-0' }} €</strong></div>
       <div><span>Ganancia latente</span>
         <strong [class.negativo]="r.plusvaliaLatente < 0">{{ r.plusvaliaLatente | number: '1.0-0' }} €</strong></div>
-      <div><span>Vendidas</span><strong>{{ r.piezasVendidas }}</strong></div>
-      <div><span>Beneficio real</span>
-        <strong [class.negativo]="r.beneficio < 0">{{ r.beneficio | number: '1.0-0' }} €</strong></div>
-      <div><span>Por hora</span><strong>{{ r.porHora != null ? (r.porHora | number: '1.0-1') + ' €/h' : '—' }}</strong></div>
       <div><span>Días hasta vender</span><strong>{{ r.diasMedios != null ? (r.diasMedios | number: '1.0-0') : '—' }}</strong></div>
     </div>
 
@@ -83,9 +95,7 @@ type Filtro = 'stock' | 'guardar' | 'vendido' | 'todo';
     </ion-segment>
 
     @if (!filtrados().length) {
-      <p class="vacio">
-        Nada por aquí. Cuando compres algo, pulsa "Lo he comprado" en su evaluación o "Añadir compra".
-      </p>
+      <p class="vacio-filtro">Nada en esta lista.</p>
     }
     <ion-list>
       @for (a of filtrados(); track a.id) {
@@ -116,6 +126,7 @@ type Filtro = 'stock' | 'guardar' | 'vendido' | 'todo';
         </ion-item>
       }
     </ion-list>
+    }
 
     <ion-modal [isOpen]="!!editando()" (didDismiss)="editando.set(null)">
       <ng-template>
@@ -193,21 +204,33 @@ type Filtro = 'stock' | 'guardar' | 'vendido' | 'todo';
     </ion-modal>
   `,
   styles: `
-    .resumen { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; max-width: 640px; margin: 0 auto 12px; }
-    .resumen div { display: flex; flex-direction: column; padding: 10px 12px; border-radius: 10px; background: var(--ion-color-light); }
-    .resumen span { font-size: 0.8rem; color: var(--ion-color-medium); }
-    .resumen strong { font-size: 1.1rem; }
+    .destacado {
+      display: flex; flex-direction: column; max-width: 640px; margin: 0 auto 10px; padding: 18px;
+      border-radius: var(--radio); border: 1px solid var(--cristal-borde); background: var(--cristal); box-shadow: var(--sombra);
+      -webkit-backdrop-filter: blur(18px) saturate(150%); backdrop-filter: blur(18px) saturate(150%);
+    }
+    .destacado span { font-size: 0.85rem; font-weight: 600; color: var(--tinta-suave); }
+    .destacado strong { font-size: 2.4rem; font-weight: 800; letter-spacing: -0.03em; color: var(--ion-color-success); }
+    .destacado small { font-size: 0.85rem; color: var(--tinta-suave); }
+    .resumen { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; max-width: 640px; margin: 0 auto 12px; }
+    .resumen div {
+      display: flex; flex-direction: column; gap: 2px; padding: 12px 14px; border-radius: var(--radio-sm);
+      border: 1px solid var(--cristal-borde); background: var(--cristal);
+    }
+    .resumen span { font-size: 0.78rem; font-weight: 600; color: var(--tinta-suave); }
+    .resumen strong { font-size: 1.15rem; font-weight: 800; }
+    .destacado strong.negativo, .resumen strong.negativo { color: var(--ion-color-danger); }
     .negativo { color: var(--ion-color-danger); }
-    .categorias { max-width: 640px; margin: 0 auto 12px; padding: 8px 12px; border-radius: 10px; background: var(--ion-color-light); }
+    .categorias { max-width: 640px; margin: 0 auto 12px; padding: 10px 14px; border-radius: var(--radio-sm); border: 1px solid var(--cristal-borde); background: var(--cristal); }
     .categorias summary { font-weight: 600; cursor: pointer; padding: 4px 0; }
     .categorias table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-top: 8px; }
     .categorias th, .categorias td { text-align: right; padding: 4px 2px; border-bottom: 1px solid var(--ion-color-step-150, #ddd); }
     .categorias th:first-child, .categorias td:first-child { text-align: left; }
     .nota-tabla { font-size: 0.75rem; color: var(--ion-color-medium); margin: 6px 0 0; }
-    .aviso-parado { max-width: 640px; margin: 0 auto 12px; padding: 10px 12px; border-radius: 10px;
+    .aviso-parado { max-width: 640px; margin: 0 auto 12px; padding: 12px 14px; border-radius: var(--radio-sm);
       background: rgba(var(--ion-color-warning-rgb), 0.15); font-size: 0.9rem; }
     .texto-aviso { color: var(--ion-color-warning-shade) !important; }
-    .anuncio { margin: 12px 0; padding: 12px; border-radius: 10px; background: var(--ion-color-light); }
+    .anuncio { margin: 12px 0; padding: 14px; border-radius: var(--radio-sm); background: var(--campo); }
     .anuncio h3 { margin: 12px 0 2px; font-size: 0.9rem; font-weight: 600; }
     .anuncio .fila { display: flex; align-items: center; justify-content: space-between; }
     .anuncio .fila h3 { margin: 8px 0 0; }
@@ -216,7 +239,12 @@ type Filtro = 'stock' | 'guardar' | 'vendido' | 'todo';
     .acciones { display: flex; gap: 8px; max-width: 640px; margin: 0 auto 12px; }
     .acciones ion-button { flex: 1; }
     ion-segment, ion-list { max-width: 640px; margin-inline: auto; }
-    .vacio { text-align: center; color: var(--ion-color-medium); margin-top: 24px; padding-inline: 16px; }
+    .vacio { max-width: 640px; margin: 0 auto; padding: 8px 16px 24px; text-align: center; }
+    .vacio app-ilustracion { max-width: 200px; margin-bottom: 8px; }
+    .vacio h2 { margin: 0 0 6px; font-size: 1.15rem; font-weight: 800; }
+    .vacio p { margin: 0 auto 16px; max-width: 340px; color: var(--tinta-suave); line-height: 1.5; }
+    .vacio-filtro { text-align: center; color: var(--tinta-suave); margin: 20px 0; }
+    ion-segment { margin-bottom: 8px; }
     .ayuda { display: block; margin-top: 12px; text-align: center; }
   `,
 })

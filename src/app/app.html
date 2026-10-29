@@ -1,44 +1,65 @@
 <ion-app>
-  <ion-header>
-    <ion-toolbar color="primary">
-      <ion-title>Chollos</ion-title>
+  <ion-header class="cabecera">
+    <ion-toolbar>
+      <app-logo slot="start" />
       <ion-buttons slot="end">
-        <ion-button (click)="abrirAjustes()" aria-label="Ajustes">
+        <ion-button fill="clear" (click)="abrirAjustes()" aria-label="Ajustes" class="boton-icono">
           <ion-icon aria-hidden="true" slot="icon-only" name="settings-outline"></ion-icon>
         </ion-button>
       </ion-buttons>
     </ion-toolbar>
-    <ion-toolbar>
-      <ion-segment [value]="vista()" [scrollable]="true" (ionChange)="vista.set($any($event.detail.value))">
-        <ion-segment-button value="evaluar"><ion-label>Evaluar</ion-label></ion-segment-button>
-        <ion-segment-button value="cola">
-          <ion-label>Cola @if (cola.elementos().length) { ({{ cola.elementos().length }}) }</ion-label>
-        </ion-segment-button>
-        <ion-segment-button value="avisos">
-          <ion-label>Avisos @if (avisos().length) { ({{ avisos().length }}) }</ion-label>
-        </ion-segment-button>
-        <ion-segment-button value="cartera"><ion-label>Cartera</ion-label></ion-segment-button>
-        <ion-segment-button value="historial"><ion-label>Historial</ion-label></ion-segment-button>
-      </ion-segment>
-    </ion-toolbar>
   </ion-header>
 
   <ion-content class="ion-padding">
+    <header class="titulo-pagina">
+      @if (vista() === 'evaluar' && resultado()) {
+        <h1>Resultado</h1>
+        <p>{{ metaResultado().titulo }}</p>
+      } @else {
+        <h1>{{ titulos[vista()].titulo }}</h1>
+        <p>{{ titulos[vista()].texto }}</p>
+      }
+    </header>
+
     @switch (vista()) {
       <!-- ================= EVALUAR ================= -->
       @case ('evaluar') {
         @if (aviso()) {
-          <ion-card color="light"><ion-card-content>{{ aviso() }}</ion-card-content></ion-card>
+          <div class="mensaje" role="status">
+            <ion-icon aria-hidden="true" name="checkmark-circle-outline"></ion-icon>
+            <span>{{ aviso() }}</span>
+          </div>
         }
 
         @if (!resultado()) {
           <ion-card>
-            <ion-card-header>
-              <ion-card-title>Anuncio</ion-card-title>
-              <ion-card-subtitle>Capturas de las fotos y la descripción, o el texto copiado</ion-card-subtitle>
-            </ion-card-header>
             <ion-card-content>
-              <ion-list lines="full">
+              <input #selector type="file" accept="image/*" multiple hidden (change)="anadirFotos($event)" />
+              @if (!fotos().length) {
+                <button type="button" class="zona-capturas" (click)="selector.click()">
+                  <ion-icon aria-hidden="true" name="images-outline"></ion-icon>
+                  <strong>Añade capturas del anuncio</strong>
+                  <span>Fotos y descripción · hasta 8</span>
+                </button>
+              } @else {
+                <div class="fotos">
+                  @for (f of fotos(); track f.url; let i = $index) {
+                    <div class="foto">
+                      <img [src]="f.url" alt="Captura {{ i + 1 }}" />
+                      <button type="button" (click)="quitarFoto(i)" [attr.aria-label]="'Quitar captura ' + (i + 1)">
+                        <ion-icon aria-hidden="true" name="close"></ion-icon>
+                      </button>
+                    </div>
+                  }
+                  @if (fotos().length < 8) {
+                    <button type="button" class="foto mas" (click)="selector.click()" aria-label="Añadir más capturas">
+                      <ion-icon aria-hidden="true" name="add"></ion-icon>
+                    </button>
+                  }
+                </div>
+              }
+
+              <ion-list lines="none" class="formulario">
                 <ion-item>
                   <ion-textarea label="Texto del anuncio" labelPlacement="stacked" [autoGrow]="true" rows="3"
                     placeholder="Título, descripción, estado…" [(ngModel)]="texto"></ion-textarea>
@@ -64,23 +85,6 @@
                 }
               </ion-list>
 
-              <div class="fotos">
-                @for (f of fotos(); track f.url; let i = $index) {
-                  <div class="foto">
-                    <img [src]="f.url" alt="Captura {{ i + 1 }}" />
-                    <button type="button" (click)="quitarFoto(i)" aria-label="Quitar captura">
-                      <ion-icon aria-hidden="true" name="close-circle"></ion-icon>
-                    </button>
-                  </div>
-                }
-              </div>
-
-              <input #selector type="file" accept="image/*" multiple hidden (change)="anadirFotos($event)" />
-              <ion-button expand="block" fill="outline" (click)="selector.click()">
-                <ion-icon aria-hidden="true" slot="start" name="images-outline"></ion-icon>
-                Añadir capturas ({{ fotos().length }}/8)
-              </ion-button>
-
               <div class="acciones">
                 <ion-button [disabled]="!puedeEvaluar()" (click)="evaluar()">
                   @if (cargando()) {
@@ -101,7 +105,10 @@
         }
 
         @if (error()) {
-          <ion-card color="danger"><ion-card-content>{{ error() }}</ion-card-content></ion-card>
+          <div class="mensaje error" role="alert">
+            <ion-icon aria-hidden="true" name="alert-circle-outline"></ion-icon>
+            <span>{{ error() }}</span>
+          </div>
         }
 
         @if (resultado(); as r) {
@@ -118,10 +125,12 @@
       <!-- ================= COLA ================= -->
       @case ('cola') {
         @if (!cola.elementos().length) {
-          <p class="vacio">
-            La cola está vacía. En "Evaluar", prepara un anuncio y pulsa "A la cola";
-            repite con todos los que quieras y evalúalos aquí de una vez.
-          </p>
+          <div class="vacio">
+            <app-ilustracion nombre="cola" />
+            <h2>La cola está vacía</h2>
+            <p>En Evaluar, prepara un anuncio y pulsa «A la cola». Repite con todos los que quieras y evalúalos aquí de una vez.</p>
+            <ion-button (click)="vista.set('evaluar')">Preparar un anuncio</ion-button>
+          </div>
         } @else {
           <div class="acciones">
             <ion-button [disabled]="cola.procesando() || !cola.pendientes()" (click)="cola.procesar()">
@@ -145,19 +154,22 @@
                 }
                 <ion-label class="ion-text-wrap">
                   <h3>{{ e.texto.split('\n')[0] || 'Anuncio sin texto' }}</h3>
+                  <p class="meta">
+                    @switch (e.estado) {
+                      @case ('evaluando') { <ion-spinner name="dots"></ion-spinner> Evaluando… }
+                      @case ('hecho') {
+                        <ion-badge [color]="color(e.evaluacion?.nota)">{{ e.evaluacion?.nota }}</ion-badge>
+                        <strong [class.positivo]="(e.evaluacion?.beneficio_neto_eur ?? 0) > 0">{{ (e.evaluacion?.beneficio_neto_eur ?? 0) >= 0 ? '+' : '' }}{{ e.evaluacion?.beneficio_neto_eur | number: '1.0-0' }} €</strong>
+                      }
+                      @case ('error') { <span class="texto-error">Error: {{ e.error }}</span> }
+                      @default { <span class="en-cola">En cola</span> }
+                    }
+                  </p>
                   <p>
                     @if (e.precio != null) { {{ e.precio }} € · }
                     {{ nombrePlataforma[e.plataforma] }} · {{ e.fotos.length }} capturas
-                    @if (e.evaluacion) { · {{ e.evaluacion.beneficio_neto_eur | number: '1.0-0' }} € netos }
-                    @if (e.estado === 'error') { · <span class="texto-error">{{ e.error }}</span> }
                   </p>
                 </ion-label>
-                @switch (e.estado) {
-                  @case ('evaluando') { <ion-spinner slot="end" name="dots"></ion-spinner> }
-                  @case ('hecho') { <ion-badge slot="end" [color]="color(e.evaluacion?.nota)">{{ e.evaluacion?.nota }}</ion-badge> }
-                  @case ('error') { <ion-icon aria-hidden="true" slot="end" color="danger" name="alert-circle-outline"></ion-icon> }
-                  @default { <ion-note slot="end">en cola</ion-note> }
-                }
                 @if (e.evaluacion) {
                   <ion-button slot="end" fill="clear" (click)="alternarCola(e.id)" [attr.aria-expanded]="abiertoEnCola() === e.id">
                     {{ abiertoEnCola() === e.id ? 'Cerrar' : 'Ver' }}
@@ -186,10 +198,11 @@
       <!-- ================= AVISOS ================= -->
       @case ('avisos') {
         @if (!enAndroid) {
-          <p class="vacio">
-            Los avisos automáticos solo funcionan en la app Android: leen las notificaciones de tus
-            búsquedas guardadas de Vinted y Wallapop y te avisan solo de lo que parece un chollo.
-          </p>
+          <div class="vacio">
+            <app-ilustracion nombre="avisos" />
+            <h2>Avisos solo en Android</h2>
+            <p>La app Android lee las notificaciones de tus búsquedas guardadas de Vinted y Wallapop y solo te avisa de lo que parece un chollo.</p>
+          </div>
         } @else {
           <ion-card>
             <ion-card-header>
@@ -248,7 +261,11 @@
               }
             </ion-list>
           } @else {
-            <p class="vacio">Todavía no hay avisos. Llegarán cuando Vinted o Wallapop te notifiquen algo nuevo.</p>
+            <div class="vacio">
+              <app-ilustracion nombre="avisos" />
+              <h2>Todavía no hay avisos</h2>
+              <p>Llegarán cuando Vinted o Wallapop te notifiquen algo nuevo de tus búsquedas guardadas.</p>
+            </div>
           }
         }
 
@@ -263,8 +280,8 @@
               @for (t of grupo.terminos; track t) {
                 <div class="busqueda">
                   <span>{{ t }}</span>
-                  <ion-button size="small" fill="clear" (click)="abrir(buscarEn.vinted(t))">Vinted</ion-button>
-                  <ion-button size="small" fill="clear" (click)="abrir(buscarEn.wallapop(t))">Wallapop</ion-button>
+                  <button type="button" class="chip" (click)="abrir(buscarEn.vinted(t))" [attr.aria-label]="'Buscar ' + t + ' en Vinted'">Vinted</button>
+                  <button type="button" class="chip" (click)="abrir(buscarEn.wallapop(t))" [attr.aria-label]="'Buscar ' + t + ' en Wallapop'">Wallapop</button>
                 </div>
               }
             }
@@ -280,7 +297,12 @@
       <!-- ================= HISTORIAL ================= -->
       @case ('historial') {
         @if (!historial.registros().length) {
-          <p class="vacio">Aún no has evaluado ningún anuncio.</p>
+          <div class="vacio">
+            <app-ilustracion nombre="historial" />
+            <h2>Aún no hay evaluaciones</h2>
+            <p>Aquí verás las últimas 50, con su nota y el beneficio estimado.</p>
+            <ion-button (click)="vista.set('evaluar')">Evaluar un anuncio</ion-button>
+          </div>
         }
         <ion-list>
           @for (h of historial.registros(); track h.id) {
@@ -290,13 +312,15 @@
               }
               <ion-label class="ion-text-wrap">
                 <h3>{{ h.titulo }}</h3>
+                <p class="meta">
+                  <ion-badge [color]="color(h.evaluacion.nota)">{{ h.evaluacion.nota }}</ion-badge>
+                  <strong [class.positivo]="h.evaluacion.beneficio_neto_eur > 0">{{ h.evaluacion.beneficio_neto_eur >= 0 ? '+' : '' }}{{ h.evaluacion.beneficio_neto_eur | number: '1.0-0' }} €</strong>
+                </p>
                 <p>
                   {{ h.fecha | date: 'd MMM, HH:mm' }}
-                  @if (h.precio != null) { · {{ h.precio }} € }
-                  · {{ h.evaluacion.beneficio_neto_eur | number: '1.0-0' }} € netos
+                  @if (h.precio != null) { · pedían {{ h.precio }} € }
                 </p>
               </ion-label>
-              <ion-badge slot="end" [color]="color(h.evaluacion.nota)">{{ h.evaluacion.nota }}</ion-badge>
               <ion-button slot="end" fill="clear" (click)="verRegistro(h)" [attr.aria-label]="'Ver evaluación de ' + h.titulo">Ver</ion-button>
               <ion-button slot="end" fill="clear" color="medium" [attr.aria-label]="'Borrar ' + h.titulo"
                 (click)="historial.borrar(h.id)">
@@ -314,7 +338,10 @@
         <ion-content class="ion-padding">
           @let paso = pasos[pasoBienvenida()];
           <div class="bienvenida">
-            <div class="logo" aria-hidden="true">€</div>
+            @if (pasoBienvenida() === 0) {
+              <app-logo [grande]="true" />
+            }
+            <app-ilustracion [nombre]="paso.ilustracion" />
             <h2>{{ paso.titulo }}</h2>
             <p>{{ paso.texto }}</p>
             <div class="puntos" role="presentation">
@@ -407,6 +434,21 @@
       </ng-template>
     </ion-modal>
   </ion-content>
+
+  <ion-footer class="pie">
+    <nav class="barra-inferior" aria-label="Secciones">
+      @for (s of secciones; track s.vista) {
+        <button type="button" [class.activa]="vista() === s.vista" [attr.aria-current]="vista() === s.vista ? 'page' : null"
+          (click)="vista.set(s.vista)">
+          <span class="icono">
+            <ion-icon aria-hidden="true" [name]="s.icono"></ion-icon>
+            @if (contador(s.vista); as n) { <span class="contador" aria-hidden="true">{{ n }}</span> }
+          </span>
+          <span class="nombre">{{ s.nombre }}@if (contador(s.vista); as n) {<span class="sr-only"> ({{ n }})</span>}</span>
+        </button>
+      }
+    </nav>
+  </ion-footer>
 
   @if (chollazos.alerta(); as c) {
     <div class="alerta-chollazo" role="alertdialog" aria-modal="true" aria-labelledby="titulo-chollazo" aria-describedby="detalle-chollazo">

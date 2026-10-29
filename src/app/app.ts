@@ -5,14 +5,17 @@ import { App as CapApp } from '@capacitor/app';
 import {
   IonApp, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonButton, IonIcon,
   IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonItem, IonInput,
-  IonTextarea, IonList, IonLabel, IonBadge, IonSpinner, IonModal, IonToggle, IonSegment,
-  IonSegmentButton, IonNote, IonThumbnail, IonListHeader, AlertController, IonSelect, IonSelectOption,
+  IonTextarea, IonList, IonLabel, IonBadge, IonSpinner, IonModal, IonToggle, IonFooter,
+  IonNote, IonThumbnail, IonListHeader, AlertController, IonSelect, IonSelectOption,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
   settingsOutline, imagesOutline, closeCircle, sparklesOutline, trashOutline, addCircleOutline,
   playOutline, notificationsOutline, alertCircleOutline, checkmarkCircleOutline, flame,
+  layersOutline, walletOutline, timeOutline, close, add,
 } from 'ionicons/icons';
+import { LogoComponent } from './logo.component';
+import { IlustracionComponent, NombreIlustracion } from './ilustracion.component';
 import { GeminiService } from './gemini.service';
 import { AjustesService } from './ajustes.service';
 import { HistorialService } from './historial.service';
@@ -35,11 +38,11 @@ type Vista = 'evaluar' | 'cola' | 'avisos' | 'cartera' | 'historial';
 @Component({
   selector: 'app-root',
   imports: [
-    FormsModule, DecimalPipe, DatePipe, ResultadoComponent, CarteraComponent,
+    FormsModule, DecimalPipe, DatePipe, ResultadoComponent, CarteraComponent, LogoComponent, IlustracionComponent,
     IonApp, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonButton, IonIcon,
     IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonItem, IonInput,
-    IonTextarea, IonList, IonLabel, IonBadge, IonSpinner, IonModal, IonToggle, IonSegment,
-    IonSegmentButton, IonNote, IonThumbnail, IonListHeader, IonSelect, IonSelectOption,
+    IonTextarea, IonList, IonLabel, IonBadge, IonSpinner, IonModal, IonToggle, IonFooter,
+    IonNote, IonThumbnail, IonListHeader, IonSelect, IonSelectOption,
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss',
@@ -100,6 +103,7 @@ export class App implements OnInit {
     addIcons({
       settingsOutline, imagesOutline, closeCircle, sparklesOutline, trashOutline, addCircleOutline,
       playOutline, notificationsOutline, alertCircleOutline, checkmarkCircleOutline, flame,
+      layersOutline, walletOutline, timeOutline, close, add,
     });
     if (!this.bienvenidaVista()) {
       this.bienvenida.set(true);
@@ -112,24 +116,52 @@ export class App implements OnInit {
 
   protected readonly bienvenida = signal(false);
   protected readonly pasoBienvenida = signal(0);
+  protected readonly titulos: Record<Vista, { titulo: string; texto: string }> = {
+    evaluar: { titulo: 'Evalúa un anuncio', texto: 'Sube capturas o pega el texto y te digo si merece la pena.' },
+    cola: { titulo: 'Cola', texto: 'Prepara varios anuncios y evalúalos de una vez.' },
+    avisos: { titulo: 'Avisos', texto: 'Lo que encuentran tus búsquedas guardadas.' },
+    cartera: { titulo: 'Cartera', texto: 'Lo que has comprado y lo que has ganado de verdad.' },
+    historial: { titulo: 'Historial', texto: 'Tus últimas evaluaciones.' },
+  };
+
+  protected readonly secciones: { vista: Vista; nombre: string; icono: string }[] = [
+    { vista: 'evaluar', nombre: 'Evaluar', icono: 'sparkles-outline' },
+    { vista: 'cola', nombre: 'Cola', icono: 'layers-outline' },
+    { vista: 'avisos', nombre: 'Avisos', icono: 'notifications-outline' },
+    { vista: 'cartera', nombre: 'Cartera', icono: 'wallet-outline' },
+    { vista: 'historial', nombre: 'Historial', icono: 'time-outline' },
+  ];
+
+  /** Número que se muestra sobre el icono de cada sección (0 = ninguno). */
+  protected contador(v: Vista): number {
+    if (v === 'cola') return this.cola.pendientes();
+    if (v === 'avisos') return this.avisos().filter((a) => a.nota && a.nota !== 'DESCARTADO').length;
+    return 0;
+  }
+
   protected readonly pasos = [
     {
+      ilustracion: 'bienvenida' as NombreIlustracion,
       titulo: 'Encuentra chollos de segunda mano',
       texto: 'Chollos evalúa anuncios de Vinted, Wallapop o todocoleccion con IA: te dice si es un chollo, cuánto podrías ganar, los riesgos y qué preguntar al vendedor.',
     },
     {
+      ilustracion: 'evaluar' as NombreIlustracion,
       titulo: '1. Evalúa',
       texto: 'Haz capturas del anuncio (fotos y descripción) y súbelas en Evaluar, o compártelas con Chollos desde la galería. Si tienes varios, mándalos a la Cola y evalúalos de una vez.',
     },
     {
+      ilustracion: 'avisos' as NombreIlustracion,
       titulo: '2. Recibe avisos',
       texto: 'En Avisos tienes búsquedas recomendadas para guardar en Vinted y Wallapop. En Android, Chollos lee sus notificaciones y solo te avisa de lo que parece un buen negocio.',
     },
     {
+      ilustracion: 'cartera' as NombreIlustracion,
       titulo: '3. Compra, vende y mide',
       texto: 'Pulsa "Lo he comprado" para llevarlo a la Cartera. Allí redactas el anuncio de venta y ves el beneficio real, los euros por hora y qué categoría te compensa más.',
     },
     {
+      ilustracion: 'clave' as NombreIlustracion,
       titulo: 'Antes de empezar',
       texto: 'Necesitas una clave gratuita de Gemini (aistudio.google.com/apikey, con tu cuenta personal de Google). Si aún no la tienes, activa el modo demostración en Ajustes para probarlo todo.',
     },

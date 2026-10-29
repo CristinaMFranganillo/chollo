@@ -141,7 +141,8 @@ public class VigilanteService extends NotificationListenerService {
             ? "\uD83D\uDD25 ¡CHOLLAZO!" + multiplo + " · " + app
             : r.nota + multiplo + " · " + app;
         NotificationCompat.Builder aviso = new NotificationCompat.Builder(ctx, r.chollazo ? CANAL_CHOLLAZO : CANAL)
-            .setSmallIcon(getApplicationInfo().icon)
+            .setSmallIcon(R.drawable.ic_notificacion)
+            .setColor(Color.rgb(14, 90, 110))
             .setContentTitle(cabecera)
             .setContentText(titulo)
             .setStyle(new NotificationCompat.BigTextStyle().bigText(titulo + "\n" + r.motivo))
