@@ -1,0 +1,66 @@
+# Compila la app Android en cada cambio y publica el APK en la Release "ultima-version".
+# Desde el móvil: github.com/<usuario>/chollo/releases → descarga chollos.apk e instálalo.
+name: APK Android
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: android
+  cancel-in-progress: true
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: gradle
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Compilar la web y copiarla al proyecto Android
+        run: |
+          npm run build
+          npx cap sync android
+
+      - name: Compilar el APK
+        working-directory: android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon
+
+      - name: Preparar el APK
+        run: cp android/app/build/outputs/apk/debug/app-debug.apk chollos.apk
+
+      - name: Guardar como artefacto
+        uses: actions/upload-artifact@v4
+        with:
+          name: chollos-apk
+          path: chollos.apk
+
+      - name: Publicar en la Release "ultima-version"
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete ultima-version --yes --cleanup-tag || true
+          gh release create ultima-version chollos.apk \
+            --title "Chollos · compilación ${{ github.run_number }}" \
+            --notes "APK de prueba generado automáticamente desde ${{ github.sha }}. Descárgalo desde el móvil e instálalo encima de la versión anterior." \
+            --prerelease \
+            --target "${{ github.sha }}"

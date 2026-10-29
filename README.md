@@ -1,4 +1,4 @@
-# Chollos · versión 1.1
+# Chollos · versión 1.2
 
 App en Angular + Ionic + Capacitor que evalúa anuncios de segunda mano con la API de Gemini, usando los criterios de la skill *evaluar-anuncio-segunda-mano*.
 
@@ -15,6 +15,17 @@ App en Angular + Ionic + Capacitor que evalúa anuncios de segunda mano con la A
 En **Ajustes** hay un **modo demostración** (respuestas de ejemplo, sin Gemini) para probar toda la app sin clave, y un botón **Probar clave**.
 
 Además, en Android la app aparece en el menú **Compartir**: desde Vinted compartes el anuncio (enlace) y desde la galería las capturas, y llegan directamente al formulario.
+
+## Compilación automática con GitHub (sin instalar nada)
+
+Cada vez que subes cambios a la rama `main`, GitHub Actions:
+
+- **Compila el APK de Android** y lo publica en la Release **"ultima-version"** del repositorio. Desde el móvil, entra en `github.com/<usuario>/chollo/releases`, descarga `chollos.apk` e instálalo (Android pedirá permitir instalar apps de Chrome la primera vez). Las siguientes versiones se instalan encima sin perder los datos.
+- **Publica la web** en GitHub Pages: `https://<usuario>.github.io/chollo/`. Hay que activarlo una vez en *Settings → Pages → Source: GitHub Actions*.
+
+Si una compilación falla, aparece una cruz roja en la pestaña **Actions**. Abre el paso que falla y copia el error.
+
+La firma de los APK de prueba (`android/app/chollos-debug.keystore`, contraseña `android`) está en el repositorio a propósito, para que todas las versiones se puedan instalar unas encima de otras. Sirve solo para uso personal, no para publicar en Google Play.
 
 ## Arrancar en el ordenador (versión web)
 
