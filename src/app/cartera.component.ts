@@ -70,7 +70,7 @@ type Filtro = 'stock' | 'guardar' | 'vendido' | 'todo';
 
     <div class="acciones">
       <ion-button (click)="abrir(cartera.nuevo())">
-        <ion-icon slot="start" name="add-circle-outline"></ion-icon> Añadir compra
+        <ion-icon aria-hidden="true" slot="start" name="add-circle-outline"></ion-icon> Añadir compra
       </ion-button>
       <ion-button fill="outline" [disabled]="!cartera.articulos().length" (click)="exportar()">Exportar CSV</ion-button>
     </div>

@@ -1,4 +1,4 @@
-# Chollos · versión 1.5
+# Chollos · versión 1.6
 
 App en Angular + Ionic + Capacitor que evalúa anuncios de segunda mano con la API de Gemini, usando los criterios de la skill *evaluar-anuncio-segunda-mano*.
 
@@ -29,9 +29,15 @@ Si una compilación falla, aparece una cruz roja en la pestaña **Actions**. Abr
 
 La firma de los APK de prueba (`android/app/chollos-debug.keystore`, contraseña `android`) está en el repositorio a propósito, para que todas las versiones se puedan instalar unas encima de otras. Sirve solo para uso personal, no para publicar en Google Play.
 
+## Fiabilidad y accesibilidad
+
+- Las respuestas de Gemini se normalizan (`src/app/normalizar.ts`): números como texto, notas mal escritas o campos que faltan no rompen la app.
+- Si Gemini responde "demasiadas peticiones" o "saturado", la app espera y reintenta (`src/app/red.ts`).
+- Revisada con axe-core contra WCAG 2.1 A/AA en modo claro y oscuro, sin incidencias: se permite el zoom, los iconos decorativos están ocultos a lectores de pantalla y no hay botones dentro de otros botones.
+
 ## Pruebas automáticas
 
-`npm test` ejecuta las pruebas de los cálculos (cartera, categorías, CSV, enlaces, modo demo) en Chrome sin interfaz. GitHub las ejecuta antes de compilar el APK: si fallan, no se publica.
+`npm test` ejecuta las pruebas de los cálculos (cartera, categorías, CSV, enlaces, modo demo, normalización de respuestas y reintentos) en Chrome sin interfaz. GitHub las ejecuta antes de compilar el APK: si fallan, no se publica.
 
 ## Arrancar en el ordenador (versión web)
 

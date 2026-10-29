@@ -4,6 +4,8 @@ import { AnuncioVenta, ArticuloCartera, Evaluacion } from './models';
 import { SKILL_PROMPT } from './skill-prompt';
 import { imagenABase64 } from './imagenes';
 import { anuncioDemo, evaluacionDemo } from './demo';
+import { extraerObjetoJson, normalizarAnuncio, normalizarEvaluacion } from './normalizar';
+import { fetchConReintentos } from './red';
 
 const URL_API = 'https://generativelanguage.googleapis.com/v1beta/models';
 
@@ -83,7 +85,7 @@ export class GeminiService {
       cuerpo['tools'] = [{ google_search: {} }];
     }
 
-    const respuesta = await fetch(`${URL_API}/${modelo}:generateContent`, {
+    const respuesta = await fetchConReintentos(`${URL_API}/${modelo}:generateContent`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
       body: JSON.stringify(cuerpo),
@@ -93,12 +95,7 @@ export class GeminiService {
       throw new Error(mensajeError(respuesta.status, await respuesta.text()));
     }
 
-    const datos = await respuesta.json();
-    const textoRespuesta: string = (datos?.candidates?.[0]?.content?.parts ?? [])
-      .map((p: { text?: string }) => p.text ?? '')
-      .join('');
-
-    return this.extraerJson(textoRespuesta);
+    return normalizarEvaluacion(extraerObjetoJson(textoDeRespuesta(await respuesta.json())));
   }
 
   /**
@@ -129,7 +126,7 @@ Responde SOLO con JSON: {"titulo": "", "descripcion": "", "precio_salida_eur": n
       a.canalVenta ? `Canal preferido: ${a.canalVenta}` : '',
     ].filter(Boolean).join('\n');
 
-    const respuesta = await fetch(`${URL_API}/${modelo}:generateContent`, {
+    const respuesta = await fetchConReintentos(`${URL_API}/${modelo}:generateContent`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
       body: JSON.stringify({
@@ -139,12 +136,7 @@ Responde SOLO con JSON: {"titulo": "", "descripcion": "", "precio_salida_eur": n
       }),
     });
     if (!respuesta.ok) throw new Error(mensajeError(respuesta.status, await respuesta.text()));
-    const json = await respuesta.json();
-    const texto: string = (json?.candidates?.[0]?.content?.parts ?? []).map((p: { text?: string }) => p.text ?? '').join('');
-    const anuncio = JSON.parse(texto.slice(texto.indexOf('{'), texto.lastIndexOf('}') + 1)) as AnuncioVenta;
-    anuncio.palabras_clave ??= [];
-    anuncio.consejos_fotos ??= [];
-    return anuncio;
+    return normalizarAnuncio(extraerObjetoJson(textoDeRespuesta(await respuesta.json())));
   }
 
   /** Comprueba que la clave funciona pidiendo la lista de modelos (no gasta cuota de generación). */
@@ -153,20 +145,6 @@ Responde SOLO con JSON: {"titulo": "", "descripcion": "", "precio_salida_eur": n
     const respuesta = await fetch(URL_API, { headers: { 'x-goog-api-key': apiKey.trim() } });
     if (!respuesta.ok) throw new Error(mensajeError(respuesta.status, await respuesta.text()));
     return 'La clave funciona.';
-  }
-
-  /** Con la búsqueda activada el modelo a veces añade texto o ```json: nos quedamos con el objeto. */
-  private extraerJson(texto: string): Evaluacion {
-    const inicio = texto.indexOf('{');
-    const fin = texto.lastIndexOf('}');
-    if (inicio === -1 || fin === -1) {
-      throw new Error('El modelo no devolvió un JSON. Respuesta: ' + texto.slice(0, 200));
-    }
-    const evaluacion = JSON.parse(texto.slice(inicio, fin + 1)) as Evaluacion;
-    evaluacion.piezas ??= [];
-    evaluacion.riesgos ??= [];
-    evaluacion.preguntas_vendedor ??= [];
-    return evaluacion;
   }
 }
 
@@ -178,4 +156,16 @@ function mensajeError(estado: number, detalle: string): string {
   if (estado === 429) return 'Has llegado al límite de la capa gratuita de Gemini. Espera un rato o prueba mañana.';
   if (estado >= 500) return 'Gemini no está respondiendo ahora mismo. Inténtalo de nuevo en unos minutos.';
   return `La API respondió ${estado}. ${detalle.slice(0, 200)}`;
+}
+
+/** Texto de la respuesta de Gemini, o un error claro si la bloqueó o vino vacía. */
+function textoDeRespuesta(datos: any): string {
+  const candidato = datos?.candidates?.[0];
+  if (!candidato) {
+    const bloqueo = datos?.promptFeedback?.blockReason;
+    throw new Error(bloqueo ? `Gemini no ha querido responder (${bloqueo}). Prueba con otras capturas.` : 'Gemini no devolvió respuesta. Prueba otra vez.');
+  }
+  const texto = (candidato.content?.parts ?? []).map((p: { text?: string }) => p.text ?? '').join('');
+  if (!texto) throw new Error(`Gemini terminó sin respuesta (${candidato.finishReason ?? 'desconocido'}). Prueba otra vez.`);
+  return texto;
 }

@@ -4,7 +4,7 @@
       <ion-title>Chollos</ion-title>
       <ion-buttons slot="end">
         <ion-button (click)="abrirAjustes()" aria-label="Ajustes">
-          <ion-icon slot="icon-only" name="settings-outline"></ion-icon>
+          <ion-icon aria-hidden="true" slot="icon-only" name="settings-outline"></ion-icon>
         </ion-button>
       </ion-buttons>
     </ion-toolbar>
@@ -54,7 +54,7 @@
                   <div class="foto">
                     <img [src]="f.url" alt="Captura {{ i + 1 }}" />
                     <button type="button" (click)="quitarFoto(i)" aria-label="Quitar captura">
-                      <ion-icon name="close-circle"></ion-icon>
+                      <ion-icon aria-hidden="true" name="close-circle"></ion-icon>
                     </button>
                   </div>
                 }
@@ -62,7 +62,7 @@
 
               <input #selector type="file" accept="image/*" multiple hidden (change)="anadirFotos($event)" />
               <ion-button expand="block" fill="outline" (click)="selector.click()">
-                <ion-icon slot="start" name="images-outline"></ion-icon>
+                <ion-icon aria-hidden="true" slot="start" name="images-outline"></ion-icon>
                 Añadir capturas ({{ fotos().length }}/8)
               </ion-button>
 
@@ -71,11 +71,11 @@
                   @if (cargando()) {
                     <ion-spinner name="dots"></ion-spinner>&nbsp;Evaluando…
                   } @else {
-                    <ion-icon slot="start" name="sparkles-outline"></ion-icon> Evaluar ahora
+                    <ion-icon aria-hidden="true" slot="start" name="sparkles-outline"></ion-icon> Evaluar ahora
                   }
                 </ion-button>
                 <ion-button fill="outline" [disabled]="!puedeEvaluar()" (click)="anadirACola()">
-                  <ion-icon slot="start" name="add-circle-outline"></ion-icon> A la cola
+                  <ion-icon aria-hidden="true" slot="start" name="add-circle-outline"></ion-icon> A la cola
                 </ion-button>
               </div>
               @if (cargando()) {
@@ -112,7 +112,7 @@
               @if (cola.procesando()) {
                 <ion-spinner name="dots"></ion-spinner>&nbsp;Evaluando…
               } @else {
-                <ion-icon slot="start" name="play-outline"></ion-icon>
+                <ion-icon aria-hidden="true" slot="start" name="play-outline"></ion-icon>
                 {{ cola.pendientes() ? 'Evaluar ' + cola.pendientes() + ' pendientes' : 'Nada pendiente' }}
               }
             </ion-button>
@@ -123,7 +123,7 @@
 
           <ion-list>
             @for (e of cola.ordenados(); track e.id) {
-              <ion-item button [detail]="false" (click)="e.evaluacion && alternarCola(e.id)">
+              <ion-item>
                 @if (e.miniatura) {
                   <ion-thumbnail slot="start"><img [src]="e.miniatura" alt="" /></ion-thumbnail>
                 }
@@ -139,13 +139,18 @@
                 @switch (e.estado) {
                   @case ('evaluando') { <ion-spinner slot="end" name="dots"></ion-spinner> }
                   @case ('hecho') { <ion-badge slot="end" [color]="color(e.evaluacion?.nota)">{{ e.evaluacion?.nota }}</ion-badge> }
-                  @case ('error') { <ion-icon slot="end" color="danger" name="alert-circle-outline"></ion-icon> }
+                  @case ('error') { <ion-icon aria-hidden="true" slot="end" color="danger" name="alert-circle-outline"></ion-icon> }
                   @default { <ion-note slot="end">en cola</ion-note> }
                 }
+                @if (e.evaluacion) {
+                  <ion-button slot="end" fill="clear" (click)="alternarCola(e.id)" [attr.aria-expanded]="abiertoEnCola() === e.id">
+                    {{ abiertoEnCola() === e.id ? 'Cerrar' : 'Ver' }}
+                  </ion-button>
+                }
                 @if (e.estado !== 'evaluando') {
-                  <ion-button slot="end" fill="clear" color="medium" aria-label="Quitar"
-                    (click)="$event.stopPropagation(); cola.quitar(e.id)">
-                    <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+                  <ion-button slot="end" fill="clear" color="medium" aria-label="Quitar de la cola"
+                    (click)="cola.quitar(e.id)">
+                    <ion-icon aria-hidden="true" slot="icon-only" name="trash-outline"></ion-icon>
                   </ion-button>
                 }
               </ion-item>
@@ -182,13 +187,13 @@
                   </ion-toggle>
                 </ion-item>
                 <ion-item>
-                  <ion-icon slot="start" [name]="permisoLectura() ? 'checkmark-circle-outline' : 'alert-circle-outline'"
+                  <ion-icon aria-hidden="true" slot="start" [name]="permisoLectura() ? 'checkmark-circle-outline' : 'alert-circle-outline'"
                     [color]="permisoLectura() ? 'success' : 'warning'"></ion-icon>
                   <ion-label class="ion-text-wrap">Permiso para leer notificaciones</ion-label>
                   @if (!permisoLectura()) { <ion-button slot="end" (click)="darPermisoLectura()">Dar permiso</ion-button> }
                 </ion-item>
                 <ion-item>
-                  <ion-icon slot="start" [name]="permisoAvisos() ? 'checkmark-circle-outline' : 'alert-circle-outline'"
+                  <ion-icon aria-hidden="true" slot="start" [name]="permisoAvisos() ? 'checkmark-circle-outline' : 'alert-circle-outline'"
                     [color]="permisoAvisos() ? 'success' : 'warning'"></ion-icon>
                   <ion-label class="ion-text-wrap">Permiso para avisarte</ion-label>
                   @if (!permisoAvisos()) { <ion-button slot="end" (click)="darPermisoAvisos()">Dar permiso</ion-button> }
@@ -261,7 +266,7 @@
         }
         <ion-list>
           @for (h of historial.registros(); track h.id) {
-            <ion-item button (click)="verRegistro(h)">
+            <ion-item>
               @if (h.miniatura) {
                 <ion-thumbnail slot="start"><img [src]="h.miniatura" alt="" /></ion-thumbnail>
               }
@@ -274,9 +279,10 @@
                 </p>
               </ion-label>
               <ion-badge slot="end" [color]="color(h.evaluacion.nota)">{{ h.evaluacion.nota }}</ion-badge>
-              <ion-button slot="end" fill="clear" color="medium" aria-label="Borrar"
-                (click)="$event.stopPropagation(); historial.borrar(h.id)">
-                <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+              <ion-button slot="end" fill="clear" (click)="verRegistro(h)" [attr.aria-label]="'Ver evaluación de ' + h.titulo">Ver</ion-button>
+              <ion-button slot="end" fill="clear" color="medium" [attr.aria-label]="'Borrar ' + h.titulo"
+                (click)="historial.borrar(h.id)">
+                <ion-icon aria-hidden="true" slot="icon-only" name="trash-outline"></ion-icon>
               </ion-button>
             </ion-item>
           }
