@@ -44,7 +44,7 @@ export async function evaluacionDemo(texto: string, precio: number | null, fotos
     return {
       nota: 'BUENO', motivo: 'DEMO · Lote con piezas de colección identificables', categoria: /lego/.test(t) ? 'LEGO' : 'Juguetes españoles',
       ...base(ingreso), oferta_maxima_eur: null,
-      piezas: [{ nombre: 'Set descatalogado (posible)', confianza: 'posible', precio_min_eur: Math.round(ingreso * 0.8), precio_max_eur: Math.round(ingreso * 1.2), fuente: 'Ejemplo de demostración' }],
+      piezas: [{ nombre: 'Set descatalogado', confianza: 'posible', precio_min_eur: Math.round(ingreso * 0.8), precio_max_eur: Math.round(ingreso * 1.2), fuente: 'Ejemplo de demostración' }],
       revender_o_guardar: 'Revender.', como_venderlo: 'BrickLink o todocoleccion, por sets completos.',
       riesgos: ['Puede estar incompleto'], preguntas_vendedor: ['¿Están todas las piezas e instrucciones?'],
     };

@@ -21,6 +21,11 @@ export class HistorialService {
     this.actualizar([registro, ...this.registros()].slice(0, MAXIMO));
   }
 
+  /** Sustituye todo (al importar una copia de seguridad). */
+  reemplazar(lista: RegistroEvaluacion[]): void {
+    this.actualizar(lista);
+  }
+
   borrar(id: string): void {
     this.actualizar(this.registros().filter((r) => r.id !== id));
   }

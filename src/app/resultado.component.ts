@@ -2,17 +2,18 @@ import { Component, input } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import {
   IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonBadge, IonList,
-  IonItem, IonLabel, IonNote,
+  IonItem, IonLabel, IonNote, IonButton,
 } from '@ionic/angular/standalone';
 import { Evaluacion } from './models';
 import { colorNota } from './colores';
+import { abrirEnlace, comparables } from './enlaces';
 
 /** Tarjeta con el resultado de una evaluación. Se reutiliza en Evaluar, Cola e Historial. */
 @Component({
   selector: 'app-resultado',
   imports: [
     DecimalPipe, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonBadge,
-    IonList, IonItem, IonLabel, IonNote,
+    IonList, IonItem, IonLabel, IonNote, IonButton,
   ],
   template: `
     @let r = evaluacion();
@@ -44,6 +45,12 @@ import { colorNota } from './colores';
                 <ion-label class="ion-text-wrap">
                   <h4>{{ p.nombre }} <ion-note>({{ p.confianza }})</ion-note></h4>
                   <p>{{ p.precio_min_eur | number: '1.0-0' }}–{{ p.precio_max_eur | number: '1.0-0' }} € · {{ p.fuente }}</p>
+                  <div class="comparables">
+                    <span>Ver vendidos:</span>
+                    <ion-button size="small" fill="clear" (click)="abrir(enlaces.ebay(p.nombre))">eBay</ion-button>
+                    <ion-button size="small" fill="clear" (click)="abrir(enlaces.todocoleccion(p.nombre))">todocoleccion</ion-button>
+                    <ion-button size="small" fill="clear" (click)="abrir(enlaces.wallapop(p.nombre))">Wallapop</ion-button>
+                  </div>
                 </ion-label>
               </ion-item>
             }
@@ -81,9 +88,14 @@ import { colorNota } from './colores';
     .cifras span { font-size: 0.8rem; color: var(--ion-color-medium); }
     .cifras strong { font-size: 1.1rem; }
     h3 { margin-top: 16px; font-weight: 600; }
+    .comparables { display: flex; flex-wrap: wrap; align-items: center; gap: 0; margin-top: 4px; }
+    .comparables span { font-size: 0.75rem; color: var(--ion-color-medium); margin-right: 4px; }
+    .comparables ion-button { --padding-start: 6px; --padding-end: 6px; margin: 0; text-transform: none; }
   `,
 })
 export class ResultadoComponent {
   readonly evaluacion = input.required<Evaluacion>();
   protected readonly color = colorNota;
+  protected readonly enlaces = comparables;
+  protected readonly abrir = abrirEnlace;
 }

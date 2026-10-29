@@ -1,4 +1,4 @@
-# Chollos · versión 1.2
+# Chollos · versión 1.3
 
 App en Angular + Ionic + Capacitor que evalúa anuncios de segunda mano con la API de Gemini, usando los criterios de la skill *evaluar-anuncio-segunda-mano*.
 
@@ -12,7 +12,9 @@ App en Angular + Ionic + Capacitor que evalúa anuncios de segunda mano con la A
 | **Cartera** | Lo que has comprado: en stock, guardado como inversión y vendido, con invertido, ganancia latente, beneficio real, €/hora y días hasta vender. "Lo he comprado" en una evaluación lo añade aquí. Exporta a CSV |
 | **Historial** | Últimas 50 evaluaciones |
 
-En **Ajustes** hay un **modo demostración** (respuestas de ejemplo, sin Gemini) para probar toda la app sin clave, y un botón **Probar clave**.
+En cada pieza valorada hay botones **Ver vendidos** (eBay, todocoleccion, Wallapop) para comprobar precios reales. En **Avisos** tienes **búsquedas recomendadas** por categoría que se abren en Vinted o Wallapop para guardarlas.
+
+En **Ajustes** puedes **exportar e importar una copia de seguridad** (cartera, historial y ajustes, sin la clave). También hay un **modo demostración** (respuestas de ejemplo, sin Gemini) para probar toda la app sin clave, y un botón **Probar clave**.
 
 Además, en Android la app aparece en el menú **Compartir**: desde Vinted compartes el anuncio (enlace) y desde la galería las capturas, y llegan directamente al formulario.
 
@@ -68,6 +70,7 @@ Cada vez que cambies el código web: `npm run android` y Run otra vez.
 | `src/app/cartera.component.ts` / `cartera.service.ts` | Pestaña Cartera, cálculo de cifras y exportación CSV |
 | `src/app/almacen.ts` | Guarda historial y cartera en IndexedDB (migra lo que hubiera en localStorage) |
 | `src/app/demo.ts` | Respuestas de ejemplo del modo demostración |
+| `src/app/enlaces.ts` | Enlaces a vendidos (eBay, todocoleccion, Wallapop) y búsquedas recomendadas |
 | `src/app/exportar.ts` | Exportar archivos: menú Compartir en Android, descarga en el navegador |
 | `android/app/src/main/java/com/cristina/chollos/VigilanteService.java` | Servicio Android que escucha las notificaciones de Vinted (`fr.vinted`) y Wallapop (`com.wallapop`) |
 | `android/.../FiltroGemini.java` | Filtro rápido con Gemini (solo texto) que decide si avisar |

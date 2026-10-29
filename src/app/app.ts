@@ -25,6 +25,8 @@ import { CarteraComponent } from './cartera.component';
 import { CarteraService } from './cartera.service';
 import { Vigilante, vigilanteDisponible } from './vigilante';
 import { escucharCompartir } from './compartir';
+import { abrirEnlace, buscarEn, BUSQUEDAS_RECOMENDADAS } from './enlaces';
+import { exportarTexto } from './exportar';
 
 type Vista = 'evaluar' | 'cola' | 'avisos' | 'cartera' | 'historial';
 
@@ -76,6 +78,12 @@ export class App implements OnInit {
   // Ajustes (copia editable en el modal)
   protected readonly ajustesAbiertos = signal(false);
   protected readonly pruebaClave = signal<string | null>(null);
+  protected readonly mensajeCopia = signal<string | null>(null);
+
+  // Búsquedas recomendadas
+  protected readonly busquedas = BUSQUEDAS_RECOMENDADAS;
+  protected readonly buscarEn = buscarEn;
+  protected readonly abrir = abrirEnlace;
   protected borrador: Ajustes = { ...this.ajustesSrv.ajustes() };
 
   constructor() {
@@ -271,6 +279,47 @@ export class App implements OnInit {
     this.vista.set('evaluar');
   }
 
+  /** Copia de seguridad: cartera, historial y ajustes (sin la clave de la API). */
+  protected async exportarCopia(): Promise<void> {
+    const { apiKey: _sinClave, ...ajustes } = this.ajustesSrv.ajustes();
+    const copia = {
+      app: 'chollos',
+      version: 1,
+      fecha: new Date().toISOString(),
+      ajustes,
+      cartera: this.cartera.articulos(),
+      historial: this.historial.registros(),
+    };
+    await exportarTexto(`chollos-copia-${copia.fecha.slice(0, 10)}.json`, JSON.stringify(copia), 'application/json');
+    this.mensajeCopia.set('Copia exportada.');
+  }
+
+  protected async importarCopia(evento: Event): Promise<void> {
+    const input = evento.target as HTMLInputElement;
+    const archivo = input.files?.[0];
+    input.value = '';
+    if (!archivo) return;
+    try {
+      const copia = JSON.parse(await archivo.text());
+      if (copia?.app !== 'chollos' || !Array.isArray(copia.cartera) || !Array.isArray(copia.historial)) {
+        throw new Error('El archivo no es una copia de Chollos.');
+      }
+      const ok = confirm(
+        `Esta copia tiene ${copia.cartera.length} artículos en cartera y ${copia.historial.length} evaluaciones. ` +
+          'Sustituirá los datos actuales. ¿Continuar?',
+      );
+      if (!ok) return;
+      this.cartera.reemplazar(copia.cartera);
+      this.historial.reemplazar(copia.historial);
+      if (copia.ajustes) {
+        this.borrador = { ...this.borrador, ...copia.ajustes, apiKey: this.borrador.apiKey };
+      }
+      this.mensajeCopia.set('Copia importada correctamente.');
+    } catch (e) {
+      this.mensajeCopia.set(e instanceof Error ? e.message : String(e));
+    }
+  }
+
   protected async probarClave(): Promise<void> {
     this.pruebaClave.set('Comprobando…');
     try {
@@ -282,6 +331,7 @@ export class App implements OnInit {
 
   protected abrirAjustes(): void {
     this.pruebaClave.set(null);
+    this.mensajeCopia.set(null);
     this.borrador = { ...this.ajustesSrv.ajustes() };
     this.ajustesAbiertos.set(true);
   }

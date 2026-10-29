@@ -86,6 +86,11 @@ export class CarteraService {
     this.actualizar(existe ? lista.map((a) => (a.id === articulo.id ? articulo : a)) : [articulo, ...lista]);
   }
 
+  /** Sustituye todo (al importar una copia de seguridad). */
+  reemplazar(lista: ArticuloCartera[]): void {
+    this.actualizar(lista);
+  }
+
   borrar(id: string): void {
     this.actualizar(this.articulos().filter((a) => a.id !== id));
   }

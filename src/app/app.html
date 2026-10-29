@@ -228,6 +228,25 @@
             <p class="vacio">Todavía no hay avisos. Llegarán cuando Vinted o Wallapop te notifiquen algo nuevo.</p>
           }
         }
+
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Búsquedas recomendadas</ion-card-title>
+            <ion-card-subtitle>Ábrelas en Vinted o Wallapop y guárdalas con las notificaciones activadas</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            @for (grupo of busquedas; track grupo.categoria) {
+              <h3 class="grupo">{{ grupo.categoria }}</h3>
+              @for (t of grupo.terminos; track t) {
+                <div class="busqueda">
+                  <span>{{ t }}</span>
+                  <ion-button size="small" fill="clear" (click)="abrir(buscarEn.vinted(t))">Vinted</ion-button>
+                  <ion-button size="small" fill="clear" (click)="abrir(buscarEn.wallapop(t))">Wallapop</ion-button>
+                </div>
+              }
+            }
+          </ion-card-content>
+        </ion-card>
       }
 
       <!-- ================= CARTERA ================= -->
@@ -296,7 +315,7 @@
               <ion-toggle [(ngModel)]="borrador.buscarPrecios">Buscar precios reales en Google</ion-toggle>
             </ion-item>
             <ion-item>
-              <ion-toggle [(ngModel)]="borrador.demo">Modo demostración (respuestas de ejemplo, sin Gemini)</ion-toggle>
+              <ion-toggle [(ngModel)]="borrador.demo">Modo demostración (sin Gemini)</ion-toggle>
             </ion-item>
           </ion-list>
           <ion-note class="ayuda">
@@ -304,6 +323,18 @@
             usas la capa gratuita y no te pueden cobrar. Con la búsqueda activada las valoraciones son más fiables,
             pero tardan más y gastan más cuota.
           </ion-note>
+
+          <h3 class="grupo">Tus datos</h3>
+          <ion-note class="ayuda">
+            La cartera y el historial se guardan solo en este dispositivo. Haz una copia de vez en cuando
+            (por ejemplo, a Google Drive) para no perderlos si cambias de móvil o reinstalas la app.
+          </ion-note>
+          <div class="acciones">
+            <ion-button fill="outline" (click)="exportarCopia()">Exportar copia</ion-button>
+            <ion-button fill="outline" (click)="selectorCopia.click()">Importar copia</ion-button>
+          </div>
+          <input #selectorCopia type="file" accept="application/json,.json" hidden (change)="importarCopia($event)" />
+          @if (mensajeCopia()) { <ion-note class="ayuda">{{ mensajeCopia() }}</ion-note> }
         </ion-content>
       </ng-template>
     </ion-modal>

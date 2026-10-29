@@ -64,3 +64,24 @@ ion-list,
   margin-top: 32px;
   padding-inline: 16px;
 }
+
+.grupo {
+  margin: 16px 0 4px;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.busqueda {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  span {
+    flex: 1;
+  }
+
+  ion-button {
+    margin: 0;
+    text-transform: none;
+  }
+}
