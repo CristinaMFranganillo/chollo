@@ -363,24 +363,30 @@
     <!-- ================= AJUSTES ================= -->
     <ion-modal [isOpen]="ajustesAbiertos()" (didDismiss)="ajustesAbiertos.set(false)">
       <ng-template>
-        <ion-header>
+        <ion-header class="cabecera">
           <ion-toolbar>
+            <ion-buttons slot="start">
+              <ion-button fill="clear" class="boton-icono" (click)="ajustesAbiertos.set(false)" aria-label="Cerrar sin guardar">
+                <ion-icon aria-hidden="true" slot="icon-only" name="close"></ion-icon>
+              </ion-button>
+            </ion-buttons>
             <ion-title>Ajustes</ion-title>
             <ion-buttons slot="end">
-              <ion-button (click)="guardarAjustes()" [strong]="true">Guardar</ion-button>
+              <ion-button fill="solid" color="primary" size="small" class="guardar" (click)="guardarAjustes()">Guardar</ion-button>
             </ion-buttons>
           </ion-toolbar>
         </ion-header>
         <ion-content class="ion-padding">
-          <ion-list lines="full">
+          <h3 class="grupo">Inteligencia artificial</h3>
+          <ion-list lines="none" class="formulario tarjeta-ajustes">
             <ion-item>
               <ion-input label="Clave de la API de Gemini" labelPlacement="stacked" type="password"
                 placeholder="Pégala desde Google AI Studio" [(ngModel)]="borrador.apiKey"></ion-input>
             </ion-item>
-            <ion-item lines="none">
-              <ion-button slot="end" fill="outline" size="small" (click)="probarClave()">Probar clave</ion-button>
-              @if (pruebaClave()) { <ion-note class="ion-text-wrap">{{ pruebaClave() }}</ion-note> }
-            </ion-item>
+            <div class="probar">
+              <ion-button fill="outline" size="small" (click)="probarClave()">Probar clave</ion-button>
+              @if (pruebaClave()) { <ion-note class="ion-text-wrap" role="status">{{ pruebaClave() }}</ion-note> }
+            </div>
             <ion-item>
               <ion-input label="Modelo para evaluar a fondo" labelPlacement="stacked" [(ngModel)]="borrador.modelo"></ion-input>
             </ion-item>
@@ -404,6 +410,7 @@
           <ion-note class="ayuda">
             Tus correcciones, tus ventas reales y tus notas. Se envían a Gemini en cada evaluación para que se ajuste a tu mercado.
           </ion-note>
+          @if (aprendizajes.total()) {
           <ion-list lines="inset">
             @for (a of aprendizajes.lista(); track a.id) {
               <ion-item>
@@ -417,6 +424,7 @@
               </ion-item>
             }
           </ion-list>
+          }
           <ion-button expand="block" fill="outline" (click)="anadirNota()">Añadir conocimiento</ion-button>
 
           <h3 class="grupo">Tus datos</h3>

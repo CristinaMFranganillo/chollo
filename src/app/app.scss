@@ -521,3 +521,41 @@ ion-list,
   font-weight: 900;
   letter-spacing: 0.5px;
 }
+
+/* ---------- Ajustes ---------- */
+.cabecera ion-title {
+  font-weight: 800;
+  font-size: 1.15rem;
+}
+
+.guardar {
+  min-height: 36px;
+  --padding-start: 16px;
+  --padding-end: 16px;
+}
+
+.tarjeta-ajustes {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 12px !important;
+  border-radius: var(--radio);
+  border: 1px solid var(--cristal-borde);
+  background: var(--cristal) !important;
+  box-shadow: var(--sombra);
+
+  ion-item:has(ion-toggle) {
+    --background: transparent;
+  }
+}
+
+.probar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: -2px 0 12px;
+  flex-wrap: wrap;
+
+  ion-button {
+    margin: 0;
+  }
+}
