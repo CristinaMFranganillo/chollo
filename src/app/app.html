@@ -1,0 +1,311 @@
+<ion-app>
+  <ion-header>
+    <ion-toolbar color="primary">
+      <ion-title>Chollos</ion-title>
+      <ion-buttons slot="end">
+        <ion-button (click)="abrirAjustes()" aria-label="Ajustes">
+          <ion-icon slot="icon-only" name="settings-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+    <ion-toolbar>
+      <ion-segment [value]="vista()" [scrollable]="true" (ionChange)="vista.set($any($event.detail.value))">
+        <ion-segment-button value="evaluar"><ion-label>Evaluar</ion-label></ion-segment-button>
+        <ion-segment-button value="cola">
+          <ion-label>Cola @if (cola.elementos().length) { ({{ cola.elementos().length }}) }</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="avisos">
+          <ion-label>Avisos @if (avisos().length) { ({{ avisos().length }}) }</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="cartera"><ion-label>Cartera</ion-label></ion-segment-button>
+        <ion-segment-button value="historial"><ion-label>Historial</ion-label></ion-segment-button>
+      </ion-segment>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content class="ion-padding">
+    @switch (vista()) {
+      <!-- ================= EVALUAR ================= -->
+      @case ('evaluar') {
+        @if (aviso()) {
+          <ion-card color="light"><ion-card-content>{{ aviso() }}</ion-card-content></ion-card>
+        }
+
+        @if (!resultado()) {
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>Anuncio</ion-card-title>
+              <ion-card-subtitle>Capturas de las fotos y la descripción, o el texto copiado</ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-list lines="full">
+                <ion-item>
+                  <ion-textarea label="Texto del anuncio" labelPlacement="stacked" [autoGrow]="true" rows="3"
+                    placeholder="Título, descripción, estado…" [(ngModel)]="texto"></ion-textarea>
+                </ion-item>
+                <ion-item>
+                  <ion-input label="Precio (€)" labelPlacement="stacked" type="text" inputmode="decimal"
+                    placeholder="Opcional si sale en la captura" [(ngModel)]="precio"></ion-input>
+                </ion-item>
+              </ion-list>
+
+              <div class="fotos">
+                @for (f of fotos(); track f.url; let i = $index) {
+                  <div class="foto">
+                    <img [src]="f.url" alt="Captura {{ i + 1 }}" />
+                    <button type="button" (click)="quitarFoto(i)" aria-label="Quitar captura">
+                      <ion-icon name="close-circle"></ion-icon>
+                    </button>
+                  </div>
+                }
+              </div>
+
+              <input #selector type="file" accept="image/*" multiple hidden (change)="anadirFotos($event)" />
+              <ion-button expand="block" fill="outline" (click)="selector.click()">
+                <ion-icon slot="start" name="images-outline"></ion-icon>
+                Añadir capturas ({{ fotos().length }}/8)
+              </ion-button>
+
+              <div class="acciones">
+                <ion-button [disabled]="!puedeEvaluar()" (click)="evaluar()">
+                  @if (cargando()) {
+                    <ion-spinner name="dots"></ion-spinner>&nbsp;Evaluando…
+                  } @else {
+                    <ion-icon slot="start" name="sparkles-outline"></ion-icon> Evaluar ahora
+                  }
+                </ion-button>
+                <ion-button fill="outline" [disabled]="!puedeEvaluar()" (click)="anadirACola()">
+                  <ion-icon slot="start" name="add-circle-outline"></ion-icon> A la cola
+                </ion-button>
+              </div>
+              @if (cargando()) {
+                <ion-note class="nota-centrada">Buscando comparables y calculando margen. Puede tardar 20–60 s.</ion-note>
+              }
+            </ion-card-content>
+          </ion-card>
+        }
+
+        @if (error()) {
+          <ion-card color="danger"><ion-card-content>{{ error() }}</ion-card-content></ion-card>
+        }
+
+        @if (resultado(); as r) {
+          <app-resultado [evaluacion]="r">
+            <div class="acciones">
+              <ion-button (click)="loHeComprado(r, metaResultado().titulo, metaResultado().miniatura, metaResultado().precio)">Lo he comprado</ion-button>
+              <ion-button fill="outline" (click)="nuevo()">Evaluar otro</ion-button>
+            </div>
+          </app-resultado>
+        }
+      }
+
+      <!-- ================= COLA ================= -->
+      @case ('cola') {
+        @if (!cola.elementos().length) {
+          <p class="vacio">
+            La cola está vacía. En "Evaluar", prepara un anuncio y pulsa "A la cola";
+            repite con todos los que quieras y evalúalos aquí de una vez.
+          </p>
+        } @else {
+          <div class="acciones">
+            <ion-button [disabled]="cola.procesando() || !cola.pendientes()" (click)="cola.procesar()">
+              @if (cola.procesando()) {
+                <ion-spinner name="dots"></ion-spinner>&nbsp;Evaluando…
+              } @else {
+                <ion-icon slot="start" name="play-outline"></ion-icon>
+                {{ cola.pendientes() ? 'Evaluar ' + cola.pendientes() + ' pendientes' : 'Nada pendiente' }}
+              }
+            </ion-button>
+            <ion-button fill="outline" color="medium" [disabled]="cola.procesando()" (click)="cola.vaciarEvaluados()">
+              Quitar evaluados
+            </ion-button>
+          </div>
+
+          <ion-list>
+            @for (e of cola.ordenados(); track e.id) {
+              <ion-item button [detail]="false" (click)="e.evaluacion && alternarCola(e.id)">
+                @if (e.miniatura) {
+                  <ion-thumbnail slot="start"><img [src]="e.miniatura" alt="" /></ion-thumbnail>
+                }
+                <ion-label class="ion-text-wrap">
+                  <h3>{{ e.texto.split('\n')[0] || 'Anuncio sin texto' }}</h3>
+                  <p>
+                    @if (e.precio != null) { {{ e.precio }} € · }
+                    {{ e.fotos.length }} capturas
+                    @if (e.evaluacion) { · {{ e.evaluacion.beneficio_neto_eur | number: '1.0-0' }} € netos }
+                    @if (e.estado === 'error') { · <span class="texto-error">{{ e.error }}</span> }
+                  </p>
+                </ion-label>
+                @switch (e.estado) {
+                  @case ('evaluando') { <ion-spinner slot="end" name="dots"></ion-spinner> }
+                  @case ('hecho') { <ion-badge slot="end" [color]="color(e.evaluacion?.nota)">{{ e.evaluacion?.nota }}</ion-badge> }
+                  @case ('error') { <ion-icon slot="end" color="danger" name="alert-circle-outline"></ion-icon> }
+                  @default { <ion-note slot="end">en cola</ion-note> }
+                }
+                @if (e.estado !== 'evaluando') {
+                  <ion-button slot="end" fill="clear" color="medium" aria-label="Quitar"
+                    (click)="$event.stopPropagation(); cola.quitar(e.id)">
+                    <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+                  </ion-button>
+                }
+              </ion-item>
+              @if (abiertoEnCola() === e.id && e.evaluacion) {
+                <app-resultado [evaluacion]="e.evaluacion">
+                  <ion-button expand="block" (click)="loHeComprado(e.evaluacion, e.texto.split('\n')[0], e.miniatura, e.precio)">
+                    Lo he comprado
+                  </ion-button>
+                </app-resultado>
+              }
+            }
+          </ion-list>
+        }
+      }
+
+      <!-- ================= AVISOS ================= -->
+      @case ('avisos') {
+        @if (!enAndroid) {
+          <p class="vacio">
+            Los avisos automáticos solo funcionan en la app Android: leen las notificaciones de tus
+            búsquedas guardadas de Vinted y Wallapop y te avisan solo de lo que parece un chollo.
+          </p>
+        } @else {
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>Vigilante de notificaciones</ion-card-title>
+              <ion-card-subtitle>Filtra las alertas de tus búsquedas guardadas, aunque la app esté cerrada</ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-list lines="full">
+                <ion-item>
+                  <ion-toggle [checked]="ajustesSrv.ajustes().vigilar" (ionChange)="cambiarVigilancia($event.detail.checked)">
+                    Vigilar Vinted y Wallapop
+                  </ion-toggle>
+                </ion-item>
+                <ion-item>
+                  <ion-icon slot="start" [name]="permisoLectura() ? 'checkmark-circle-outline' : 'alert-circle-outline'"
+                    [color]="permisoLectura() ? 'success' : 'warning'"></ion-icon>
+                  <ion-label class="ion-text-wrap">Permiso para leer notificaciones</ion-label>
+                  @if (!permisoLectura()) { <ion-button slot="end" (click)="darPermisoLectura()">Dar permiso</ion-button> }
+                </ion-item>
+                <ion-item>
+                  <ion-icon slot="start" [name]="permisoAvisos() ? 'checkmark-circle-outline' : 'alert-circle-outline'"
+                    [color]="permisoAvisos() ? 'success' : 'warning'"></ion-icon>
+                  <ion-label class="ion-text-wrap">Permiso para avisarte</ion-label>
+                  @if (!permisoAvisos()) { <ion-button slot="end" (click)="darPermisoAvisos()">Dar permiso</ion-button> }
+                </ion-item>
+              </ion-list>
+              <ion-note class="ayuda">
+                Activa en Vinted y Wallapop las notificaciones de tus búsquedas guardadas. Para que funcione
+                todo el día, quita a Chollos de la optimización de batería en los ajustes de Android.
+              </ion-note>
+            </ion-card-content>
+          </ion-card>
+
+          @if (avisos().length) {
+            <ion-list>
+              <ion-list-header>
+                <ion-label>Detectados</ion-label>
+                <ion-button (click)="borrarAvisos()">Borrar todo</ion-button>
+              </ion-list-header>
+              @for (a of avisos(); track a.id) {
+                <ion-item button [detail]="false" (click)="evaluarAviso(a)">
+                  <ion-label class="ion-text-wrap">
+                    <h3>{{ a.titulo || a.app }}</h3>
+                    <p>{{ a.texto }}</p>
+                    <p>
+                      {{ a.fecha | date: 'd MMM, HH:mm' }} · {{ a.app }}
+                      @if (a.motivo) { · {{ a.motivo }} }
+                    </p>
+                  </ion-label>
+                  <ion-badge slot="end" [color]="color(a.nota)">
+                    {{ a.nota ?? 'SIN EVALUAR' }}
+                    @if (a.multiplo != null) { ×{{ a.multiplo | number: '1.1-1' }} }
+                  </ion-badge>
+                </ion-item>
+              }
+            </ion-list>
+          } @else {
+            <p class="vacio">Todavía no hay avisos. Llegarán cuando Vinted o Wallapop te notifiquen algo nuevo.</p>
+          }
+        }
+      }
+
+      <!-- ================= CARTERA ================= -->
+      @case ('cartera') {
+        <app-cartera />
+      }
+
+      <!-- ================= HISTORIAL ================= -->
+      @case ('historial') {
+        @if (!historial.registros().length) {
+          <p class="vacio">Aún no has evaluado ningún anuncio.</p>
+        }
+        <ion-list>
+          @for (h of historial.registros(); track h.id) {
+            <ion-item button (click)="verRegistro(h)">
+              @if (h.miniatura) {
+                <ion-thumbnail slot="start"><img [src]="h.miniatura" alt="" /></ion-thumbnail>
+              }
+              <ion-label class="ion-text-wrap">
+                <h3>{{ h.titulo }}</h3>
+                <p>
+                  {{ h.fecha | date: 'd MMM, HH:mm' }}
+                  @if (h.precio != null) { · {{ h.precio }} € }
+                  · {{ h.evaluacion.beneficio_neto_eur | number: '1.0-0' }} € netos
+                </p>
+              </ion-label>
+              <ion-badge slot="end" [color]="color(h.evaluacion.nota)">{{ h.evaluacion.nota }}</ion-badge>
+              <ion-button slot="end" fill="clear" color="medium" aria-label="Borrar"
+                (click)="$event.stopPropagation(); historial.borrar(h.id)">
+                <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+              </ion-button>
+            </ion-item>
+          }
+        </ion-list>
+      }
+    }
+
+    <!-- ================= AJUSTES ================= -->
+    <ion-modal [isOpen]="ajustesAbiertos()" (didDismiss)="ajustesAbiertos.set(false)">
+      <ng-template>
+        <ion-header>
+          <ion-toolbar>
+            <ion-title>Ajustes</ion-title>
+            <ion-buttons slot="end">
+              <ion-button (click)="guardarAjustes()" [strong]="true">Guardar</ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content class="ion-padding">
+          <ion-list lines="full">
+            <ion-item>
+              <ion-input label="Clave de la API de Gemini" labelPlacement="stacked" type="password"
+                placeholder="Pégala desde Google AI Studio" [(ngModel)]="borrador.apiKey"></ion-input>
+            </ion-item>
+            <ion-item lines="none">
+              <ion-button slot="end" fill="outline" size="small" (click)="probarClave()">Probar clave</ion-button>
+              @if (pruebaClave()) { <ion-note class="ion-text-wrap">{{ pruebaClave() }}</ion-note> }
+            </ion-item>
+            <ion-item>
+              <ion-input label="Modelo para evaluar a fondo" labelPlacement="stacked" [(ngModel)]="borrador.modelo"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-input label="Modelo rápido para avisos" labelPlacement="stacked" [(ngModel)]="borrador.modeloRapido"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-toggle [(ngModel)]="borrador.buscarPrecios">Buscar precios reales en Google</ion-toggle>
+            </ion-item>
+            <ion-item>
+              <ion-toggle [(ngModel)]="borrador.demo">Modo demostración (respuestas de ejemplo, sin Gemini)</ion-toggle>
+            </ion-item>
+          </ion-list>
+          <ion-note class="ayuda">
+            La clave se guarda solo en este dispositivo. Mientras no actives la facturación en Google AI Studio,
+            usas la capa gratuita y no te pueden cobrar. Con la búsqueda activada las valoraciones son más fiables,
+            pero tardan más y gastan más cuota.
+          </ion-note>
+        </ion-content>
+      </ng-template>
+    </ion-modal>
+  </ion-content>
+</ion-app>

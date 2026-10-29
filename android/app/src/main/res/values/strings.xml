@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Chollos</string>
+    <string name="title_activity_main">Chollos</string>
+    <string name="package_name">com.cristina.chollos</string>
+    <string name="custom_url_scheme">com.cristina.chollos</string>
+</resources>
