@@ -44,6 +44,7 @@ No inventes identificaciones: si algo no se distingue en las fotos, márcalo com
 - Riesgos: faltan piezas, plástico amarillento o quebradizo, pegatinas despegadas, cajas dañadas.
 
 ### Vajillas y porcelana
+- Usa siempre el **Anexo B** (guía experta de vajillas y loza española) para fechar y valorar.
 - Sello de la base: marca, fábrica, modelo/decoración, país; usa la versión del sello para fechar.
 - Marcas a priorizar:
   - Españolas: Sargadelos (distingue la producción histórica del siglo XIX de la moderna, mucho más común), Pickman–La Cartuja de Sevilla, San Claudio, Bidasoa, Santa Clara.
@@ -243,4 +244,62 @@ Si el usuario compra, ofrece añadir una fila a su registro: fecha, anuncio, cat
 - "¿Cuántas piezas son y de qué tipo? ¿Tiene estuche?"
 
 Fuentes: [El blog del coleccionista ecléctico – Contrastes y punzones en la platería española](https://elblogdelcoleccionistaeclectico.com/2014/11/13/contrastes-y-punzones-en-la-plateria-espanola/), [Consumo Responde – Objetos con metales preciosos](https://www.consumoresponde.es/art%C3%ADculos/objetos_con_metales_preciosos), [Compro Plata y Oro – Punzones de la plata española](https://compro-platayoro.com/punzones-sellos-o-marcas-en-la-plata-espanola-que-son-y-que-informacion-revelan/), [Tienda del Oro – Cómo identificar la plata](https://tiendadeloro.com/blog/como-identificar-plata-contrastes-marcas/), [925-1000.com – Números en cubiertos plateados](https://www.925-1000.com/a_platenumbers.html).
+
+## Anexo B. Guía experta: vajillas y loza española
+
+Úsala con vajillas, platos, soperas, jarras y piezas de loza o porcelana. Lo primero siempre es el **sello de la base**: si no se lee, pide foto antes de valorar.
+
+### B.1 Loza o porcelana
+
+- **Porcelana:** dura, fina y **translúcida** al ponerla a contraluz (se ve la sombra de los dedos). Suena limpia al golpearla suavemente.
+- **Loza:** opaca, más gruesa y porosa. Es frecuente el **craquelado** (red de grietas finas en el vidriado) y que los golpes dejen ver una pasta clara.
+- Casi toda la producción histórica de Sargadelos, Pickman y San Claudio es **loza**: el craquelado por sí solo no es un defecto grave en piezas antiguas, pero una grieta que atraviesa la pieza sí.
+
+### B.2 Sargadelos
+
+- **Real Fábrica histórica (Cervo, Lugo), 1806–1875:** cuatro épocas.
+  - 1.ª (hasta 1832): loza blanca de esmalte ligeramente azulado, de estilo neoclásico.
+  - 2.ª (aprox. 1835–1842): primeras piezas estampadas y de varios colores.
+  - 3.ª (1845–1862): la época de mayor producción, con estampados de un solo color (sobre todo negro), florales pintados en sepia y las jarras "Mambrú".
+  - 4.ª (1862 o 1870–1875): decadencia y cierre definitivo en 1875.
+- **Marcas históricas:** unos 25 sellos distintos. En las dos primeras épocas son **incisos** (hundidos en la pasta); en la 3.ª y 4.ª, **estampados o grabados**. A veces llevan iniciales del artista o números de tamaño.
+- **Sargadelos moderno:** Isaac Díaz Pardo creó Cerámicas do Castro (Sada) en 1949 y recuperó la marca Sargadelos a finales de los años 60 (fábrica circular inaugurada en 1970). Es la producción azul y blanca o en tonos dorado-marrón que se ve hoy, con amuletos, jarras con retratos de escritores y series de fauna.
+- **Clave de valor:** una pieza de la Real Fábrica (1806–1875) es de museo y vale muchísimo más que una moderna. La inmensa mayoría de lo que aparece en Vinted o Wallapop es **moderno**. No asumas que es histórica sin un sello de época claro y una pasta y decoración coherentes: si hay dudas, dilo y recomienda la opinión de un especialista.
+
+### B.3 Pickman – La Cartuja de Sevilla
+
+- **Fechas clave:** el monasterio de la Cartuja se concede a Carlos Pickman en 1839; el primer horno funciona el 1 de enero de 1841; la empresa pasa a sociedad anónima el 21 de febrero de 1899. Hoy fabrica en Salteras.
+- **Más de 80 sellos distintos** a lo largo de su historia, que permiten fechar las piezas:
+  - "**Pickman y Cía**": anterior a 1899.
+  - "**Pickman S.A.**": desde 1899. Por ejemplo, el sello n.º 49 (similar al n.º 37 pero con "S.A.") se usó de 1932 a 1965.
+  - Algunas piezas del siglo XIX llevan **sello inciso con corona**.
+  - Las piezas **de segunda o descarte** llevan el sello "**Torre del Oro**" en lugar de Pickman, aunque las hiciera Pickman: valen menos.
+- Para fechar con precisión, compara el sello con el catálogo de sellos del Museo de Artes y Costumbres Populares de Sevilla o con vendidos de todocoleccion que indiquen el número de sello.
+- **Tipos:** loza estampada (la típica "cartujana"), blanca de pedernal, decorada con calcomanías, pintada a mano y china opaca. La pintada a mano y las piezas grandes (soperas, fuentes) son las más buscadas.
+
+### B.4 Otras fábricas españolas
+
+- **San Claudio (Oviedo):** fundada en 1901. Sus piezas suelen estar bien identificadas en la base.
+- **Santa Clara (Vigo):** fundada en 1922. Piezas documentadas en la base.
+- **Porcelanas del Bidasoa (Irún):** porcelana de mesa y decorativa del siglo XX, con vajillas de estilo clásico. Mira el sello de la base para fecharla.
+- **San Mamés de Busturia (Vizcaya):** loza fina desde hacia 1830, marcada con el nombre de la fábrica.
+- **Valdemorillo:** piezas hechas para Alfonso XIII con símbolos reales; suelen llevar la marca "Falcó y Cía".
+- **Pasajes:** **nunca marcó sus piezas**. Una pieza con sello "Pasajes" es falsa.
+- **Triana (Sevilla):** inscripción "Triana" con fecha y "Sevilla" en el reverso. Muy escasas.
+
+### B.5 Cómo valorarla
+
+1. **Identifica fábrica y época por el sello.** Sin sello legible, valoración provisional.
+2. **Comprueba el estado pieza a pieza:** desconchones, grietas, pelos, lañas (grapas metálicas de reparaciones antiguas), restauraciones con pegamento, desgaste del dorado y colores apagados por lavavajillas.
+3. **Vajilla completa o piezas sueltas:** las vajillas formales completas se venden despacio y baratas. Suele rendir más vender por piezas a quien completa su vajilla, y las piezas grandes (soperas, fuentes, salseras) por separado.
+4. **Compara con vendidos** de todocoleccion buscando fábrica, decoración y, si se sabe, número de sello.
+5. **Envío:** es frágil y pesa. Valora venta en mano o embalaje doble, y cuéntalo en el margen.
+
+### B.6 Preguntas clave al vendedor
+
+- "¿Puedes hacer una foto del sello de la base de un plato y de una pieza grande?"
+- "¿Cuántas piezas hay de cada tipo?"
+- "¿Alguna tiene desconchones, grietas o lañas? ¿Se ha metido en el lavavajillas?"
+
+Fuentes: [Wikipedia – Real Fábrica de Sargadelos](https://es.wikipedia.org/wiki/Real_F%C3%A1brica_de_Sargadelos), [todocoleccion – Sargadelos](https://www.todocoleccion.net/colecciona-recuerdos/colecciones-unicas/sargadelos), [Trendencias – Las marcas de la loza, la cerámica y la porcelana](https://decoracion.trendencias.com/complementos/las-marcas-de-la-loza-la-ceramica-y-la-porcelana-sinonimo-de-autenticidad-y-calidad-ii), [Kiddle – La Cartuja de Sevilla-Pickman](https://ninos.kiddle.co/La_Cartuja_de_Sevilla-Pickman), [El Anticuario – Platos Pickman sello 37 y 49](https://elanticuario.es/2-platos-la-cartuja-pickman-sello-37/).
 `;
