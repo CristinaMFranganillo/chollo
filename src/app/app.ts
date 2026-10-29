@@ -6,7 +6,7 @@ import {
   IonApp, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonButton, IonIcon,
   IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonItem, IonInput,
   IonTextarea, IonList, IonLabel, IonBadge, IonSpinner, IonModal, IonToggle, IonSegment,
-  IonSegmentButton, IonNote, IonThumbnail, IonListHeader,
+  IonSegmentButton, IonNote, IonThumbnail, IonListHeader, AlertController,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
@@ -23,6 +23,7 @@ import { colorNota } from './colores';
 import { ResultadoComponent } from './resultado.component';
 import { CarteraComponent } from './cartera.component';
 import { CarteraService } from './cartera.service';
+import { AprendizajesService } from './aprendizajes.service';
 import { Vigilante, vigilanteDisponible } from './vigilante';
 import { escucharCompartir } from './compartir';
 import { abrirEnlace, buscarEn, BUSQUEDAS_RECOMENDADAS } from './enlaces';
@@ -49,6 +50,8 @@ export class App implements OnInit {
   protected readonly historial = inject(HistorialService);
   protected readonly cola = inject(ColaService);
   private readonly cartera = inject(CarteraService);
+  protected readonly aprendizajes = inject(AprendizajesService);
+  private readonly alertas = inject(AlertController);
   protected readonly color = colorNota;
 
   protected readonly vista = signal<Vista>('evaluar');
@@ -331,6 +334,45 @@ export class App implements OnInit {
     this.aviso.set(null);
   }
 
+  // ---------- Aprendizajes ----------
+
+  /** "Corregir valoración": lo que la IA hizo mal se guarda y se tiene en cuenta en las siguientes. */
+  protected async corregir(evaluacion: Evaluacion, titulo: string): Promise<void> {
+    const alerta = await this.alertas.create({
+      header: 'Enseñar a la app',
+      message: '¿Qué estaba mal o qué sabes tú de esto? Por ejemplo: "no era plata, era alpaca Meneses" o "este modelo se vende a 40 € en todocoleccion".',
+      inputs: [{ name: 'texto', type: 'textarea', placeholder: 'Tu corrección' }],
+      buttons: [
+        { text: 'Cancelar', role: 'cancel' },
+        {
+          text: 'Guardar',
+          handler: (datos: { texto: string }) => {
+            if (!datos.texto?.trim()) return;
+            this.aprendizajes.anadir(evaluacion.categoria, `Corrección sobre «${titulo || evaluacion.categoria}»: ${datos.texto.trim()}`, 'correccion');
+            this.aviso.set('Guardado. La app lo tendrá en cuenta en las próximas evaluaciones.');
+          },
+        },
+      ],
+    });
+    await alerta.present();
+  }
+
+  protected async anadirNota(): Promise<void> {
+    const alerta = await this.alertas.create({
+      header: 'Añadir conocimiento',
+      message: 'Algo que quieras que la app sepa siempre (marcas, precios, canales, trucos).',
+      inputs: [
+        { name: 'categoria', type: 'text', placeholder: 'Categoría (p. ej. Cuberterías)' },
+        { name: 'texto', type: 'textarea', placeholder: 'Lo que debe saber' },
+      ],
+      buttons: [
+        { text: 'Cancelar', role: 'cancel' },
+        { text: 'Guardar', handler: (d: { categoria: string; texto: string }) => this.aprendizajes.anadir(d.categoria, d.texto, 'manual') },
+      ],
+    });
+    await alerta.present();
+  }
+
   // ---------- Historial y ajustes ----------
 
   protected verRegistro(h: RegistroEvaluacion): void {
@@ -350,6 +392,7 @@ export class App implements OnInit {
       ajustes,
       cartera: this.cartera.articulos(),
       historial: this.historial.registros(),
+      aprendizajes: this.aprendizajes.lista(),
     };
     await exportarTexto(`chollos-copia-${copia.fecha.slice(0, 10)}.json`, JSON.stringify(copia), 'application/json');
     this.mensajeCopia.set('Copia exportada.');
@@ -372,6 +415,7 @@ export class App implements OnInit {
       if (!ok) return;
       this.cartera.reemplazar(copia.cartera);
       this.historial.reemplazar(copia.historial);
+      if (Array.isArray(copia.aprendizajes)) this.aprendizajes.reemplazar(copia.aprendizajes);
       if (copia.ajustes) {
         this.borrador = { ...this.borrador, ...copia.ajustes, apiKey: this.borrador.apiKey };
       }

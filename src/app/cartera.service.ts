@@ -1,6 +1,7 @@
-import { Injectable, computed, signal } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
 import { ArticuloCartera, Evaluacion } from './models';
 import { guardar, leer } from './almacen';
+import { AprendizajesService } from './aprendizajes.service';
 
 const CLAVE = 'chollos.cartera';
 
@@ -8,6 +9,7 @@ const CLAVE = 'chollos.cartera';
 @Injectable({ providedIn: 'root' })
 export class CarteraService {
   readonly articulos = signal<ArticuloCartera[]>([]);
+  private readonly aprendizajes = inject(AprendizajesService);
 
   constructor() {
     leer<ArticuloCartera[]>(CLAVE, []).then((lista) => this.articulos.update((a) => [...a, ...lista]));
@@ -110,6 +112,8 @@ export class CarteraService {
   }
 
   guardarArticulo(articulo: ArticuloCartera): void {
+    // Cada venta real enseña a la app cuánto vale de verdad ese tipo de artículo.
+    if (articulo.estado === 'vendido') this.aprendizajes.registrarVenta(articulo);
     const lista = this.articulos();
     const existe = lista.some((a) => a.id === articulo.id);
     this.actualizar(existe ? lista.map((a) => (a.id === articulo.id ? articulo : a)) : [articulo, ...lista]);

@@ -112,3 +112,12 @@ export const ORDEN_NOTA: Record<Nota, number> = {
   NEGOCIABLE: 2,
   DESCARTADO: 3,
 };
+
+/** Algo que la app ha aprendido de ti: correcciones, ventas reales o notas que añades. */
+export interface Aprendizaje {
+  id: string;
+  fecha: string;
+  categoria: string;
+  texto: string;
+  origen: 'correccion' | 'venta' | 'manual';
+}

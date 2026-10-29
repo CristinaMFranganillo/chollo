@@ -1,4 +1,4 @@
-# Chollos · versión 1.6
+# Chollos · versión 1.7
 
 App en Angular + Ionic + Capacitor que evalúa anuncios de segunda mano con la API de Gemini, usando los criterios de la skill *evaluar-anuncio-segunda-mano*.
 
@@ -28,6 +28,11 @@ Cada vez que subes cambios a la rama `main`, GitHub Actions:
 Si una compilación falla, aparece una cruz roja en la pestaña **Actions**. Abre el paso que falla y copia el error.
 
 La firma de los APK de prueba (`android/app/chollos-debug.keystore`, contraseña `android`) está en el repositorio a propósito, para que todas las versiones se puedan instalar unas encima de otras. Sirve solo para uso personal, no para publicar en Google Play.
+
+## Cómo aprende
+
+- **Conocimiento experto:** la skill incluye anexos de experto por categoría (de momento, el **Anexo A: cuberterías y punzones**, con las leyes de la plata, las marcas españolas por épocas, las señales de plateado y cómo valorar al peso). Están en `src/app/skill-prompt.ts`.
+- **Memoria de aprendizajes** (`src/app/aprendizajes.service.ts`): tus correcciones ("¿Algo no cuadra? Corrige a la app"), tus ventas reales (se registran solas al marcar un artículo como vendido) y tus notas ("Añadir conocimiento" en Ajustes). Se envían a Gemini en cada evaluación y en cada anuncio de venta, con prioridad sobre su conocimiento general. Se pueden revisar y borrar en Ajustes y van incluidos en la copia de seguridad.
 
 ## Fiabilidad y accesibilidad
 

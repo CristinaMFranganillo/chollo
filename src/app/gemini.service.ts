@@ -1,5 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { AjustesService } from './ajustes.service';
+import { AprendizajesService } from './aprendizajes.service';
 import { AnuncioVenta, ArticuloCartera, Evaluacion } from './models';
 import { SKILL_PROMPT } from './skill-prompt';
 import { imagenABase64 } from './imagenes';
@@ -41,6 +42,7 @@ y pon en "preguntas_vendedor" lo que habría que pedir.`;
 @Injectable({ providedIn: 'root' })
 export class GeminiService {
   private readonly ajustes = inject(AjustesService);
+  private readonly aprendizajes = inject(AprendizajesService);
 
   async evaluar(texto: string, precio: number | null, fotos: File[]): Promise<Evaluacion> {
     const { apiKey, modelo, buscarPrecios, demo } = this.ajustes.ajustes();
@@ -65,7 +67,7 @@ export class GeminiService {
 
     // 3. Cuerpo de la petición a la API REST de Gemini.
     const cuerpo: Record<string, unknown> = {
-      systemInstruction: { parts: [{ text: SKILL_PROMPT + FORMATO_JSON }] },
+      systemInstruction: { parts: [{ text: SKILL_PROMPT + this.aprendizajes.contexto() + FORMATO_JSON }] },
       contents: [
         {
           role: 'user',
@@ -130,7 +132,7 @@ Responde SOLO con JSON: {"titulo": "", "descripcion": "", "precio_salida_eur": n
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
       body: JSON.stringify({
-        systemInstruction: { parts: [{ text: instrucciones }] },
+        systemInstruction: { parts: [{ text: instrucciones + this.aprendizajes.contexto() }] },
         contents: [{ role: 'user', parts: [{ text: datos }] }],
         generationConfig: { temperature: 0.4, responseMimeType: 'application/json' },
       }),

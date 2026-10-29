@@ -1,4 +1,4 @@
-// Contenido de la skill evaluar-anuncio-segunda-mano (sin la cabecera).
+// Contenido de la skill evaluar-anuncio-segunda-mano (sin la cabecera), con sus anexos de conocimiento experto.
 // Si actualizas la skill, pega aquí su nuevo contenido.
 export const SKILL_PROMPT = `# Evaluar anuncio de segunda mano para reventa o inversión
 
@@ -55,6 +55,7 @@ No inventes identificaciones: si algo no se distingue en las fotos, márcalo com
 - Cuenta piezas por tipo; soperas, fuentes y teteras valen más por unidad.
 
 ### Cuberterías
+- Usa siempre el **Anexo A** (guía experta de punzones) para leer las marcas.
 - Punzones: ley (800, 835, 900, 916, 925…), platero o fabricante, marcas de garantía. 916 y 925 son habituales en España.
 - Plata de ley frente a plateado: EPNS, "plateado", "alpaca", gramos de plata (90, 100) o ausencia de ley = plateado. El plateado vale mucho menos salvo marcas con demanda (Christofle, diseño).
 - Diseño de autor o nórdico (Georg Jensen) puede valer bastante más que su peso.
@@ -178,4 +179,68 @@ Mantén un tono neutral con el vendedor: nunca sugieras mentirle sobre el valor 
 ## 9. Registro opcional
 
 Si el usuario compra, ofrece añadir una fila a su registro: fecha, anuncio, categoría, estrategia (revender o guardar), coste total, valor estimado, y después precio de venta, canal, días hasta vender, horas dedicadas y dónde está guardado.
+
+## Anexo A. Guía experta: cuberterías y punzones
+
+Úsala siempre que haya plata o metal plateado. Si una marca no se ve con claridad, no la des por buena: pide foto de cerca.
+
+### A.1 Leyes de la plata (milésimas de plata pura)
+
+| Marca | Qué significa |
+| --- | --- |
+| 999 | Plata fina |
+| 925 | Primera ley española desde 1988 (y "sterling" internacional) |
+| 916 o 916/000 | Ley tradicional española (equivale a 11 dineros). Habitual en el siglo XIX y primer tercio del XX, y grabada en muchas piezas españolas de mediados del XX |
+| 915 | Primera ley del reglamento español de 1934/35 (la de la estrella) |
+| 900, 835, 800 | Habituales en Alemania, Italia, Austria o Suiza. 800 es además la segunda ley española actual |
+| 833 | Habitual en Portugal |
+| 750 | Segunda ley española del reglamento de 1934/35 (estrella con cometa) |
+| 84 (Rusia, con cabeza de mujer con kokoshnik) | Plata 875. No confundir con el "84" del plateado francés |
+
+### A.2 Marcas españolas por épocas
+
+- **Hasta el siglo XIX:** triple marca (localidad con escudo o nombre, marcador o fiel contraste con nombre y a veces año, y platero con nombre o iniciales). La ley se expresaba en dineros.
+- **1881 a 1934:** sin control oficial. El fabricante estampaba la ley en números (750, 800, 900, 916) junto a su marca.
+- **1934/35 a 1988 (reglamento de la II República):** dos contrastes oficiales:
+  - **Estrella de cinco puntas dentro de un óvalo = 915 (primera ley).** Es el contraste español más frecuente en cuberterías de los años 40 a 80, a menudo junto a "916" grabado y la marca del platero.
+  - **Estrella con cometa dentro de un rectángulo = 750 (segunda ley).**
+  - Marca de fabricante en hexágono con letra y número; letras de laboratorio como M (Madrid), B (Barcelona) o Z (Zaragoza).
+  - Piezas anteriores al reglamento marcadas "Ignotus" o "Igt". El metal plateado se marcaba "Mtl" (con G o Ch).
+- **Desde 1988 (Ley 17/1985 y RD 197/1988):** marca del fabricante (no encerrada en figura geométrica) y contraste de garantía oficial: **rectángulo horizontal con la ley (925 o 800) y la contraseña del laboratorio**. Las leyes legales son 999, 925 y 800. Piezas de menos de 7 g pueden no llevar punzón.
+
+### A.3 Señales de que NO es plata
+
+- Inscripciones: **EPNS, EP, Silver Plated, Plateado, Mtl, Alpaca o Alpacca, Metal blanco**.
+- **Números 90, 100, 84, 80 o similares** en cubiertos alemanes o franceses: son los gramos de plata del baño (por lote de cubiertos), **no la ley**. Es plateado.
+- **Christofle y Ercuis:** marca del fabricante dentro de un **cuadrado** y número de peso = plateado. La plata maciza francesa lleva la marca del fabricante en un **rombo** y la cabeza de Minerva.
+- **Meneses** sin 925, 800, 916 ni estrella: alpaca plateada.
+- **"Silver plated China"** o sin marca: plateado de poco valor.
+- **Desgaste en aristas y puntos de apoyo** que deja ver un metal dorado (latón) o rojizo (cobre): plateado. La plata maciza tiene el mismo color en toda la superficie.
+- **Rigidez:** la plata es blanda y cede al doblarla; la alpaca apenas se deforma.
+- El **imán** solo descarta acero o hierro: no distingue plata de alpaca, porque ninguna de las dos se atrae.
+- La ausencia de marcas no prueba nada: la comprobación definitiva es un análisis con ácido por un tasador.
+
+### A.4 Marcas extranjeras de plata frecuentes
+
+- **Francia:** cabeza de Minerva + marca del fabricante en rombo.
+- **Alemania:** 800 con media luna y corona (desde 1888).
+- **Reino Unido:** león pasante = sterling 925.
+- **Italia:** 800 habitual, con marca de fabricante y provincia.
+- **Portugal:** 833 o 925.
+
+### A.5 Cómo valorarla
+
+1. Confirma la ley por los punzones. Sin punzones legibles, la valoración es provisional.
+2. Pide el **peso sin los cuchillos ni las piezas de servir con mango relleno**: no los cuentes como plata. No estimes el peso a ojo.
+3. Valor de la plata = gramos × ley (por ejemplo, 0,915) × precio actual del gramo (búscalo). Quien compra al peso paga bastante menos que el precio de mercado: usa un 70 % como cifra conservadora y dilo.
+4. Un juego completo, en estuche y de marca o platero conocido, suele venderse por encima del valor al peso: compáralo con vendidos.
+5. Los monogramas grabados restan algo de valor, salvo en el mercado de antigüedades.
+
+### A.6 Preguntas clave al vendedor
+
+- "¿Puedes hacer una foto de cerca de las marcas del reverso de un tenedor y de una cuchara?"
+- "¿Cuánto pesa el juego sin los cuchillos?"
+- "¿Cuántas piezas son y de qué tipo? ¿Tiene estuche?"
+
+Fuentes: [El blog del coleccionista ecléctico – Contrastes y punzones en la platería española](https://elblogdelcoleccionistaeclectico.com/2014/11/13/contrastes-y-punzones-en-la-plateria-espanola/), [Consumo Responde – Objetos con metales preciosos](https://www.consumoresponde.es/art%C3%ADculos/objetos_con_metales_preciosos), [Compro Plata y Oro – Punzones de la plata española](https://compro-platayoro.com/punzones-sellos-o-marcas-en-la-plata-espanola-que-son-y-que-informacion-revelan/), [Tienda del Oro – Cómo identificar la plata](https://tiendadeloro.com/blog/como-identificar-plata-contrastes-marcas/), [925-1000.com – Números en cubiertos plateados](https://www.925-1000.com/a_platenumbers.html).
 `;

@@ -95,6 +95,7 @@
               <ion-button (click)="loHeComprado(r, metaResultado().titulo, metaResultado().miniatura, metaResultado().precio)">Lo he comprado</ion-button>
               <ion-button fill="outline" (click)="nuevo()">Evaluar otro</ion-button>
             </div>
+            <ion-button expand="block" fill="clear" (click)="corregir(r, metaResultado().titulo)">¿Algo no cuadra? Corrige a la app</ion-button>
           </app-resultado>
         }
       }
@@ -159,6 +160,7 @@
                   <ion-button expand="block" (click)="loHeComprado(e.evaluacion, e.texto.split('\n')[0], e.miniatura, e.precio)">
                     Lo he comprado
                   </ion-button>
+                  <ion-button expand="block" fill="clear" (click)="corregir(e.evaluacion, e.texto.split('\n')[0])">¿Algo no cuadra? Corrige a la app</ion-button>
                 </app-resultado>
               }
             }
@@ -354,6 +356,25 @@
             usas la capa gratuita y no te pueden cobrar. Con la búsqueda activada las valoraciones son más fiables,
             pero tardan más y gastan más cuota.
           </ion-note>
+
+          <h3 class="grupo">Lo que ha aprendido la app ({{ aprendizajes.total() }})</h3>
+          <ion-note class="ayuda">
+            Tus correcciones, tus ventas reales y tus notas. Se envían a Gemini en cada evaluación para que se ajuste a tu mercado.
+          </ion-note>
+          <ion-list lines="inset">
+            @for (a of aprendizajes.lista(); track a.id) {
+              <ion-item>
+                <ion-label class="ion-text-wrap">
+                  <p><strong>{{ a.categoria }}</strong> · {{ a.origen === 'venta' ? 'venta real' : a.origen === 'correccion' ? 'corrección' : 'nota' }} · {{ a.fecha }}</p>
+                  <h3>{{ a.texto }}</h3>
+                </ion-label>
+                <ion-button slot="end" fill="clear" color="medium" [attr.aria-label]="'Borrar aprendizaje: ' + a.texto" (click)="aprendizajes.borrar(a.id)">
+                  <ion-icon aria-hidden="true" slot="icon-only" name="trash-outline"></ion-icon>
+                </ion-button>
+              </ion-item>
+            }
+          </ion-list>
+          <ion-button expand="block" fill="outline" (click)="anadirNota()">Añadir conocimiento</ion-button>
 
           <h3 class="grupo">Tus datos</h3>
           <ion-note class="ayuda">

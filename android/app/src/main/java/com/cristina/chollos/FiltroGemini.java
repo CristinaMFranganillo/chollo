@@ -29,6 +29,7 @@ final class FiltroGemini {
         + "o plateado de marca (Christofle, Ercuis, WMF 90/100), menaje premium (Le Creuset, Staub, cobre Mauviel, Pyrex vintage), "
         + "cristalería firmada (Iittala, Holmegaard, Orrefors, Murano firmado, Duralex vintage), jarrones de cerámica firmados "
         + "(West Germany, nórdicos, Manises, Sargadelos) y juegos completos de herrajes antiguos de latón o bronce.\n"
+        + "Plata: 925, 916, 915, 800 o estrella de cinco puntas. NO es plata: EPNS, silver plated, plateado, Mtl, alpaca, números 90/100/84 (baño), Meneses sin ley.\n"
         + "Descarta: metal plateado o 'silver plated' sin marca, réplicas o 'estilo antiguo', moda rápida, y aldabas, pomos de porcelana, "
         + "ganchos de hierro fundido, percheros de diseño, porcelana china 'antigua' y cerámica italiana sin etiqueta.\n"
         + "Estima a ojo el múltiplo = valor de reventa conservador / precio pedido. Notas: CHOLLO (múltiplo >= 3), BUENO (2 a 3), "
