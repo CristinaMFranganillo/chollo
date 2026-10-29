@@ -66,6 +66,19 @@ export interface ArticuloCartera {
   ubicacion: string;
   notas: string;
   miniatura: string | null;
+  /** Último anuncio de venta redactado para este artículo. */
+  anuncio?: AnuncioVenta;
+}
+
+/** Anuncio de venta redactado por la IA para revender un artículo. */
+export interface AnuncioVenta {
+  titulo: string;
+  descripcion: string;
+  precio_salida_eur: number;
+  precio_minimo_eur: number;
+  canal: string;
+  palabras_clave: string[];
+  consejos_fotos: string[];
 }
 
 /** Un anuncio en la cola de evaluación. */

@@ -1,9 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { AjustesService } from './ajustes.service';
-import { Evaluacion } from './models';
+import { AnuncioVenta, ArticuloCartera, Evaluacion } from './models';
 import { SKILL_PROMPT } from './skill-prompt';
 import { imagenABase64 } from './imagenes';
-import { evaluacionDemo } from './demo';
+import { anuncioDemo, evaluacionDemo } from './demo';
 
 const URL_API = 'https://generativelanguage.googleapis.com/v1beta/models';
 
@@ -99,6 +99,52 @@ export class GeminiService {
       .join('');
 
     return this.extraerJson(textoRespuesta);
+  }
+
+  /**
+   * Redacta un anuncio para revender un artículo de la cartera: título con las palabras que
+   * buscan los compradores, descripción honesta, precio de salida y mínimo, y canal recomendado.
+   */
+  async redactarAnuncio(a: ArticuloCartera): Promise<AnuncioVenta> {
+    const { apiKey, modelo, demo } = this.ajustes.ajustes();
+    if (demo) return anuncioDemo(a);
+    if (!apiKey) throw new Error('Falta la clave de la API de Gemini. Añádela en Ajustes.');
+
+    const instrucciones = `Eres experta en vender artículos de segunda mano en España (Wallapop, Vinted, todocoleccion, eBay, Catawiki).
+Redacta un anuncio para vender el artículo que te describen. Reglas:
+- Título de máximo 70 caracteres que empiece por marca y modelo y use las palabras que buscan los compradores. Sin emojis ni mayúsculas gritonas.
+- Descripción en español, clara y honesta: qué es, marca, modelo o época, material, medidas o número de piezas si se conocen, estado real con los defectos, y cómo se envía o entrega. 5 a 10 líneas. No inventes datos que no te den: si falta algo importante, escribe [completar: …] para que el vendedor lo rellene.
+- Precio de salida algo por encima del valor estimado para dejar margen a ofertas, y precio mínimo aceptable.
+- Canal donde mejor se vende ese tipo de artículo y por qué, en una frase.
+- 5 a 10 palabras clave para el título o las etiquetas.
+- 3 a 5 consejos de fotos concretos para ese artículo (por ejemplo, punzones, sello de la base, número de set).
+Responde SOLO con JSON: {"titulo": "", "descripcion": "", "precio_salida_eur": número, "precio_minimo_eur": número, "canal": "", "palabras_clave": [], "consejos_fotos": []}`;
+
+    const datos = [
+      `Artículo: ${a.titulo}`,
+      `Categoría: ${a.categoria}`,
+      `Coste de compra: ${a.costeTotal} €`,
+      a.valorEstimado != null ? `Valor de reventa estimado: ${a.valorEstimado} €` : '',
+      a.notas ? `Notas del vendedor: ${a.notas}` : '',
+      a.canalVenta ? `Canal preferido: ${a.canalVenta}` : '',
+    ].filter(Boolean).join('\n');
+
+    const respuesta = await fetch(`${URL_API}/${modelo}:generateContent`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
+      body: JSON.stringify({
+        systemInstruction: { parts: [{ text: instrucciones }] },
+        contents: [{ role: 'user', parts: [{ text: datos }] }],
+        generationConfig: { temperature: 0.4, responseMimeType: 'application/json' },
+      }),
+    });
+    if (!respuesta.ok) throw new Error(mensajeError(respuesta.status, await respuesta.text()));
+    const json = await respuesta.json();
+    const texto: string = (json?.candidates?.[0]?.content?.parts ?? []).map((p: { text?: string }) => p.text ?? '').join('');
+    const anuncio = JSON.parse(texto.slice(texto.indexOf('{'), texto.lastIndexOf('}') + 1)) as AnuncioVenta;
+    anuncio.palabras_clave ??= [];
+    anuncio.consejos_fotos ??= [];
+    return anuncio;
   }
 
   /** Comprueba que la clave funciona pidiendo la lista de modelos (no gasta cuota de generación). */

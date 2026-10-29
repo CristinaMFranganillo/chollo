@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import {
   IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonInput, IonItem,
   IonLabel, IonList, IonModal, IonNote, IonSegment, IonSegmentButton, IonSelect, IonSelectOption,
-  IonTextarea, IonThumbnail, IonTitle, IonToolbar, IonBadge,
+  IonTextarea, IonThumbnail, IonTitle, IonToolbar, IonBadge, IonSpinner,
 } from '@ionic/angular/standalone';
 import { CarteraService } from './cartera.service';
-import { ArticuloCartera } from './models';
+import { AnuncioVenta, ArticuloCartera } from './models';
 import { exportarTexto } from './exportar';
+import { GeminiService } from './gemini.service';
 
 type Filtro = 'stock' | 'guardar' | 'vendido' | 'todo';
 
@@ -19,7 +20,7 @@ type Filtro = 'stock' | 'guardar' | 'vendido' | 'todo';
     FormsModule, DecimalPipe, DatePipe,
     IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonInput, IonItem,
     IonLabel, IonList, IonModal, IonNote, IonSegment, IonSegmentButton, IonSelect, IonSelectOption,
-    IonTextarea, IonThumbnail, IonTitle, IonToolbar, IonBadge,
+    IonTextarea, IonThumbnail, IonTitle, IonToolbar, IonBadge, IonSpinner,
   ],
   template: `
     @let r = cartera.resumen();
@@ -35,6 +36,13 @@ type Filtro = 'stock' | 'guardar' | 'vendido' | 'todo';
       <div><span>Por hora</span><strong>{{ r.porHora != null ? (r.porHora | number: '1.0-1') + ' €/h' : '—' }}</strong></div>
       <div><span>Días hasta vender</span><strong>{{ r.diasMedios != null ? (r.diasMedios | number: '1.0-0') : '—' }}</strong></div>
     </div>
+
+    @if (parados().length) {
+      <div class="aviso-parado">
+        <strong>{{ parados().length }} {{ parados().length === 1 ? 'artículo lleva' : 'artículos llevan' }} más de {{ diasParado }} días sin venderse.</strong>
+        Plantéate bajar el precio, cambiar de canal o mejorar las fotos y el anuncio.
+      </div>
+    }
 
     <div class="acciones">
       <ion-button (click)="abrir(cartera.nuevo())">
@@ -72,7 +80,11 @@ type Filtro = 'stock' | 'guardar' | 'vendido' | 'todo';
                 · vale ~{{ a.valorEstimado | number: '1.0-0' }} €
               }
             </p>
-            @if (a.ubicacion) { <p>Guardado en: {{ a.ubicacion }}</p> }
+            @if (a.estado === 'en_stock') {
+              <p [class.texto-aviso]="a.estrategia === 'revender' && dias(a) > diasParado">
+                {{ dias(a) }} días en stock @if (a.ubicacion) { · Guardado en: {{ a.ubicacion }} }
+              </p>
+            }
           </ion-label>
           <ion-badge slot="end" [color]="a.estado === 'vendido' ? 'success' : a.estrategia === 'guardar' ? 'tertiary' : 'primary'">
             {{ a.estado === 'vendido' ? 'VENDIDO' : a.estrategia === 'guardar' ? 'GUARDAR' : 'REVENDER' }}
@@ -119,6 +131,34 @@ type Filtro = 'stock' | 'guardar' | 'vendido' | 'todo';
               }
               <ion-item><ion-textarea label="Notas" labelPlacement="stacked" [autoGrow]="true" [(ngModel)]="e.notas"></ion-textarea></ion-item>
             </ion-list>
+            @if (e.estado === 'en_stock' && e.titulo) {
+              <ion-button expand="block" fill="outline" [disabled]="redactando()" (click)="redactar(e)">
+                @if (redactando()) { <ion-spinner name="dots"></ion-spinner>&nbsp;Redactando… } @else { Redactar anuncio de venta }
+              </ion-button>
+              @if (errorAnuncio()) { <ion-note class="ayuda error">{{ errorAnuncio() }}</ion-note> }
+              @if (e.anuncio; as an) {
+                <div class="anuncio">
+                  <div class="fila"><h3>Título</h3><ion-button size="small" fill="clear" (click)="copiar(an.titulo)">Copiar</ion-button></div>
+                  <p>{{ an.titulo }}</p>
+                  <div class="fila"><h3>Descripción</h3><ion-button size="small" fill="clear" (click)="copiar(an.descripcion)">Copiar</ion-button></div>
+                  <p class="descripcion">{{ an.descripcion }}</p>
+                  <h3>Precio</h3>
+                  <p>Salida: <strong>{{ an.precio_salida_eur | number: '1.0-0' }} €</strong> · mínimo aceptable: <strong>{{ an.precio_minimo_eur | number: '1.0-0' }} €</strong></p>
+                  <h3>Dónde venderlo</h3>
+                  <p>{{ an.canal }}</p>
+                  @if (an.palabras_clave.length) {
+                    <h3>Palabras clave</h3>
+                    <p>{{ an.palabras_clave.join(', ') }}</p>
+                  }
+                  @if (an.consejos_fotos.length) {
+                    <h3>Fotos</h3>
+                    <ul>@for (c of an.consejos_fotos; track $index) { <li>{{ c }}</li> }</ul>
+                  }
+                  <ion-button expand="block" (click)="copiar(an.titulo + '\n\n' + an.descripcion)">Copiar título y descripción</ion-button>
+                  @if (copiado()) { <ion-note class="ayuda">{{ copiado() }}</ion-note> }
+                </div>
+              }
+            }
             @if (existe(e.id)) {
               <ion-button expand="block" fill="clear" color="danger" (click)="borrar(e.id)">Borrar de la cartera</ion-button>
             }
@@ -134,6 +174,15 @@ type Filtro = 'stock' | 'guardar' | 'vendido' | 'todo';
     .resumen span { font-size: 0.8rem; color: var(--ion-color-medium); }
     .resumen strong { font-size: 1.1rem; }
     .negativo { color: var(--ion-color-danger); }
+    .aviso-parado { max-width: 640px; margin: 0 auto 12px; padding: 10px 12px; border-radius: 10px;
+      background: rgba(var(--ion-color-warning-rgb), 0.15); font-size: 0.9rem; }
+    .texto-aviso { color: var(--ion-color-warning-shade) !important; }
+    .anuncio { margin: 12px 0; padding: 12px; border-radius: 10px; background: var(--ion-color-light); }
+    .anuncio h3 { margin: 12px 0 2px; font-size: 0.9rem; font-weight: 600; }
+    .anuncio .fila { display: flex; align-items: center; justify-content: space-between; }
+    .anuncio .fila h3 { margin: 8px 0 0; }
+    .anuncio .descripcion { white-space: pre-line; }
+    .error { color: var(--ion-color-danger); }
     .acciones { display: flex; gap: 8px; max-width: 640px; margin: 0 auto 12px; }
     .acciones ion-button { flex: 1; }
     ion-segment, ion-list { max-width: 640px; margin-inline: auto; }
@@ -143,6 +192,46 @@ type Filtro = 'stock' | 'guardar' | 'vendido' | 'todo';
 })
 export class CarteraComponent {
   protected readonly cartera = inject(CarteraService);
+  private readonly gemini = inject(GeminiService);
+  protected readonly diasParado = 60;
+  protected readonly redactando = signal(false);
+  protected readonly errorAnuncio = signal<string | null>(null);
+  protected readonly copiado = signal<string | null>(null);
+
+  /** Artículos para revender que llevan demasiado tiempo en stock. */
+  protected readonly parados = computed(() =>
+    this.cartera.enStock().filter((a) => a.estrategia === 'revender' && this.dias(a) > this.diasParado),
+  );
+
+  protected dias(a: ArticuloCartera): number {
+    return Math.max(0, Math.floor((Date.now() - Date.parse(a.fechaCompra)) / 864e5));
+  }
+
+  /** Redacta el anuncio con Gemini y lo guarda en el artículo. */
+  protected async redactar(e: ArticuloCartera): Promise<void> {
+    this.redactando.set(true);
+    this.errorAnuncio.set(null);
+    this.copiado.set(null);
+    try {
+      const anuncio: AnuncioVenta = await this.gemini.redactarAnuncio(e);
+      const actualizado = { ...e, anuncio };
+      this.editando.set(actualizado);
+      if (this.existe(e.id)) this.cartera.guardarArticulo({ ...(this.cartera.articulos().find((x) => x.id === e.id)!), anuncio });
+    } catch (err) {
+      this.errorAnuncio.set(err instanceof Error ? err.message : String(err));
+    } finally {
+      this.redactando.set(false);
+    }
+  }
+
+  protected async copiar(texto: string): Promise<void> {
+    try {
+      await navigator.clipboard.writeText(texto);
+      this.copiado.set('Copiado. Pégalo en la app donde vayas a publicarlo.');
+    } catch {
+      this.copiado.set('No se pudo copiar automáticamente: mantén pulsado el texto para copiarlo.');
+    }
+  }
   protected readonly filtro = signal<Filtro>('stock');
   /** Copia editable del artículo abierto en el modal. */
   protected readonly editando = signal<ArticuloCartera | null>(null);
@@ -158,6 +247,8 @@ export class CarteraComponent {
   });
 
   abrir(articulo: ArticuloCartera): void {
+    this.errorAnuncio.set(null);
+    this.copiado.set(null);
     this.editando.set({ ...articulo });
   }
 

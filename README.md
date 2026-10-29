@@ -1,4 +1,4 @@
-# Chollos · versión 1.3
+# Chollos · versión 1.4
 
 App en Angular + Ionic + Capacitor que evalúa anuncios de segunda mano con la API de Gemini, usando los criterios de la skill *evaluar-anuncio-segunda-mano*.
 
@@ -9,7 +9,7 @@ App en Angular + Ionic + Capacitor que evalúa anuncios de segunda mano con la A
 | **Evaluar** | Subes capturas y/o texto de un anuncio y te da nota de chollo, múltiplo, beneficio, piezas, riesgos y preguntas al vendedor |
 | **Cola** | Preparas varios anuncios con "A la cola" y los evalúa todos seguidos, ordenados de mejor a peor |
 | **Avisos** (solo Android) | Lee las notificaciones de tus búsquedas guardadas de Vinted y Wallapop, las filtra con Gemini aunque la app esté cerrada y solo te avisa de lo que parece un chollo |
-| **Cartera** | Lo que has comprado: en stock, guardado como inversión y vendido, con invertido, ganancia latente, beneficio real, €/hora y días hasta vender. "Lo he comprado" en una evaluación lo añade aquí. Exporta a CSV |
+| **Cartera** | Lo que has comprado: en stock, guardado como inversión y vendido, con invertido, ganancia latente, beneficio real, €/hora y días hasta vender. "Lo he comprado" en una evaluación lo añade aquí. Exporta a CSV. Avisa de lo que lleva más de 60 días sin venderse. En cada artículo, **Redactar anuncio de venta** prepara título, descripción, precio de salida y mínimo, canal, palabras clave y consejos de fotos, listos para copiar |
 | **Historial** | Últimas 50 evaluaciones |
 
 En cada pieza valorada hay botones **Ver vendidos** (eBay, todocoleccion, Wallapop) para comprobar precios reales. En **Avisos** tienes **búsquedas recomendadas** por categoría que se abren en Vinted o Wallapop para guardarlas.

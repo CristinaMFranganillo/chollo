@@ -1,4 +1,4 @@
-import { Evaluacion } from './models';
+import { AnuncioVenta, ArticuloCartera, Evaluacion } from './models';
 
 /**
  * Modo demostración: devuelve una evaluación de ejemplo sin llamar a Gemini,
@@ -55,5 +55,25 @@ export async function evaluacionDemo(texto: string, precio: number | null, fotos
     ...base(ingreso), oferta_maxima_eur: Math.round(p * 0.75),
     piezas: [], revender_o_guardar: 'Revender si se compra a la oferta máxima.', como_venderlo: 'Wallapop o Vinted.',
     riesgos: ['Identificación sin confirmar'], preguntas_vendedor: ['¿Tiene alguna marca o sello en la base?'],
+  };
+}
+
+/** Anuncio de ejemplo para el modo demostración. */
+export async function anuncioDemo(a: ArticuloCartera): Promise<AnuncioVenta> {
+  await new Promise((r) => setTimeout(r, 800));
+  const valor = a.valorEstimado ?? Math.round(a.costeTotal * 2);
+  return {
+    titulo: `${a.titulo}`.slice(0, 70),
+    descripcion:
+      `DEMO · ${a.titulo}.\n` +
+      `Categoría: ${a.categoria || '[completar: categoría]'}.\n` +
+      'Estado: [completar: estado real y defectos].\n' +
+      'Medidas o número de piezas: [completar].\n' +
+      'Envío bien embalado o entrega en mano en Madrid.',
+    precio_salida_eur: Math.round(valor * 1.15),
+    precio_minimo_eur: Math.round(valor * 0.9),
+    canal: 'todocoleccion o Wallapop (ejemplo de demostración)',
+    palabras_clave: a.titulo.toLowerCase().split(/\s+/).filter((p) => p.length > 3).slice(0, 6),
+    consejos_fotos: ['Foto general con luz natural', 'Detalle de marcas o sellos', 'Defectos de cerca'],
   };
 }
