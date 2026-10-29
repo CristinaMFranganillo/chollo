@@ -137,4 +137,6 @@ export interface Aprendizaje {
   categoria: string;
   texto: string;
   origen: 'correccion' | 'venta' | 'manual';
+  /** Fijado: se envía siempre a Gemini, aunque el anuncio sea de otra categoría. */
+  fijado?: boolean;
 }

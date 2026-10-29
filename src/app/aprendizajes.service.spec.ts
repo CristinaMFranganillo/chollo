@@ -31,4 +31,32 @@ describe('AprendizajesService', () => {
     expect(ap.total()).toBe(1);
     expect(ap.lista()[0].texto).toContain('vendido por 115 € netos en Wallapop en 20 días (se había estimado 120 €)');
   });
+
+  it('prioriza los fijados y los del mismo tema que el anuncio', () => {
+    ap.anadir('LEGO', 'Los lotes al peso se venden a 10 €/kg', 'manual');
+    ap.anadir('General', 'Wallapop en mano para lo que pese', 'manual');
+    ap.anadir('Cuberterías', 'Meneses sin ley es alpaca', 'correccion');
+    const fijado = ap.lista().find((a) => a.categoria === 'General')!;
+    ap.alternarFijado(fijado.id);
+    const orden = ap.relevantes('Cubertería de plata 916 en estuche').map((a) => a.categoria);
+    expect(orden).toEqual(['General', 'Cuberterías', 'LEGO']);
+  });
+
+  it('limita lo que se envía y edita sin perder datos', () => {
+    for (let i = 0; i < 50; i++) ap.anadir('General', `nota ${i}`, 'manual');
+    expect(ap.relevantes('').length).toBe(40);
+    const id = ap.lista()[0].id;
+    ap.editar(id, { texto: '  nuevo texto ', categoria: 'Libros' });
+    expect(ap.lista()[0]).toEqual(jasmine.objectContaining({ id, texto: 'nuevo texto', categoria: 'Libros' }));
+    ap.editar(id, { texto: '   ' });
+    expect(ap.lista()[0].texto).toBe('nuevo texto');
+  });
+
+  it('el resumen del filtro va corto y pone las ventas al final', () => {
+    ap.anadir('Menaje', 'x'.repeat(300), 'venta');
+    ap.anadir('Vajillas', 'Pickman completa: 150 € en mano', 'manual');
+    const r = ap.resumenFiltro().split('\n');
+    expect(r[0]).toContain('Pickman');
+    expect(r[1].length).toBeLessThan(180);
+  });
 });

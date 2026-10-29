@@ -24,12 +24,18 @@ final class VigilanteStore {
         return ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
     }
 
-    static void configurar(Context ctx, String apiKey, String modelo, boolean activo) {
+    static void configurar(Context ctx, String apiKey, String modelo, boolean activo, String notas) {
         prefs(ctx).edit()
             .putString("apiKey", apiKey)
             .putString("modelo", modelo)
             .putBoolean("activo", activo)
+            .putString("notas", notas)
             .apply();
+    }
+
+    /** Resumen de los aprendizajes de la usuaria para el filtro rápido (puede estar vacío). */
+    static String notas(Context ctx) {
+        return prefs(ctx).getString("notas", "");
     }
 
     static String apiKey(Context ctx) {

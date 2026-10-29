@@ -9,7 +9,7 @@ import { Aviso } from './models';
  * Desde aquí solo lo configuramos y leemos los avisos que ha guardado.
  */
 export interface VigilantePlugin {
-  configurar(opciones: { apiKey: string; modelo: string; activo: boolean }): Promise<void>;
+  configurar(opciones: { apiKey: string; modelo: string; activo: boolean; notas: string }): Promise<void>;
   estado(): Promise<{ permisoLectura: boolean; permisoAvisos: boolean; activo: boolean }>;
   abrirPermisoLectura(): Promise<void>;
   pedirPermisoAvisos(): Promise<{ concedido: boolean }>;

@@ -128,7 +128,7 @@ type Filtro = 'stock' | 'guardar' | 'vendido' | 'todo';
     </ion-list>
     }
 
-    <ion-modal [isOpen]="!!editando()" (didDismiss)="editando.set(null)">
+    <ion-modal class="modal-hoja" [isOpen]="!!editando()" (didDismiss)="editando.set(null)" [initialBreakpoint]="0.92" [breakpoints]="[0, 0.92]" [handle]="true">
       <ng-template>
         @if (editando(); as e) {
           <ion-header>

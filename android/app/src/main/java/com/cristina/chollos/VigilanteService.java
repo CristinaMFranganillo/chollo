@@ -102,7 +102,8 @@ public class VigilanteService extends NotificationListenerService {
             if (apiKey.isEmpty()) {
                 aviso.put("motivo", "Falta la clave de Gemini");
             } else {
-                FiltroGemini.Resultado r = FiltroGemini.evaluar(apiKey, VigilanteStore.modelo(ctx), app, titulo, cuerpo);
+                FiltroGemini.Resultado r = FiltroGemini.evaluar(
+                    apiKey, VigilanteStore.modelo(ctx), app, titulo, cuerpo, VigilanteStore.notas(ctx));
                 aviso.put("nota", r.nota);
                 aviso.put("motivo", r.motivo);
                 aviso.put("multiplo", r.multiplo == null ? JSONObject.NULL : r.multiplo);

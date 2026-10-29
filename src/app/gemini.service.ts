@@ -78,7 +78,7 @@ export class GeminiService {
 
     // 3. Cuerpo de la petición a la API REST de Gemini.
     const cuerpo: Record<string, unknown> = {
-      systemInstruction: { parts: [{ text: instruccionesPara(texto) + this.aprendizajes.contexto() + FORMATO_JSON }] },
+      systemInstruction: { parts: [{ text: instruccionesPara(texto) + this.aprendizajes.contexto(texto) + FORMATO_JSON }] },
       contents: [
         {
           role: 'user',
@@ -143,7 +143,7 @@ Responde SOLO con JSON: {"titulo": "", "descripcion": "", "precio_salida_eur": n
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
       body: JSON.stringify({
-        systemInstruction: { parts: [{ text: instrucciones + this.aprendizajes.contexto() }] },
+        systemInstruction: { parts: [{ text: instrucciones + this.aprendizajes.contexto(`${a.categoria} ${a.titulo}`) }] },
         contents: [{ role: 'user', parts: [{ text: datos }] }],
         generationConfig: { temperature: 0.4, responseMimeType: 'application/json' },
       }),

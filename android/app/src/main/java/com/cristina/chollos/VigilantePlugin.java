@@ -51,7 +51,8 @@ public class VigilantePlugin extends Plugin {
             getContext(),
             call.getString("apiKey", ""),
             call.getString("modelo", "gemini-2.5-flash-lite"),
-            Boolean.TRUE.equals(call.getBoolean("activo", false))
+            Boolean.TRUE.equals(call.getBoolean("activo", false)),
+            call.getString("notas", "")
         );
         call.resolve();
     }

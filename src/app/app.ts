@@ -1,4 +1,4 @@
-import { Component, NgZone, OnInit, inject, signal } from '@angular/core';
+import { Component, NgZone, OnInit, effect, inject, signal } from '@angular/core';
 import { DecimalPipe, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { App as CapApp } from '@capacitor/app';
@@ -12,8 +12,9 @@ import { addIcons } from 'ionicons';
 import {
   settingsOutline, imagesOutline, closeCircle, sparklesOutline, trashOutline, addCircleOutline,
   playOutline, notificationsOutline, alertCircleOutline, checkmarkCircleOutline, flame,
-  layersOutline, walletOutline, timeOutline, close, add,
+  layersOutline, walletOutline, timeOutline, close, add, libraryOutline, chevronForward,
 } from 'ionicons/icons';
+import { ConocimientoComponent } from './conocimiento.component';
 import { LogoComponent } from './logo.component';
 import { IlustracionComponent, NombreIlustracion } from './ilustracion.component';
 import { GeminiService } from './gemini.service';
@@ -38,7 +39,7 @@ type Vista = 'evaluar' | 'cola' | 'avisos' | 'cartera' | 'historial';
 @Component({
   selector: 'app-root',
   imports: [
-    FormsModule, DecimalPipe, DatePipe, ResultadoComponent, CarteraComponent, LogoComponent, IlustracionComponent,
+    FormsModule, DecimalPipe, DatePipe, ResultadoComponent, CarteraComponent, LogoComponent, IlustracionComponent, ConocimientoComponent,
     IonApp, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonButton, IonIcon,
     IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonItem, IonInput,
     IonTextarea, IonList, IonLabel, IonBadge, IonSpinner, IonModal, IonToggle, IonFooter,
@@ -89,6 +90,7 @@ export class App implements OnInit {
   protected readonly permisoAvisos = signal(false);
 
   // Ajustes (copia editable en el modal)
+  protected readonly conocimientoAbierto = signal(false);
   protected readonly ajustesAbiertos = signal(false);
   protected readonly pruebaClave = signal<string | null>(null);
   protected readonly mensajeCopia = signal<string | null>(null);
@@ -103,7 +105,12 @@ export class App implements OnInit {
     addIcons({
       settingsOutline, imagesOutline, closeCircle, sparklesOutline, trashOutline, addCircleOutline,
       playOutline, notificationsOutline, alertCircleOutline, checkmarkCircleOutline, flame,
-      layersOutline, walletOutline, timeOutline, close, add,
+      layersOutline, walletOutline, timeOutline, close, add, libraryOutline, chevronForward,
+    });
+    // Lo que aprende la app también llega al filtro rápido de notificaciones de Android.
+    effect(() => {
+      this.aprendizajes.lista();
+      if (this.enAndroid) void this.sincronizarVigilante();
     });
     if (!this.bienvenidaVista()) {
       this.bienvenida.set(true);
@@ -376,7 +383,9 @@ export class App implements OnInit {
   private async sincronizarVigilante(): Promise<void> {
     if (!this.enAndroid) return;
     const a = this.ajustesSrv.ajustes();
-    await Vigilante.configurar({ apiKey: a.apiKey, modelo: a.modeloRapido, activo: a.vigilar });
+    await Vigilante.configurar({
+      apiKey: a.apiKey, modelo: a.modeloRapido, activo: a.vigilar, notas: this.aprendizajes.resumenFiltro(),
+    });
     await this.leerEstadoVigilante();
   }
 
@@ -437,22 +446,6 @@ export class App implements OnInit {
             this.aviso.set('Guardado. La app lo tendrá en cuenta en las próximas evaluaciones.');
           },
         },
-      ],
-    });
-    await alerta.present();
-  }
-
-  protected async anadirNota(): Promise<void> {
-    const alerta = await this.alertas.create({
-      header: 'Añadir conocimiento',
-      message: 'Algo que quieras que la app sepa siempre (marcas, precios, canales, trucos).',
-      inputs: [
-        { name: 'categoria', type: 'text', placeholder: 'Categoría (p. ej. Cuberterías)' },
-        { name: 'texto', type: 'textarea', placeholder: 'Lo que debe saber' },
-      ],
-      buttons: [
-        { text: 'Cancelar', role: 'cancel' },
-        { text: 'Guardar', handler: (d: { categoria: string; texto: string }) => this.aprendizajes.anadir(d.categoria, d.texto, 'manual') },
       ],
     });
     await alerta.present();

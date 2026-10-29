@@ -56,10 +56,13 @@ final class FiltroGemini {
     private FiltroGemini() {}
 
     /** Llamada bloqueante: ejecutar siempre fuera del hilo principal. */
-    static Resultado evaluar(String apiKey, String modelo, String app, String titulo, String texto) throws Exception {
+    static Resultado evaluar(String apiKey, String modelo, String app, String titulo, String texto, String notas) throws Exception {
+        String instrucciones = notas == null || notas.trim().isEmpty()
+            ? INSTRUCCIONES
+            : INSTRUCCIONES + "\nLo que sabe la usuaria (tiene prioridad sobre lo anterior):\n" + notas.trim() + "\n";
         JSONObject cuerpo = new JSONObject();
         cuerpo.put("systemInstruction", new JSONObject()
-            .put("parts", new JSONArray().put(new JSONObject().put("text", INSTRUCCIONES))));
+            .put("parts", new JSONArray().put(new JSONObject().put("text", instrucciones))));
         String mensaje = "Notificación de " + app + ".\nTítulo: " + titulo + "\nTexto: " + texto;
         cuerpo.put("contents", new JSONArray().put(new JSONObject()
             .put("role", "user")

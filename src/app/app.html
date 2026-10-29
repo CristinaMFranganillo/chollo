@@ -3,6 +3,9 @@
     <ion-toolbar>
       <app-logo slot="start" />
       <ion-buttons slot="end">
+        <ion-button fill="clear" (click)="conocimientoAbierto.set(true)" aria-label="Conocimiento" class="boton-icono">
+          <ion-icon aria-hidden="true" slot="icon-only" name="library-outline"></ion-icon>
+        </ion-button>
         <ion-button fill="clear" (click)="abrirAjustes()" aria-label="Ajustes" class="boton-icono">
           <ion-icon aria-hidden="true" slot="icon-only" name="settings-outline"></ion-icon>
         </ion-button>
@@ -333,9 +336,9 @@
     }
 
     <!-- ================= BIENVENIDA ================= -->
-    <ion-modal [isOpen]="bienvenida()" [backdropDismiss]="false">
+    <ion-modal class="modal-tarjeta" [isOpen]="bienvenida()" [backdropDismiss]="false">
       <ng-template>
-        <ion-content class="ion-padding">
+        <div class="contenido-tarjeta">
           @let paso = pasos[pasoBienvenida()];
           <div class="bienvenida">
             @if (pasoBienvenida() === 0) {
@@ -356,12 +359,21 @@
               <ion-button expand="block" fill="clear" color="medium" (click)="cerrarBienvenida()">Saltar</ion-button>
             }
           </div>
-        </ion-content>
+        </div>
+      </ng-template>
+    </ion-modal>
+
+    <!-- ================= CONOCIMIENTO ================= -->
+    <ion-modal class="modal-hoja" [isOpen]="conocimientoAbierto()" (didDismiss)="conocimientoAbierto.set(false)"
+      [initialBreakpoint]="0.92" [breakpoints]="[0, 0.92]" [handle]="true">
+      <ng-template>
+        <app-conocimiento (cerrar)="conocimientoAbierto.set(false)" />
       </ng-template>
     </ion-modal>
 
     <!-- ================= AJUSTES ================= -->
-    <ion-modal [isOpen]="ajustesAbiertos()" (didDismiss)="ajustesAbiertos.set(false)">
+    <ion-modal class="modal-hoja" [isOpen]="ajustesAbiertos()" (didDismiss)="ajustesAbiertos.set(false)"
+      [initialBreakpoint]="0.92" [breakpoints]="[0, 0.92]" [handle]="true">
       <ng-template>
         <ion-header class="cabecera">
           <ion-toolbar>
@@ -406,26 +418,15 @@
             pero tardan más y gastan más cuota.
           </ion-note>
 
-          <h3 class="grupo">Lo que ha aprendido la app ({{ aprendizajes.total() }})</h3>
-          <ion-note class="ayuda">
-            Tus correcciones, tus ventas reales y tus notas. Se envían a Gemini en cada evaluación para que se ajuste a tu mercado.
-          </ion-note>
-          @if (aprendizajes.total()) {
-          <ion-list lines="inset">
-            @for (a of aprendizajes.lista(); track a.id) {
-              <ion-item>
-                <ion-label class="ion-text-wrap">
-                  <p><strong>{{ a.categoria }}</strong> · {{ a.origen === 'venta' ? 'venta real' : a.origen === 'correccion' ? 'corrección' : 'nota' }} · {{ a.fecha }}</p>
-                  <h3>{{ a.texto }}</h3>
-                </ion-label>
-                <ion-button slot="end" fill="clear" color="medium" [attr.aria-label]="'Borrar aprendizaje: ' + a.texto" (click)="aprendizajes.borrar(a.id)">
-                  <ion-icon aria-hidden="true" slot="icon-only" name="trash-outline"></ion-icon>
-                </ion-button>
-              </ion-item>
-            }
-          </ion-list>
-          }
-          <ion-button expand="block" fill="outline" (click)="anadirNota()">Añadir conocimiento</ion-button>
+          <h3 class="grupo">Conocimiento</h3>
+          <button type="button" class="fila-enlace" (click)="conocimientoAbierto.set(true)">
+            <ion-icon aria-hidden="true" name="library-outline"></ion-icon>
+            <span>
+              <strong>Lo que sabe la app</strong>
+              <small>{{ aprendizajes.total() }} {{ aprendizajes.total() === 1 ? 'aprendizaje' : 'aprendizajes' }} tuyos · 5 guías expertas</small>
+            </span>
+            <ion-icon aria-hidden="true" name="chevron-forward"></ion-icon>
+          </button>
 
           <h3 class="grupo">Tus datos</h3>
           <ion-note class="ayuda">

@@ -10,17 +10,56 @@ const PALABRAS: Record<string, RegExp> = {
   B: /vajilla|plato|loza|porcelana|sargadelos|pickman|cartuja|sopera|fuente|bidasoa|claudio|santa clara|taza|limoges|vista alegre/i,
   C: /lego|minifig|bricklink|ninjago|technic|duplo/i,
   E: /libro|novela|primera edici|rayuela|cien a[ñn]os de soledad|sombra del viento|pascual duarte|colmena|cinco horas con mario|harry potter|sudamericana|biblioteca|romancero gitano|platero|ficciones|borges|ciudad y los perros|revista de occidente|seix barral|la lectura/i,
-  D: /game ?boy|gba|nintendo|n64|snes|super nintendo|gamecube|game cube|consola|sega|playstation|ps1|ps2|cartucho|videojuego|pok[eé]mon/i,
+  D: /retro|game ?boy|gba|nintendo|n64|snes|super nintendo|gamecube|game cube|consola|sega|playstation|ps1|ps2|cartucho|videojuego|pok[eé]mon/i,
 };
 
-interface Anexo {
+/** Temas sin guía propia, solo para relacionar aprendizajes con anuncios. */
+const OTROS_TEMAS: Record<string, RegExp> = {
+  MENAJE: /menaje|le creuset|staub|cobre|cazo|olla|cocotte|mauviel|sart[eé]n/i,
+  CRISTAL: /cristaler|cristal|iittala|holmegaard|murano|jarr[oó]n|vidrio|west germany/i,
+  DECORACION: /decoraci|tirador|herraje|colgador|perchero|aplique|pomo/i,
+};
+
+/** Temas (letra de guía o tema extra) que aparecen en un texto. */
+export function temasDe(texto: string): string[] {
+  if (!texto.trim()) return [];
+  return Object.entries({ ...PALABRAS, ...OTROS_TEMAS })
+    .filter(([, re]) => re.test(texto))
+    .map(([tema]) => tema);
+}
+
+/** Categorías que se ofrecen al añadir conocimiento. */
+export const CATEGORIAS = [
+  'General', 'Cuberterías', 'Vajillas', 'LEGO', 'Retro', 'Libros', 'Menaje', 'Cristalería', 'Decoración y herrajes',
+];
+
+/** Qué hace que se use cada guía, dicho de forma sencilla. */
+const CUANDO: Record<string, string> = {
+  A: 'plata, cuberterías, cucharas, punzones, Christofle, 916 o 925',
+  B: 'vajillas, porcelana, loza, Sargadelos, Pickman, Limoges, Vista Alegre',
+  C: 'LEGO, minifiguras, Technic, Ninjago',
+  D: 'Game Boy, Nintendo, GameCube, consolas, cartuchos, Pokémon',
+  E: 'libros, primeras ediciones y los títulos de la lista',
+};
+
+export interface Anexo {
   letra: string;
+  titulo: string;
+  cuando: string;
   texto: string;
 }
 
 const partes = SKILL_PROMPT.split(/\n(?=## Anexo [A-Z]\.)/);
 export const NUCLEO = partes[0];
-export const ANEXOS: Anexo[] = partes.slice(1).map((texto) => ({ letra: texto.match(/## Anexo ([A-Z])\./)?.[1] ?? '?', texto }));
+export const ANEXOS: Anexo[] = partes.slice(1).map((texto) => {
+  const letra = texto.match(/## Anexo ([A-Z])\./)?.[1] ?? '?';
+  return {
+    letra,
+    titulo: (texto.match(/## Anexo [A-Z]\.\s*(.+)/)?.[1] ?? `Anexo ${letra}`).replace(/^Guía experta:\s*/i, '').trim(),
+    cuando: CUANDO[letra] ?? '',
+    texto,
+  };
+});
 
 /** Instrucciones de la skill con solo los anexos que corresponden al anuncio. */
 export function instruccionesPara(textoAnuncio: string): string {

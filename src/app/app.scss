@@ -389,7 +389,6 @@ ion-list,
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: 92%;
   max-width: 440px;
   margin: 0 auto;
   text-align: center;
@@ -399,8 +398,8 @@ ion-list,
   }
 
   app-ilustracion {
-    max-width: 240px;
-    margin: 8px 0;
+    max-width: 200px;
+    margin: 4px 0;
   }
 
   h2 {
@@ -423,7 +422,7 @@ ion-list,
     display: flex;
     justify-content: center;
     gap: 6px;
-    margin: 16px 0 24px;
+    margin: 12px 0 18px;
 
     span {
       width: 8px;
