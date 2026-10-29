@@ -1,5 +1,5 @@
 // Contenido de la skill evaluar-anuncio-segunda-mano (sin la cabecera), con sus anexos de conocimiento experto.
-// Si actualizas la skill, pega aquí su nuevo contenido.
+// Si actualizas la skill, pega aquí su nuevo contenido. conocimiento.ts separa los anexos por categoría.
 export const SKILL_PROMPT = `# Evaluar anuncio de segunda mano para reventa o inversión
 
 Objetivo: a partir de capturas, fotos, texto o enlace de un anuncio, decidir rápido si merece la pena comprarlo, con qué beneficio, si conviene revenderlo o guardarlo, y cómo y a quién venderlo. Responde siempre en español.
@@ -21,6 +21,7 @@ Indica la categoría (o mixto). Si no es ninguna de las cubiertas, dilo y haz so
 No inventes identificaciones: si algo no se distingue en las fotos, márcalo como "posible" y añade la pregunta que lo aclararía.
 
 ### LEGO
+- Usa siempre el **Anexo C** (guía experta de LEGO).
 - Número de set (caja, instrucciones, pegatinas, piezas impresas únicas) y temática.
 - Prioriza: casas modulares (Creator Expert/Icons), Star Wars UCS y sets grandes descatalogados, Ideas, Harry Potter, Ghostbusters, Technic grandes, minifiguras raras (caras, torsos, accesorios).
 - Lotes al peso: estima kg si se puede y busca piezas o minifiguras destacables.
@@ -28,6 +29,7 @@ No inventes identificaciones: si algo no se distingue en las fotos, márcalo com
 - Riesgo principal: incompleto (piezas, minifiguras o instrucciones).
 
 ### Videojuegos y consolas retro
+- Usa siempre el **Anexo D** (guía experta de retro).
 - Plataforma, título y región. En España interesa PAL/ESP; no uses precios NTSC/USA.
 - Suelto / completo en caja (caja + manual + bandeja) / precintado. El estado de las cajas de cartón (N64, SNES, Game Boy) cambia mucho el valor.
 - Prioriza: Pokémon de GB/GBC/GBA, GameCube (Pokémon Colosseum/XD, Fire Emblem, Zelda, Metroid, Paper Mario), N64 y SNES completos PAL, consolas o ediciones especiales.
@@ -106,7 +108,7 @@ Usa búsqueda web para comparables actuales; nunca te bases solo en tu conocimie
 
 | Categoría | Fuentes |
 | --- | --- |
-| LEGO | BrickLink (media de ventas de 6 meses, nuevo o usado), BrickEconomy. Lotes al peso: referencia orientativa 10–15 €/kg; súbela solo con minifiguras o sets identificados |
+| LEGO | BrickLink (media de ventas de 6 meses, nuevo o usado), BrickEconomy. Lotes al peso: ver Anexo C (compra razonable por debajo de unos 6–7 €/kg; reventa a granel en torno a 10 €/kg, más si hay minifiguras o sets identificables) |
 | Retro | PriceCharting filtrado por PAL (suelto / completo / nuevo), eBay vendidos Europa |
 | Juguetes españoles | todocoleccion vendidos, eBay vendidos |
 | Vajillas | todocoleccion vendidos, Catawiki, eBay vendidos, Replacements.com (precio minorista de piezas sueltas) |
@@ -302,4 +304,95 @@ Fuentes: [El blog del coleccionista ecléctico – Contrastes y punzones en la p
 - "¿Alguna tiene desconchones, grietas o lañas? ¿Se ha metido en el lavavajillas?"
 
 Fuentes: [Wikipedia – Real Fábrica de Sargadelos](https://es.wikipedia.org/wiki/Real_F%C3%A1brica_de_Sargadelos), [todocoleccion – Sargadelos](https://www.todocoleccion.net/colecciona-recuerdos/colecciones-unicas/sargadelos), [Trendencias – Las marcas de la loza, la cerámica y la porcelana](https://decoracion.trendencias.com/complementos/las-marcas-de-la-loza-la-ceramica-y-la-porcelana-sinonimo-de-autenticidad-y-calidad-ii), [Kiddle – La Cartuja de Sevilla-Pickman](https://ninos.kiddle.co/La_Cartuja_de_Sevilla-Pickman), [El Anticuario – Platos Pickman sello 37 y 49](https://elanticuario.es/2-platos-la-cartuja-pickman-sello-37/).
+
+
+## Anexo C. Guía experta: LEGO
+
+### C.1 Original o réplica
+
+- **Logo LEGO en los pivotes** (studs) de las piezas normales. En piezas muy pequeñas puede faltar o verse cortado ("L.GO") por una marca de molde: eso es normal.
+- **Marcas de molde por debajo o por dentro:** logo, símbolo de copyright y números de máquina y posición. Las réplicas suelen tener un solo número o nada.
+- **Minifiguras originales:** logo en la parte de arriba de las caderas, en el cuello del torso y, en las más nuevas, bajo los pies. Las cabezas con pivote llevan el logo (algunas tienen un agujero de seguridad en su lugar).
+- **Señales de réplica:** falta de logos, rebabas de plástico en las juntas del molde o marcas de haberse arrancado de una matriz, piezas algo más pequeñas, colores o temas que LEGO nunca hizo (por ejemplo, vehículos militares realistas), y faltas de ortografía en cajas e instrucciones.
+- **El anuncio también habla:** "compatible con las grandes marcas", "bloques sin marca" o un set nuevo muy por debajo de su precio indican réplica (Lepin, King, Lari y similares).
+- Las réplicas mezcladas en un lote restan valor y no se pueden vender como LEGO: descuéntalas.
+
+### C.2 Identificar el set
+
+- Busca el **número de set** en la caja, las instrucciones o la descripción, y compruébalo en BrickLink o BrickEconomy (nombre, año, si está retirado).
+- Sin número: identifícalo por piezas o minifiguras características visibles en las fotos y márcalo como "probable".
+- Comprueba **si está completo** contra el inventario de BrickLink: minifiguras, piezas impresas, pegatinas e instrucciones. Las minifiguras suelen concentrar buena parte del valor.
+
+### C.3 Estado
+
+- Piezas blancas, grises o azul claro **amarillentas por el sol**: restan valor.
+- Pegatinas despegadas o mal puestas, piezas mordidas o rotas, cajas aplastadas.
+- Precintado (nuevo) vale bastante más que usado; usado con caja e instrucciones, más que suelto.
+
+### C.4 Lotes al peso
+
+- Referencias de compradores habituales: comprar un lote mezclado por debajo de unos **6–7 €/kg** es razonable; a granel se suele revender en torno a **10 €/kg**. En Estados Unidos se habla de 3 a 10 $ por libra.
+- Suben el valor: **minifiguras**, sets identificables (aunque estén desmontados), piezas grandes o especiales (placas grandes, curvas, impresas) y lotes limpios.
+- Bajan el valor: réplicas mezcladas, piezas rotas, suciedad y cosas que no son LEGO.
+- El peso no dice el número de piezas con exactitud: valora con las fotos lo que se distingue.
+
+### C.5 Cómo valorarlo
+
+1. Original o réplica (C.1). Si hay dudas, pide foto de cerca de pivotes, caderas de minifigura e interior de una pieza.
+2. Set identificado y completo (C.2): precio de vendidos de 6 meses en BrickLink, nuevo o usado según corresponda.
+3. Lote: valor al peso y, aparte, minifiguras o sets que se distingan.
+4. Los sets **retirados** suelen revalorizarse: compruébalo en BrickEconomy.
+
+### C.6 Preguntas clave al vendedor
+
+- "¿Tienes el número del set o las instrucciones?"
+- "¿Están todas las minifiguras? ¿Puedes hacer una foto de ellas?"
+- "¿Todo es LEGO original o hay piezas de otras marcas?"
+- "¿Cuánto pesa el lote?"
+
+Fuentes: [Brick Resales – How to identify fake LEGO parts](https://brickresales.com.au/how-to-identify-fake-lego-parts/), [Brickset – Calculating the value of a bulk lot](https://brickset.com/article/54103/calculating-the-value-of-a-bulk-lot).
+
+## Anexo D. Guía experta: videojuegos y consolas retro
+
+### D.1 Región
+
+- En España interesa **PAL**. En Game Boy Advance, el código del producto en la etiqueta debe terminar en una región europea (por ejemplo, **EUR** o el código de país); un código que termina en USA en un juego vendido como PAL es una señal de alarma.
+- En Super Nintendo, el código del producto debe corresponder a la región.
+- Usa siempre precios PAL en PriceCharting o vendidos de eBay Europa.
+
+### D.2 Original o falso
+
+**Game Boy y Game Boy Color**
+- En la parte de arriba del cartucho debe poner "Nintendo Game Boy".
+- Color de la carcasa correcto para ese juego (por ejemplo, Pokémon Oro es dorado).
+- Etiqueta comparada con una original conocida.
+
+**Game Boy Advance** (los Pokémon son los más falsificados)
+- La etiqueta debe tener logo del juego, logo de Nintendo, sello de calidad, símbolo de clasificación por edades y código del producto. Si falta alguno, probablemente es falso.
+- Las etiquetas originales llevan un **número estampado** (en relieve) que se ve con luz rasante.
+- Brillo y acabado de la etiqueta: las falsas suelen ser más mates o tener el brillo distinto.
+- **Pokémon Rojo Fuego y Verde Hoja:** en el reverso de la placa, las originales tienen **cuatro rectángulos dorados** a la izquierda; las falsas, círculos dorados brillantes.
+- Placa con una pegatina numerada o marcas de tinta (como "E4"): no es original.
+- Una pila en un juego que no debería llevarla es sospechoso.
+
+**Super Nintendo**
+- Detrás: etiqueta de seguridad y logo de Nintendo en relieve en el plástico.
+- **Tornillos metálicos de seguridad.** Tornillos que parecen de plástico o una carcasa que se abre a mano: falso.
+- La placa lleva "Nintendo", el año y un código de serie (se puede comprobar en SNES Central). Ojo con placas de juegos baratos cambiadas a carcasas de juegos caros.
+
+**En general:** anuncios de "nuevo" para juegos de hace décadas, o "reproducción", indican copias.
+
+### D.3 Estado y completitud
+
+- **Suelto, completo en caja (caja + manual + bandeja) o precintado:** el precio cambia muchísimo. Las cajas de cartón (Game Boy, SNES, N64) en buen estado suben mucho el valor.
+- La **pila de guardado agotada** en juegos de Game Boy y Game Boy Color no indica que sea falso; se puede cambiar, pero resta algo de valor.
+- Consolas: pregunta si funcionan y si se han probado hace poco.
+
+### D.4 Preguntas clave al vendedor
+
+- "¿Puedes hacer una foto de la parte de atrás del cartucho y de la etiqueta con luz de lado?"
+- "¿Tiene caja, manual y bandeja?"
+- "¿Lo has probado? ¿Guarda partidas?"
+
+Fuentes: [Nintendo Life – How to spot fake Nintendo video games](https://www.nintendolife.com/guides/how-to-spot-fake-nintendo-video-games).
 `;

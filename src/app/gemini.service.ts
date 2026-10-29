@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { AjustesService } from './ajustes.service';
 import { AprendizajesService } from './aprendizajes.service';
 import { AnuncioVenta, ArticuloCartera, Evaluacion } from './models';
-import { SKILL_PROMPT } from './skill-prompt';
+import { instruccionesPara } from './conocimiento';
 import { imagenABase64 } from './imagenes';
 import { anuncioDemo, evaluacionDemo } from './demo';
 import { extraerObjetoJson, normalizarAnuncio, normalizarEvaluacion } from './normalizar';
@@ -67,7 +67,7 @@ export class GeminiService {
 
     // 3. Cuerpo de la petición a la API REST de Gemini.
     const cuerpo: Record<string, unknown> = {
-      systemInstruction: { parts: [{ text: SKILL_PROMPT + this.aprendizajes.contexto() + FORMATO_JSON }] },
+      systemInstruction: { parts: [{ text: instruccionesPara(texto) + this.aprendizajes.contexto() + FORMATO_JSON }] },
       contents: [
         {
           role: 'user',
