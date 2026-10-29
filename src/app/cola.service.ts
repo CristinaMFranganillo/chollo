@@ -4,6 +4,7 @@ import { HistorialService } from './historial.service';
 import { ElementoCola, ORDEN_NOTA, Plataforma } from './models';
 import { miniatura } from './imagenes';
 import { guardar, leer } from './almacen';
+import { ChollazoService, esChollazo } from './chollazo';
 
 const CLAVE = 'chollos.cola';
 
@@ -15,6 +16,7 @@ const CLAVE = 'chollos.cola';
 export class ColaService {
   private readonly gemini = inject(GeminiService);
   private readonly historial = inject(HistorialService);
+  private readonly chollazos = inject(ChollazoService);
 
   readonly elementos = signal<ElementoCola[]>([]);
   readonly procesando = signal(false);
@@ -89,6 +91,13 @@ export class ColaService {
             elemento.texto, elemento.precio, elemento.fotos, elemento.plataforma, elemento.precioTotal,
           );
           this.actualizar(elemento.id, { estado: 'hecho', evaluacion });
+          if (esChollazo(evaluacion)) {
+            this.chollazos.avisar({
+              titulo: elemento.texto.split('\n')[0].slice(0, 60) || evaluacion.categoria,
+              detalle: `×${evaluacion.multiplo.toFixed(1)} · +${Math.round(evaluacion.beneficio_neto_eur)} € · ${evaluacion.motivo}`,
+              destino: 'cola',
+            });
+          }
           this.historial.anadir({
             id: elemento.id,
             fecha: new Date().toISOString(),

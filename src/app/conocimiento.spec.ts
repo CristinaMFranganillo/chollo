@@ -24,6 +24,8 @@ describe('Conocimiento por categoría', () => {
     const t = instruccionesPara('Rayuela, Cortázar, Sudamericana');
     expect(t).toContain('## Anexo E.');
     expect(t).not.toContain('## Anexo A.');
+    expect(instruccionesPara('Primer romancero gitano, Revista de Occidente')).toContain('## Anexo E.');
+    expect(instruccionesPara('Platero y yo antiguo')).toContain('Primer romancero gitano');
   });
 
   it('envía todas si no se reconoce la categoría o no hay texto', () => {

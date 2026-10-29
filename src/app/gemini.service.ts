@@ -33,7 +33,8 @@ sin texto antes ni después y sin bloques de código, con exactamente estas clav
   "revender_o_guardar": "una línea",
   "como_venderlo": "una o dos líneas: comprador, canal y presentación",
   "riesgos": [textos cortos],
-  "preguntas_vendedor": [1 a 3 preguntas]
+  "preguntas_vendedor": [1 a 3 preguntas],
+  "chollazo": true o false (true solo si la nota es CHOLLO y es excepcional: múltiplo de 5 o más, beneficio de 150 € o más, un libro de la lista de vigilancia o una pieza rara identificada con seguridad)
 }
 
 Si no hay datos suficientes para valorar, usa la nota DESCARTADO, explica qué falta en "motivo"

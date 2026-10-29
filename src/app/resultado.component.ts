@@ -6,6 +6,7 @@ import {
 } from '@ionic/angular/standalone';
 import { Evaluacion } from './models';
 import { colorNota } from './colores';
+import { esChollazo } from './chollazo';
 import { abrirEnlace, comparables } from './enlaces';
 
 /** Tarjeta con el resultado de una evaluación. Se reutiliza en Evaluar, Cola e Historial. */
@@ -17,7 +18,10 @@ import { abrirEnlace, comparables } from './enlaces';
   ],
   template: `
     @let r = evaluacion();
-    <ion-card>
+    <ion-card [class.chollazo]="chollazo(r)">
+      @if (chollazo(r)) {
+        <div class="banda-chollazo" role="status">¡CHOLLAZO! Muévete rápido</div>
+      }
       <ion-card-header>
         <div class="cabecera-nota">
           <ion-badge [color]="color(r.nota)">{{ r.nota }}</ion-badge>
@@ -83,6 +87,11 @@ import { abrirEnlace, comparables } from './enlaces';
   `,
   styles: `
     ion-card { max-width: 640px; margin-inline: auto; }
+    ion-card.chollazo { box-shadow: 0 0 0 3px #e0002a, 0 6px 20px rgba(224, 0, 42, 0.35); }
+    .banda-chollazo {
+      padding: 10px 16px; text-align: center; font-size: 1.15rem; font-weight: 900; letter-spacing: 0.5px;
+      color: #fff; background: linear-gradient(90deg, #e0002a, #ff7a00);
+    }
     .cabecera-nota { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
     .cabecera-nota ion-badge { font-size: 1rem; padding: 6px 10px; }
     .multiplo { font-size: 1.25rem; font-weight: 600; }
@@ -101,6 +110,7 @@ export class ResultadoComponent {
   protected readonly color = colorNota;
   protected readonly enlaces = comparables;
   protected readonly abrir = abrirEnlace;
+  protected readonly chollazo = esChollazo;
   protected esLibro(categoria: string): boolean {
     return /libro/i.test(categoria);
   }

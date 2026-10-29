@@ -1,6 +1,7 @@
 // Contenido de la skill evaluar-anuncio-segunda-mano (sin la cabecera), con sus anexos de conocimiento experto.
 // Si actualizas la skill, pega aquí su nuevo contenido. conocimiento.ts separa los anexos por categoría.
-export const SKILL_PROMPT = `# Evaluar anuncio de segunda mano para reventa o inversión
+export const SKILL_PROMPT = `
+# Evaluar anuncio de segunda mano para reventa o inversión
 
 Objetivo: a partir de capturas, fotos, texto o enlace de un anuncio, decidir rápido si merece la pena comprarlo, con qué beneficio, si conviene revenderlo o guardarlo, y cómo y a quién venderlo. Responde siempre en español.
 
@@ -413,11 +414,16 @@ No es una categoría de compra habitual: es una **lista de vigilancia** de libro
 | La familia de Pascual Duarte (Cela) | Aldecoa, Madrid, 1942 | 650–700 € |
 | La colmena (Cela) | Emecé, Buenos Aires, 1951 | 90–280 € |
 | Cinco horas con Mario (Delibes) | Destino, Barcelona, 1966 | 60–75 € |
+| Primer romancero gitano (García Lorca) | Revista de Occidente, Madrid, 1928; título completo "Primer romancero gitano 1924-1927" | 5.500–8.000 € |
+| Platero y yo (Juan Ramón Jiménez) | La Lectura, Madrid, 1914 (primera edición, colección "Biblioteca Juventud") | ~8.800 € firmado (un solo anuncio); sin firmar, bastante menos |
+| Ficciones (Borges) | Sur, Buenos Aires, 1944 | 3.000–4.400 € |
+| La ciudad y los perros (Vargas Llosa) | Seix Barral, Barcelona, 1963 (colección Biblioteca Breve) | 620–1.700 € |
 | Harry Potter and the Philosopher's Stone (inglés) | Bloomsbury 1997; línea "10 9 8 7 6 5 4 3 2 1" y autora "Joanne Rowling"; solo 500 ejemplares | 40.000–55.000 $ |
 | Harry Potter and the Sorcerer's Stone (EE. UU.) | Scholastic 1998, "First American edition, October 1998" | 4.000–6.500 $ |
 | Harry Potter and the Prisoner of Azkaban (inglés) | 1999, con el error "Joanne Rowling" en la página de créditos | 1.500–12.000 $ |
 
 - **No confundir:** Harry Potter y la piedra filosofal de **Salamandra (1999)** en español casi no tiene valor (ejemplares a 3–9 €).
+- **Comprobados sin valor relevante (no vigilar):** Tiempo de silencio (Seix Barral 1962), La casa de los espíritus (1982), Nada (Destino 1945), El Principito (Emecé 1951), El Señor de los Anillos (Minotauro 1977) y Juego de tronos (Gigamesh 2002): en octubre de 2026 solo había ejemplares baratos o ninguno.
 - **Confirmación:** la edición se confirma con la foto de la **página de créditos o el colofón**. Sin ella, márcalo como "posible" y pide la foto antes de comprar. Las primeras ediciones antiguas suelen ser rústicas y estar gastadas: el aspecto no descarta nada.
 - **Valoración:** los precios de la tabla son pedidos por libreros, no ventas cerradas. Para decidir, usa el extremo bajo y busca vendidos en todocoleccion o eBay.
 - **Venta:** todocoleccion, Iberlibro (como librero) o casas de subastas para los más caros.

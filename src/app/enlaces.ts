@@ -38,7 +38,8 @@ export const BUSQUEDAS_RECOMENDADAS: { categoria: string; terminos: string[] }[]
     categoria: 'Libros a vigilar',
     terminos: [
       'cien años de soledad sudamericana', 'rayuela sudamericana', 'la sombra del viento planeta 2001',
-      'pascual duarte 1942', 'la colmena emece', 'cinco horas con mario 1966', 'harry potter bloomsbury', 'lote libros antiguos',
+      'pascual duarte 1942', 'la colmena emece', 'cinco horas con mario 1966', 'harry potter bloomsbury',
+      'romancero gitano 1928', 'platero y yo 1914', 'ficciones borges sur', 'la ciudad y los perros 1963', 'lote libros antiguos',
     ],
   },
   { categoria: 'Cristalería y jarrones', terminos: ['iittala', 'holmegaard', 'cristal murano firmado', 'west germany jarrón'] },

@@ -230,8 +230,9 @@
                 <ion-button (click)="borrarAvisos()">Borrar todo</ion-button>
               </ion-list-header>
               @for (a of avisos(); track a.id) {
-                <ion-item button [detail]="false" (click)="evaluarAviso(a)">
+                <ion-item button [detail]="false" (click)="evaluarAviso(a)" [class.item-chollazo]="avisoEsChollazo(a)">
                   <ion-label class="ion-text-wrap">
+                    @if (avisoEsChollazo(a)) { <p class="etiqueta-chollazo">¡CHOLLAZO!</p> }
                     <h3>{{ a.titulo || a.app }}</h3>
                     <p>{{ a.texto }}</p>
                     <p>
@@ -406,4 +407,18 @@
       </ng-template>
     </ion-modal>
   </ion-content>
+
+  @if (chollazos.alerta(); as c) {
+    <div class="alerta-chollazo" role="alertdialog" aria-modal="true" aria-labelledby="titulo-chollazo" aria-describedby="detalle-chollazo">
+      <div class="caja">
+        <ion-icon aria-hidden="true" name="flame" class="llama"></ion-icon>
+        <h2 id="titulo-chollazo">¡CHOLLAZO!</h2>
+        <p class="que">{{ c.titulo }}</p>
+        <p id="detalle-chollazo">{{ c.detalle }}</p>
+        <p class="consejo">Revisa las fotos y escribe al vendedor cuanto antes: estos duran minutos.</p>
+        <ion-button expand="block" class="ver" (click)="verChollazo()">Verlo ahora</ion-button>
+        <ion-button expand="block" fill="clear" class="cerrar" (click)="chollazos.cerrar()">Cerrar</ion-button>
+      </div>
+    </div>
+  }
 </ion-app>

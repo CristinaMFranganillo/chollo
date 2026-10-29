@@ -23,6 +23,8 @@ export interface Evaluacion {
   como_venderlo: string;
   riesgos: string[];
   preguntas_vendedor: string[];
+  /** La IA lo marca como excepcional (múltiplo enorme, libro de la lista, pieza rara bien identificada). */
+  chollazo?: boolean;
 }
 
 /** Lo que guardamos en el historial. */
@@ -116,6 +118,8 @@ export interface Aviso {
   nota: Nota | null;
   motivo: string;
   multiplo: number | null;
+  /** El filtro rápido lo ha marcado como excepcional. */
+  chollazo?: boolean;
 }
 
 /** Orden para listas: mejores notas primero y, a igual nota, más beneficio. */

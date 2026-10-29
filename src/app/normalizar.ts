@@ -95,6 +95,7 @@ export function normalizarEvaluacion(bruto: unknown): Evaluacion {
     como_venderlo: texto(o['como_venderlo']),
     riesgos: textos(o['riesgos']),
     preguntas_vendedor: textos(o['preguntas_vendedor']),
+    chollazo: o['chollazo'] === true || texto(o['chollazo']).toLowerCase() === 'true',
   };
 }
 

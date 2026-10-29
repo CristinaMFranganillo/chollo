@@ -1,4 +1,4 @@
-# Chollos · versión 2.1
+# Chollos · versión 2.2
 
 App en Angular + Ionic + Capacitor que evalúa anuncios de segunda mano con la API de Gemini, usando los criterios de la skill *evaluar-anuncio-segunda-mano*.
 
@@ -32,6 +32,7 @@ La firma de los APK de prueba (`android/app/chollos-debug.keystore`, contraseña
 ## Cómo aprende
 
 - **Conocimiento experto:** la skill incluye anexos de experto por categoría (**Anexo A: cuberterías y punzones**, con las leyes de la plata, las marcas españolas por épocas, las señales de plateado y cómo valorar al peso; **Anexo B: vajillas y loza española**, con las épocas y sellos de Sargadelos y Pickman, otras fábricas españolas y cómo valorar por piezas; **Anexo C: LEGO**, con cómo detectar réplicas, identificar sets y valorar lotes al peso; **Anexo D: retro**, con región PAL y cómo detectar cartuchos falsos de Game Boy, GBA y SNES; **Anexo E: libros a vigilar**, una lista de primeras ediciones valiosas y fáciles de reconocer, también en las búsquedas recomendadas). `src/app/conocimiento.ts` envía a Gemini solo los anexos de la categoría del anuncio (o todos si no la reconoce). Están en `src/app/skill-prompt.ts`.
+- **Aviso de chollazo** (`src/app/chollazo.ts`): un CHOLLO excepcional (múltiplo de 5 o más, 150 € o más de beneficio, o marcado por la IA: libro de la lista o pieza rara segura) muestra una alerta a pantalla completa con vibración larga, un borde rojo en el resultado y se destaca en la lista de avisos. En Android, los chollazos del vigilante llegan por un canal de notificación propio, "¡Chollazos!", con el sonido de alarma del móvil, vibración larga y luz roja; se puede ajustar o silenciar aparte en los ajustes de notificaciones de Android. El criterio está duplicado en `VigilanteService.java`/`FiltroGemini.java`: si cambias uno, cambia el otro.
 - **Memoria de aprendizajes** (`src/app/aprendizajes.service.ts`): tus correcciones ("¿Algo no cuadra? Corrige a la app"), tus ventas reales (se registran solas al marcar un artículo como vendido) y tus notas ("Añadir conocimiento" en Ajustes). Se envían a Gemini en cada evaluación y en cada anuncio de venta, con prioridad sobre su conocimiento general. Se pueden revisar y borrar en Ajustes y van incluidos en la copia de seguridad.
 
 ## Fiabilidad y accesibilidad

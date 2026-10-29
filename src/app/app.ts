@@ -11,7 +11,7 @@ import {
 import { addIcons } from 'ionicons';
 import {
   settingsOutline, imagesOutline, closeCircle, sparklesOutline, trashOutline, addCircleOutline,
-  playOutline, notificationsOutline, alertCircleOutline, checkmarkCircleOutline,
+  playOutline, notificationsOutline, alertCircleOutline, checkmarkCircleOutline, flame,
 } from 'ionicons/icons';
 import { GeminiService } from './gemini.service';
 import { AjustesService } from './ajustes.service';
@@ -28,6 +28,7 @@ import { Vigilante, vigilanteDisponible } from './vigilante';
 import { escucharCompartir } from './compartir';
 import { abrirEnlace, buscarEn, BUSQUEDAS_RECOMENDADAS } from './enlaces';
 import { exportarTexto } from './exportar';
+import { ChollazoService, avisoEsChollazo, esChollazo } from './chollazo';
 
 type Vista = 'evaluar' | 'cola' | 'avisos' | 'cartera' | 'historial';
 
@@ -52,6 +53,8 @@ export class App implements OnInit {
   private readonly cartera = inject(CarteraService);
   protected readonly aprendizajes = inject(AprendizajesService);
   private readonly alertas = inject(AlertController);
+  protected readonly chollazos = inject(ChollazoService);
+  protected readonly avisoEsChollazo = avisoEsChollazo;
   protected readonly color = colorNota;
 
   protected readonly vista = signal<Vista>('evaluar');
@@ -96,7 +99,7 @@ export class App implements OnInit {
   constructor() {
     addIcons({
       settingsOutline, imagesOutline, closeCircle, sparklesOutline, trashOutline, addCircleOutline,
-      playOutline, notificationsOutline, alertCircleOutline, checkmarkCircleOutline,
+      playOutline, notificationsOutline, alertCircleOutline, checkmarkCircleOutline, flame,
     });
     if (!this.bienvenidaVista()) {
       this.bienvenida.set(true);
@@ -184,7 +187,18 @@ export class App implements OnInit {
     if (this.enAndroid) {
       await this.sincronizarVigilante();
       await this.cargarAvisos();
-      await Vigilante.addListener('nuevoAviso', () => this.zone.run(() => this.cargarAvisos()));
+      await Vigilante.addListener('nuevoAviso', (a) =>
+        this.zone.run(() => {
+          void this.cargarAvisos();
+          if (avisoEsChollazo(a)) {
+            this.chollazos.avisar({
+              titulo: a.titulo || a.app,
+              detalle: `${a.app}${a.multiplo != null ? ` · ×${a.multiplo.toFixed(1)}` : ''} · ${a.motivo}`,
+              destino: 'avisos',
+            });
+          }
+        }),
+      );
       await Vigilante.addListener('avisoAbierto', () => this.zone.run(() => this.vista.set('avisos')));
       const { id } = await Vigilante.avisoPendiente();
       if (id) this.vista.set('avisos');
@@ -242,6 +256,12 @@ export class App implements OnInit {
     return Number.isFinite(n) ? n : null;
   }
 
+  protected verChollazo(): void {
+    const alerta = this.chollazos.alerta();
+    if (alerta) this.vista.set(alerta.destino);
+    this.chollazos.cerrar();
+  }
+
   protected async evaluar(): Promise<void> {
     this.cargando.set(true);
     this.error.set(null);
@@ -255,6 +275,13 @@ export class App implements OnInit {
       const mini = archivos[0] ? await miniatura(archivos[0]) : null;
       this.resultado.set(evaluacion);
       this.metaResultado.set({ titulo, miniatura: mini, precio });
+      if (esChollazo(evaluacion)) {
+        this.chollazos.avisar({
+          titulo,
+          detalle: `×${evaluacion.multiplo.toFixed(1)} · +${Math.round(evaluacion.beneficio_neto_eur)} € · ${evaluacion.motivo}`,
+          destino: 'evaluar',
+        });
+      }
       this.historial.anadir({
         id: crypto.randomUUID(),
         fecha: new Date().toISOString(),
